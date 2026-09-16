@@ -41,70 +41,68 @@
     <!-- Sidebar Overlay for Mobile -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden transition-opacity"></div>
 
-    <!-- Sidebar Navigation (Responsive: Off-canvas on mobile, fixed on desktop) -->
-    <aside id="admin-sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-[#111111] text-white flex flex-col justify-between border-r border-[#313130] flex-shrink-0 -translate-x-full lg:translate-x-0 transition-transform duration-300">
-        <div>
-            <!-- Brand Logo -->
-            <div class="h-16 flex items-center justify-between px-6 border-b border-[#313130]">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-                    <img src="{{ asset('images/logo-mekarjaya.jpg') }}" alt="Mekar Jaya Sports Logo" class="h-8 w-auto rounded-md object-contain border border-[#313130]">
-                    <div>
-                        <span class="font-bold text-white text-sm leading-tight block">MEKARJAYA<span class="text-[#ff5600]">.SPORTS</span></span>
-                        <span class="text-[9px] font-mono text-[#9c9fa5] uppercase tracking-widest block">ADMIN PORTAL</span>
-                    </div>
-                </a>
-                <button id="close-sidebar-btn" class="lg:hidden text-[#9c9fa5] hover:text-white p-1">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <!-- Navigation Links -->
-            <nav class="p-3 space-y-1 text-xs font-medium">
-                <a href="{{ route('admin.dashboard') }}" 
-                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
-                    <i class="fa-solid fa-chart-pie w-4 text-center"></i> Dashboard Utama
-                </a>
-
-                <!-- Core Solution Feature -->
-                <a href="{{ route('admin.players.index') }}" 
-                   class="flex items-center justify-between px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.players.*') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-users w-4 text-center"></i> Data Pemain Per Tahun
-                    </div>
-                    <span class="bg-[#313130] text-[#ff5600] text-[9px] font-mono px-1.5 py-0.5 rounded uppercase">Utama</span>
-                </a>
-
-                <a href="{{ route('admin.registrations.index') }}" 
-                   class="flex items-center justify-between px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.registrations.*') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-user-plus w-4 text-center"></i> Pendaftaran Online
-                    </div>
-                    @php $pendingCnt = \App\Models\Registration::where('status', 'pending')->count(); @endphp
-                    @if($pendingCnt > 0)
-                        <span class="bg-[#ff5600] text-white font-bold text-[10px] px-2 py-0.5 rounded-full">{{ $pendingCnt }}</span>
-                    @endif
-                </a>
-
-                <a href="{{ route('admin.schedules.index') }}" 
-                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.schedules.*') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
-                    <i class="fa-solid fa-calendar-days w-4 text-center"></i> Kelola Jadwal Latihan
-                </a>
-
-                <a href="{{ route('admin.attendances.index') }}" 
-                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.attendances.*') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
-                    <i class="fa-solid fa-calendar-check w-4 text-center"></i> Presensi Latihan
-                </a>
-
-                <a href="{{ route('home') }}" target="_blank"
-                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-md text-[#9c9fa5] hover:bg-[#313130] hover:text-white transition-colors mt-6 border-t border-[#313130]">
-                    <i class="fa-solid fa-globe w-4 text-center"></i> Website Publik
-                </a>
-            </nav>
+    <!-- Sidebar Navigation (Responsive: Off-canvas on mobile, sticky 100vh viewport on desktop) -->
+    <aside id="admin-sidebar" class="fixed lg:sticky lg:top-0 inset-y-0 left-0 z-50 w-64 h-screen bg-[#111111] text-white flex flex-col justify-between border-r border-[#313130] flex-shrink-0 -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-hidden">
+        <!-- Brand Logo (Fixed Header) -->
+        <div class="h-16 flex items-center justify-between px-6 border-b border-[#313130] flex-shrink-0">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
+                <img src="{{ asset('images/logo-mekarjaya.jpg') }}" alt="Mekar Jaya Sports Logo" class="h-8 w-auto rounded-md object-contain border border-[#313130]">
+                <div>
+                    <span class="font-bold text-white text-sm leading-tight block">MEKARJAYA<span class="text-[#ff5600]">.SPORTS</span></span>
+                    <span class="text-[9px] font-mono text-[#9c9fa5] uppercase tracking-widest block">ADMIN PORTAL</span>
+                </div>
+            </a>
+            <button id="close-sidebar-btn" class="lg:hidden text-[#9c9fa5] hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
         </div>
 
-        <!-- Sidebar User Footer -->
-        <div class="p-3 border-t border-[#313130] bg-[#111111]">
-            <div class="flex items-center gap-2.5 mb-3 px-1">
+        <!-- Navigation Links (Scrolls independently if content overflows) -->
+        <nav class="p-3 space-y-1 text-xs font-medium flex-1 overflow-y-auto min-h-0 custom-scrollbar">
+            <a href="{{ route('admin.dashboard') }}" 
+               class="flex items-center gap-3 px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
+                <i class="fa-solid fa-chart-pie w-4 text-center"></i> Dashboard Utama
+            </a>
+
+            <!-- Core Solution Feature -->
+            <a href="{{ route('admin.players.index') }}" 
+               class="flex items-center justify-between px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.players.*') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-users w-4 text-center"></i> Data Pemain Per Tahun
+                </div>
+                <span class="bg-[#313130] text-[#ff5600] text-[9px] font-mono px-1.5 py-0.5 rounded uppercase">Utama</span>
+            </a>
+
+            <a href="{{ route('admin.registrations.index') }}" 
+               class="flex items-center justify-between px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.registrations.*') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-user-plus w-4 text-center"></i> Pendaftaran Online
+                </div>
+                @php $pendingCnt = \App\Models\Registration::where('status', 'pending')->count(); @endphp
+                @if($pendingCnt > 0)
+                    <span class="bg-[#ff5600] text-white font-bold text-[10px] px-2 py-0.5 rounded-full">{{ $pendingCnt }}</span>
+                @endif
+            </a>
+
+            <a href="{{ route('admin.schedules.index') }}" 
+               class="flex items-center gap-3 px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.schedules.*') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
+                <i class="fa-solid fa-calendar-days w-4 text-center"></i> Kelola Jadwal Latihan
+            </a>
+
+            <a href="{{ route('admin.attendances.index') }}" 
+               class="flex items-center gap-3 px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.attendances.*') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
+                <i class="fa-solid fa-calendar-check w-4 text-center"></i> Presensi Latihan
+            </a>
+
+            <a href="{{ route('home') }}" target="_blank"
+               class="flex items-center gap-3 px-3.5 py-2.5 rounded-md text-[#9c9fa5] hover:bg-[#313130] hover:text-white transition-colors mt-6 border-t border-[#313130]">
+                <i class="fa-solid fa-globe w-4 text-center"></i> Website Publik
+            </a>
+        </nav>
+
+        <!-- Sidebar User Footer (Always Pinned at Bottom of Viewport) -->
+        <div class="p-3 border-t border-[#313130] bg-[#111111] flex-shrink-0">
+            <div class="flex items-center gap-2.5 mb-2.5 px-1">
                 <div class="w-8 h-8 rounded bg-[#313130] text-white font-bold flex items-center justify-center text-xs border border-[#ff5600]">
                     {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                 </div>
