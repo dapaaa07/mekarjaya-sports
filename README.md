@@ -31,6 +31,32 @@
 
 ---
 
+## 📸 Tampilan Antarmuka (Screenshots Showcase)
+
+### 📊 1. Admin Dashboard Ringkasan Utama
+![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+*Ringkasan statistik siswa aktif, presensi harian, verifikasi pendaftaran baru, status SPP bulanan, serta grafik distribusi siswa per tahun lahir (2008–2018).*
+
+---
+
+### 🌐 2. Landing Page & Portal Publik
+![Public Landing Page](docs/screenshots/public-landing.png)
+*Tampilan portal publik resmi SSB Mekar Jaya Subang lengkap dengan informasi akademi, pendaftaran online, dan daftar sesi latihan terdekat.*
+
+---
+
+### 🆔 3. Kartu Anggota Siswa Digital
+![Kartu Siswa Digital](docs/screenshots/digital-student-card.png)
+*Kartu identitas anggota siswa digital SSB Mekar Jaya Subang dengan desain dark mode eksklusif, NIS, status SPP, dan pengelompokan KU.*
+
+---
+
+### 📅 4. Kelola Jadwal Latihan & Presensi Integrasi
+![Kelola Jadwal Latihan](docs/screenshots/schedule-management.png)
+*Master pengelolaan jadwal latihan per Kelompok Umur (KU) dengan tombol Presensi 1-Click ke pencatatan absensi harian siswa.*
+
+---
+
 ## ✨ Fitur-Fitur Unggulan
 
 ### 👔 1. Sisi Admin (Management Portal)
@@ -49,17 +75,6 @@
 * ** Landing Page Interaktif**: Informasi profil SSB Mekar Jaya, jadwal latihan terbaru, dan galeri fasilitas.
 * ** Form Pendaftaran Online**: Pendaftaran calon siswa baru secara mandiri tanpa harus datang ke sekretariat.
 * ** Booking Lapangan Mini Soccer**: Antarmuka pemesanan jam main lapangan sintetis mini soccer yang transparan dan fleksibel.
-
----
-
-## 📸 Tampilan Antarmuka (Screenshots Preview)
-
-| Tangkapan Layar | Deskripsi |
-| :--- | :--- |
-| **Admin Dashboard** | Ringkasan statistik statistik pemain, pendaftaran, presensi, dan reservasi lapangan. |
-| **Kelola Pemain & KU** | Tabel daftar pemain lengkap dengan filter Kelompok Umur (2008-2018) & pencarian cepat. |
-| **Jadwal Latihan & Presensi** | Integrasi jadwal latihan harian dengan modul presensi 1-Click. |
-| **Kartu Siswa Digital** | Kartu identitas resmi pemain SSB Mekar Jaya dilengkapi logo mitra dan QR Code. |
 
 ---
 
@@ -102,8 +117,8 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek ini di lingkungan lokal A
 
 ### 2. Kloning Repositori
 ```bash
-git clone https://github.com/USERNAME/mekarjaya-ssb.git
-cd mekarjaya-ssb
+git clone https://github.com/dapaaa07/mekarjaya-sports.git
+cd mekarjaya-sports
 ```
 
 ### 3. Instalasi Dependensi PHP & JavaScript
@@ -167,6 +182,8 @@ mekarjaya/
 ├── database/
 │   ├── migrations/               # Skema Migrasi Database
 │   └── seeders/                  # Seeder Data Pemain, Jadwal, KU 2008-2018
+├── docs/
+│   └── screenshots/              # Screenshot Tampilan Aplikasi (Dashboard, Landing, Kartu Digital, Jadwal)
 ├── public/
 │   ├── images/
 │   │   └── logo-mekarjaya.jpg    # Logo Resmi Mitra SSB Mekar Jaya Subang
