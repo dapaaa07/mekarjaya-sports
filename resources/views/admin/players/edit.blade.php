@@ -57,6 +57,15 @@
             </div>
 
             <div>
+                <label for="jersey_size" class="block font-medium text-[#626260] uppercase mb-1">Ukuran Jersey *</label>
+                <select id="jersey_size" name="jersey_size" required class="w-full px-3.5 py-2.5 rounded-md border border-[#d3cec6] bg-white text-[#111111] focus:outline-none focus:ring-1 focus:ring-[#111111] font-semibold">
+                    @foreach(['S', 'M', 'L', 'XL', 'XXL'] as $sz)
+                        <option value="{{ $sz }}" {{ old('jersey_size', $player->jersey_size ?? 'M') == $sz ? 'selected' : '' }}>{{ $sz }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
                 <label for="status" class="block font-medium text-[#626260] uppercase mb-1">Status Keanggotaan *</label>
                 <select id="status" name="status" required class="w-full px-3.5 py-2.5 rounded-md border border-[#d3cec6] bg-white text-[#111111] focus:outline-none focus:ring-1 focus:ring-[#111111]">
                     <option value="aktif" {{ old('status', $player->status) == 'aktif' ? 'selected' : '' }}>Aktif Siswa</option>

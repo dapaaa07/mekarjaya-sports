@@ -58,6 +58,9 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
+        // Upcoming matches & tactics
+        $upcomingMatches = \App\Models\MatchModel::orderBy('match_date', 'desc')->take(2)->get();
+
         // Stats summary for hero section
         $totalPlayers = Player::where('status', 'aktif')->count();
         $totalCoaches = Coach::count();
@@ -70,6 +73,7 @@ class HomeController extends Controller
             'coaches',
             'miniSoccerRates',
             'upcomingSchedules',
+            'upcomingMatches',
             'totalPlayers',
             'totalCoaches',
             'yearsCovered'
@@ -83,6 +87,7 @@ class HomeController extends Controller
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date',
             'position_preference' => 'required|string',
+            'jersey_size' => 'nullable|string|in:S,M,L,XL,XXL',
             'parent_name' => 'required|string|max:255',
             'parent_phone' => 'required|string|max:20',
             'school_name' => 'nullable|string|max:255',

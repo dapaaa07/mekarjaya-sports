@@ -69,6 +69,17 @@
             </div>
 
             <div>
+                <label for="jersey_size" class="block font-medium text-[#626260] uppercase mb-1">Ukuran Jersey *</label>
+                <select id="jersey_size" name="jersey_size" required class="w-full px-3.5 py-2.5 rounded-md border border-[#d3cec6] bg-white text-[#111111] focus:outline-none focus:ring-1 focus:ring-[#111111] font-semibold">
+                    <option value="S">S (Anak / Kecil)</option>
+                    <option value="M" selected>M (Sedang)</option>
+                    <option value="L">L (Besar)</option>
+                    <option value="XL">XL (Sangat Besar)</option>
+                    <option value="XXL">XXL</option>
+                </select>
+            </div>
+
+            <div>
                 <label for="status" class="block font-medium text-[#626260] uppercase mb-1">Status Keanggotaan *</label>
                 <select id="status" name="status" required class="w-full px-3.5 py-2.5 rounded-md border border-[#d3cec6] bg-white text-[#111111] focus:outline-none focus:ring-1 focus:ring-[#111111]">
                     <option value="aktif">Aktif Siswa</option>

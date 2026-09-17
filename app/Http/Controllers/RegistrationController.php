@@ -30,6 +30,7 @@ class RegistrationController extends Controller
             'birth_date' => $registration->birth_date,
             'birth_year' => $registration->birth_year,
             'position' => $registration->position_preference,
+            'jersey_size' => $registration->jersey_size ?? 'M',
             'school_name' => $registration->school_name,
             'parent_name' => $registration->parent_name,
             'parent_phone' => $registration->parent_phone,

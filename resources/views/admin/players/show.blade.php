@@ -45,12 +45,27 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
-                <a href="{{ route('admin.evaluations.edit', $player->id) }}" class="btn-fin text-xs py-2 px-4 flex items-center gap-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('admin.players.print-rapor', $player->id) }}" target="_blank" class="bg-[#111111] hover:bg-black border border-[#d3cec6] text-white text-xs py-2 px-3 rounded font-semibold flex items-center gap-1.5 transition-colors">
+                    <i class="fa-solid fa-print text-xs"></i> Cetak Rapor
+                </a>
+
+                @php
+                    $cleanPhone = preg_replace('/[^0-9]/', '', $player->parent_phone);
+                    if (str_starts_with($cleanPhone, '0')) {
+                        $cleanPhone = '62' . substr($cleanPhone, 1);
+                    }
+                    $waText = rawurlencode("Halo Bapak/Ibu {$player->parent_name}, kami dari Pengurus SSB Mekar Jaya Subang mengingatkan perihal tagihan SPP bulanan untuk siswa ananda {$player->full_name} (NIS: {$player->nis}). Mohon konfirmasi jika pembayaran telah dilakukan. Terima kasih.");
+                @endphp
+                <a href="https://wa.me/{{ $cleanPhone }}?text={{ $waText }}" target="_blank" class="bg-[#16A34A] hover:bg-emerald-700 text-white text-xs py-2 px-3 rounded font-semibold flex items-center gap-1.5 transition-colors">
+                    <i class="fa-brands fa-whatsapp text-xs"></i> Pengingat SPP WA
+                </a>
+
+                <a href="{{ route('admin.evaluations.edit', $player->id) }}" class="btn-fin text-xs py-2 px-3 flex items-center gap-1.5">
                     <i class="fa-solid fa-sliders text-xs"></i> Score Rapor
                 </a>
-                <a href="{{ route('admin.players.edit', $player->id) }}" class="btn-secondary text-xs py-2 px-4 flex items-center gap-1.5">
-                    <i class="fa-solid fa-pen-to-square text-xs"></i> Edit Profil
+                <a href="{{ route('admin.players.edit', $player->id) }}" class="btn-secondary text-xs py-2 px-3 flex items-center gap-1.5">
+                    <i class="fa-solid fa-pen-to-square text-xs"></i> Edit
                 </a>
             </div>
 
@@ -76,6 +91,10 @@
                     <div class="flex justify-between py-1 border-b border-[#ebe7e1]">
                         <span class="text-[#626260]">Tahun Kelahiran:</span>
                         <span class="font-bold text-[#ff5600] font-mono">{{ $player->birth_year }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-[#ebe7e1]">
+                        <span class="text-[#626260]">Ukuran Jersey:</span>
+                        <span class="font-bold bg-[#111111] text-white px-2 py-0.5 rounded text-[10px]">{{ $player->jersey_size ?? 'M' }}</span>
                     </div>
                     <div class="flex justify-between py-1 border-b border-[#ebe7e1]">
                         <span class="text-[#626260]">Tinggi / Berat Badan:</span>

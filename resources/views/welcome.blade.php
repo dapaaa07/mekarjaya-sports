@@ -340,6 +340,89 @@
     </div>
 </section>
 
+<!-- SECTION 2.5: FOOTBALL MANAGER TACTICAL MATCH PITCH -->
+@if(count($upcomingMatches) > 0)
+<section id="taktik-match" class="py-16 bg-[#081c15] text-white border-t border-b border-[#1b4332]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-10">
+            <div>
+                <span class="text-xs font-semibold text-[#ff5600] uppercase tracking-wider block">Match Center & Taktik Tim</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-1">
+                    Formasi Laga & Starting XI Football Manager
+                </h2>
+                <p class="text-[#9c9fa5] text-xs sm:text-sm mt-1">
+                    Pratinjau susunan 11 pemain inti & strategi formasi taktis laga mendatang SSB Mekar Jaya Subang.
+                </p>
+            </div>
+            <a href="{{ route('admin.matches.index') }}" class="btn-fin text-xs py-2 px-4 flex items-center gap-1.5">
+                <i class="fa-solid fa-shirt"></i> Kelola Formasi Match
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            @foreach($upcomingMatches as $match)
+                <div class="bg-[#111111] p-6 rounded-2xl border-2 border-[#1b4332] space-y-4 shadow-xl">
+                    <div class="flex items-center justify-between border-b border-[#313130] pb-3">
+                        <div>
+                            <span class="bg-[#ff5600] text-white text-[9px] font-mono px-2 py-0.5 rounded uppercase font-bold">{{ $match->match_type }}</span>
+                            <span class="text-xs font-bold text-[#9c9fa5] ml-2 font-mono">KU: {{ $match->target_ku }}</span>
+                            <h3 class="font-bold text-white text-base mt-1">{{ $match->match_title }}</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] text-[#9c9fa5] block font-mono">FORMASI TAKTIK</span>
+                            <span class="text-lg font-mono font-bold text-[#ff5600]">{{ $match->formation ?? '4-3-3' }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Mini Pitch Display -->
+                    <div class="bg-[#081c15] p-4 rounded-xl border border-[#1b4332] relative overflow-hidden min-h-[300px] flex flex-col justify-between">
+                        <!-- Pitch lines mockup -->
+                        <div class="absolute inset-2 border border-white/20 rounded pointer-events-none"></div>
+                        <div class="absolute top-1/2 left-2 right-2 h-0.5 bg-white/20 -translate-y-1/2 pointer-events-none"></div>
+                        <div class="absolute top-1/2 left-1/2 w-20 h-20 border border-white/20 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+
+                        <div class="relative z-10 space-y-3">
+                            <p class="text-[10px] text-white/70 italic text-center">Formasi Taktik Disusun oleh Pelatih Head Coach SSB Mekar Jaya Subang</p>
+                            
+                            <!-- Lineup badges grid -->
+                            @if(!empty($match->lineup_json))
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                                    @foreach($match->lineup_json as $posKey => $playerName)
+                                        @if(!empty($playerName))
+                                            <div class="bg-[#111111]/90 border border-[#ff5600]/40 p-1.5 rounded flex items-center gap-2">
+                                                <div class="w-6 h-6 rounded-full bg-[#ff5600] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+                                                    <i class="fa-solid fa-shirt"></i>
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <span class="block text-[10px] font-bold text-white truncate">{{ $playerName }}</span>
+                                                    <span class="block text-[8px] font-mono text-[#ff5600] uppercase">{{ strtoupper($posKey) }}</span>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="py-12 text-center text-xs text-white/60 italic">
+                                    Formasi taktik belum dikonfigurasi untuk match ini. Pelatih dapat mengaturnya di Admin Match Center.
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs text-[#9c9fa5] border-t border-[#313130] pt-3">
+                        <span><i class="fa-solid fa-calendar mr-1 text-[#ff5600]"></i> {{ $match->match_date->format('d M Y') }}</span>
+                        @if($match->score_result)
+                            <span class="font-mono font-bold text-white bg-[#313130] px-2 py-0.5 rounded">Skor: {{ $match->score_result }}</span>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+    </div>
+</section>
+@endif
 
 <!-- SECTION 3: MEKAR JAYA MINI SOCCER (Inverse Canvas Tile) -->
 <section id="mini-soccer" class="py-16 bg-[#111111] text-white">
@@ -473,6 +556,17 @@
                             <option value="Bek Tengah">Bek Tengah (Center Back)</option>
                             <option value="Bek Sayap">Bek Sayap (Full Back)</option>
                             <option value="Kiper">Kiper (Goalkeeper)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="jersey_size" class="block font-medium text-[#626260] uppercase mb-1">Ukuran Jersey Tim *</label>
+                        <select id="jersey_size" name="jersey_size" required class="w-full px-3.5 py-2.5 rounded-md border border-[#d3cec6] bg-white text-[#111111] focus:outline-none focus:ring-1 focus:ring-[#111111]">
+                            <option value="S">S (Ukuran Anak / Kecil)</option>
+                            <option value="M" selected>M (Ukuran Sedang)</option>
+                            <option value="L">L (Ukuran Besar)</option>
+                            <option value="XL">XL (Ukuran Extra Large)</option>
+                            <option value="XXL">XXL</option>
                         </select>
                     </div>
 

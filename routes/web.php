@@ -9,6 +9,9 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\ScheduleController;
 
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\MatchController;
+
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -35,8 +38,9 @@ Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // Player Management & Birth Year Export & Fast SPP Toggle
+    // Player Management & Birth Year Export & Fast SPP Toggle & Print Rapor
     Route::get('/players/print-roster', [PlayerController::class, 'exportPrintable'])->name('players.print');
+    Route::get('/players/{player}/print-rapor', [PlayerController::class, 'printRapor'])->name('players.print-rapor');
     Route::post('/players/{player}/toggle-spp', [PlayerController::class, 'toggleSpp'])->name('players.toggle-spp');
     Route::resource('players', PlayerController::class);
 
@@ -55,4 +59,12 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Performance Evaluations (Spider/Radar Chart)
     Route::get('/players/{player}/evaluations/edit', [EvaluationController::class, 'edit'])->name('evaluations.edit');
     Route::post('/players/{player}/evaluations', [EvaluationController::class, 'update'])->name('evaluations.update');
+
+    // Inventory & Equipment Management
+    Route::resource('inventories', InventoryController::class)->only(['index', 'store', 'destroy']);
+
+    // Match Center & Football Manager Tactical Pitch
+    Route::get('/matches/{match}/tactics', [MatchController::class, 'tactics'])->name('matches.tactics');
+    Route::post('/matches/{match}/tactics', [MatchController::class, 'updateTactics'])->name('matches.tactics.update');
+    Route::resource('matches', MatchController::class)->only(['index', 'store', 'destroy']);
 });

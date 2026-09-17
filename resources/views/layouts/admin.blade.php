@@ -94,6 +94,16 @@
                 <i class="fa-solid fa-calendar-check w-4 text-center"></i> Presensi Latihan
             </a>
 
+            <a href="{{ route('admin.matches.index') }}" 
+               class="flex items-center gap-3 px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.matches.*') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
+                <i class="fa-solid fa-trophy w-4 text-center"></i> Match Center Laga
+            </a>
+
+            <a href="{{ route('admin.inventories.index') }}" 
+               class="flex items-center gap-3 px-3.5 py-2.5 rounded-md transition-colors {{ request()->routeIs('admin.inventories.*') ? 'bg-[#ff5600] text-white font-semibold' : 'text-[#9c9fa5] hover:bg-[#313130] hover:text-white' }}">
+                <i class="fa-solid fa-boxes-packing w-4 text-center"></i> Inventaris Peralatan
+            </a>
+
             <a href="{{ route('home') }}" target="_blank"
                class="flex items-center gap-3 px-3.5 py-2.5 rounded-md text-[#9c9fa5] hover:bg-[#313130] hover:text-white transition-colors mt-6 border-t border-[#313130]">
                 <i class="fa-solid fa-globe w-4 text-center"></i> Website Publik

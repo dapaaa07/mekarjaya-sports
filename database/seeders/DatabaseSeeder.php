@@ -367,5 +367,47 @@ class DatabaseSeeder extends Seeder
         foreach ($pendingRegs as $reg) {
             Registration::updateOrCreate(['registration_code' => $reg['registration_code']], $reg);
         }
+
+        // 8. Sample Inventories
+        $sampleInventories = [
+            ['item_name' => 'Bola Sepak Speeds Size 4 (KU-10 & U-12)', 'category' => 'Bola', 'quantity' => 15, 'condition' => 'Baik', 'location' => 'Gudang Utama', 'notes' => 'Pengadaan 2026'],
+            ['item_name' => 'Bola Sepak Molten Size 5 (KU-14, U-16, U-18)', 'category' => 'Bola', 'quantity' => 12, 'condition' => 'Baik', 'location' => 'Gudang Utama', 'notes' => 'Pengadaan 2026'],
+            ['item_name' => 'Rompi Latihan High-Vis (Oranye & Hijau)', 'category' => 'Rompi', 'quantity' => 40, 'condition' => 'Baik', 'location' => 'Loker Sekretariat', 'notes' => '20 Oranye, 20 Hijau'],
+            ['item_name' => 'Cone Disc Latihan & Marker Field', 'category' => 'Cone', 'quantity' => 60, 'condition' => 'Baik', 'location' => 'Gudang Utama', 'notes' => 'Digunakan harian'],
+            ['item_name' => 'Agility Ladder 6 Meter', 'category' => 'Cone', 'quantity' => 4, 'condition' => 'Baik', 'location' => 'Gudang Utama', 'notes' => 'Latihan kelincahan'],
+            ['item_name' => 'Kotak P3K Lengkap & Semprotan Chloretil', 'category' => 'Medis', 'quantity' => 2, 'condition' => 'Baik', 'location' => 'Sekretariat', 'notes' => 'Perlengkapan medis emergency'],
+        ];
+
+        foreach ($sampleInventories as $inv) {
+            \App\Models\Inventory::updateOrCreate(['item_name' => $inv['item_name']], $inv);
+        }
+
+        // 9. Sample Match Center Records
+        $sampleMatches = [
+            [
+                'match_title' => 'Internal Game Seleksi Tim Inti U-12 vs U-14',
+                'match_date' => '2026-09-05',
+                'target_ku' => 'U-12',
+                'match_type' => 'Internal Game',
+                'opponent_name' => 'Tim B U-14',
+                'score_result' => '3 - 2',
+                'man_of_the_match' => 'Fathan Mubina Subang',
+                'match_notes' => 'Pertandingan berjalan sengit. Pergerakan sayap sangat efektif.',
+            ],
+            [
+                'match_title' => 'Uji Tanding Persahabatan SSB Mekar Jaya vs SSB Persikas Subang',
+                'match_date' => '2026-09-12',
+                'target_ku' => 'U-14',
+                'match_type' => 'Uji Tanding',
+                'opponent_name' => 'SSB Persikas Subang',
+                'score_result' => '2 - 1',
+                'man_of_the_match' => 'Arya Wiguna Cigadung',
+                'match_notes' => 'Kemenangan penting untuk mental tanding tim jelang turnamen daerah.',
+            ],
+        ];
+
+        foreach ($sampleMatches as $m) {
+            \App\Models\MatchModel::updateOrCreate(['match_title' => $m['match_title']], $m);
+        }
     }
 }

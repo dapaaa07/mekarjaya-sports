@@ -73,6 +73,7 @@ class PlayerController extends Controller
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date',
             'position' => 'required|string',
+            'jersey_size' => 'required|string|in:S,M,L,XL,XXL',
             'height_cm' => 'nullable|integer',
             'weight_kg' => 'nullable|integer',
             'school_name' => 'nullable|string|max:255',
@@ -128,6 +129,7 @@ class PlayerController extends Controller
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date',
             'position' => 'required|string',
+            'jersey_size' => 'required|string|in:S,M,L,XL,XXL',
             'height_cm' => 'nullable|integer',
             'weight_kg' => 'nullable|integer',
             'school_name' => 'nullable|string|max:255',
@@ -173,6 +175,16 @@ class PlayerController extends Controller
         $selectedKu = $request->ku;
 
         return view('admin.players.print', compact('players', 'selectedYear', 'selectedKu'));
+    }
+
+    public function printRapor(Player $player)
+    {
+        $evaluation = $player->latestEvaluation;
+        $attendanceCount = $player->attendances()->where('status', 'hadir')->count();
+        $totalSessions = $player->attendances()->count();
+        $attendanceRate = $totalSessions > 0 ? round(($attendanceCount / $totalSessions) * 100) : 100;
+
+        return view('admin.players.print-rapor', compact('player', 'evaluation', 'attendanceRate'));
     }
 
     public function toggleSpp(Player $player)
