@@ -41,8 +41,8 @@
     <!-- Sidebar Overlay for Mobile -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden transition-opacity"></div>
 
-    <!-- Sidebar Navigation (Responsive: Off-canvas on mobile, sticky 100vh viewport on desktop) -->
-    <aside id="admin-sidebar" class="fixed lg:sticky lg:top-0 inset-y-0 left-0 z-50 w-64 h-screen bg-[#111111] text-white flex flex-col justify-between border-r border-[#313130] flex-shrink-0 -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-hidden">
+    <!-- Sidebar Navigation (Responsive: Off-canvas on mobile, fixed 100vh viewport on desktop) -->
+    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 h-screen bg-[#111111] text-white flex flex-col justify-between border-r border-[#313130] flex-shrink-0 -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-hidden">
         <!-- Brand Logo (Fixed Header) -->
         <div class="h-16 flex items-center justify-between px-6 border-b border-[#313130] flex-shrink-0">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
@@ -121,8 +121,8 @@
         </div>
     </aside>
 
-    <!-- Main Content Layout -->
-    <div class="flex-grow flex flex-col min-w-0 overflow-x-hidden">
+    <!-- Main Content Layout (Padded by lg:pl-64 to accommodate fixed sidebar) -->
+    <div class="flex-grow flex flex-col min-w-0 overflow-x-hidden lg:pl-64">
         
         <!-- Top Navbar Header -->
         <header class="min-h-16 py-3 bg-[#f5f1ec] border-b border-[#d3cec6] px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sticky top-0 z-30">
