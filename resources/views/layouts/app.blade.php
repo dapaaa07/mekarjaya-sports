@@ -65,6 +65,7 @@
                     <a href="{{ route('home') }}#program" class="hover:text-[#FF6B00] transition-colors py-1">Program KU</a>
                     <a href="{{ route('home') }}#pelatih" class="hover:text-[#FF6B00] transition-colors py-1">Tim Pelatih</a>
                     <a href="{{ route('home') }}#mini-soccer" class="hover:text-[#FF6B00] transition-colors py-1">Mini Soccer</a>
+                    <a href="{{ route('home') }}#faq" class="hover:text-[#FF6B00] transition-colors py-1">FAQ</a>
                 </nav>
 
                 <!-- Action Buttons -->
@@ -93,6 +94,7 @@
             <a href="{{ route('home') }}#pelatih" class="block px-3 py-2 rounded-xl font-medium text-[#111111]">Tim Pelatih</a>
             <a href="{{ route('home') }}#mini-soccer" class="block px-3 py-2 rounded-xl font-medium text-[#111111]">Tarif Mini Soccer</a>
             <a href="{{ route('home') }}#pendaftaran" class="block px-3 py-2 rounded-xl font-medium text-[#111111]">Pendaftaran Online</a>
+            <a href="{{ route('home') }}#faq" class="block px-3 py-2 rounded-xl font-medium text-[#111111]">FAQ (Tanya Jawab)</a>
             <div class="pt-3 border-t border-[#EAEAEA] flex flex-col gap-2">
                 <a href="{{ route('login') }}" class="w-full py-2.5 text-center rounded-xl border border-[#EAEAEA] bg-white text-[#111111] font-bold text-xs">
                     <i class="fa-solid fa-lock mr-1"></i> Admin Portal
@@ -146,6 +148,8 @@
                         <li><a href="{{ route('home') }}#program" class="hover:text-white transition-colors">Program Kelompok Umur (KU)</a></li>
                         <li><a href="{{ route('home') }}#pelatih" class="hover:text-white transition-colors">Profil Pelatih & Lisensi PSSI</a></li>
                         <li><a href="{{ route('home') }}#mini-soccer" class="hover:text-white transition-colors">Tarif Sewa Mini Soccer</a></li>
+                        <li><a href="{{ route('home') }}#faq" class="hover:text-white transition-colors">FAQ & Tanya Jawab</a></li>
+                        <li><button type="button" onclick="openPrivacyModal()" class="hover:text-white transition-colors text-left focus:outline-none">Syarat & Ketentuan Privasi KK</button></li>
                     </ul>
                 </div>
 
@@ -198,10 +202,16 @@
             <!-- Bottom Copyright -->
             <div class="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-[#7b7b78] gap-4">
                 <p>&copy; {{ date('Y') }} Mekar Jaya Sport Subang. All rights reserved.</p>
-                <p>Dikembangkan untuk Mitra SSB Subang.</p>
+                <div class="flex items-center gap-4">
+                    <button type="button" onclick="openPrivacyModal()" class="hover:text-white transition-colors underline focus:outline-none">
+                        Syarat & Ketentuan serta Kebijakan Privasi Dokumen KK
+                    </button>
+                </div>
             </div>
         </div>
     </footer>
+
+    @include('components.privacy-modal')
 
     <!-- Mobile Menu Toggle Script -->
     <script>

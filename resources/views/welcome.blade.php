@@ -563,9 +563,24 @@
                             <span>Wajib berupa foto/scan gambar (JPG, JPEG, PNG, WEBP). File di atas 2 MB akan dikompresi otomatis oleh sistem sebelum disimpan.</span>
                         </div>
                     </div>
+
+                    <!-- Checkbox Persetujuan Syarat & Ketentuan -->
+                    <div class="p-4 rounded-xl bg-orange-50/60 border border-orange-100">
+                        <label for="terms_agreement" class="flex items-start gap-3 text-xs text-[#111111] cursor-pointer">
+                            <input type="checkbox" id="terms_agreement" name="terms_agreement" value="1" required {{ old('terms_agreement') ? 'checked' : '' }}
+                                   class="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#FF6B00] focus:ring-[#FF6B00] accent-[#FF6B00] cursor-pointer">
+                            <span class="leading-relaxed text-[#333333]">
+                                Saya menyatakan bahwa seluruh data yang diisi adalah benar, dan saya menyetujui 
+                                <button type="button" onclick="openPrivacyModal()" class="font-bold text-[#FF6B00] underline hover:text-[#e05e00] focus:outline-none inline">
+                                    Syarat & Ketentuan serta Kebijakan Privasi Dokumen KK
+                                </button> 
+                                SSB Mekar Jaya Subang. *
+                            </span>
+                        </label>
+                    </div>
                 </div>
 
-                <div class="pt-4">
+                <div class="pt-2">
                     <button type="submit" class="w-full btn-primary py-4 font-bold text-sm flex items-center justify-center gap-2">
                         <i class="fa-solid fa-paper-plane text-xs"></i> Kirim Formulir Pendaftaran Online
                     </button>
@@ -577,4 +592,177 @@
     </div>
 </section>
 
+
+<!-- SECTION 6: FAQ (Frequently Asked Questions & Keamanan Data) -->
+<section id="faq" class="py-16 lg:py-24 bg-[#FAFAFA] border-t border-[#EAEAEA]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="mb-12 text-center">
+            <span class="text-xs font-bold text-[#FF6B00] uppercase tracking-widest block">Tanya Jawab Umum</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight mt-1">
+                Pertanyaan yang Sering Diajukan
+            </h2>
+            <p class="text-[#666666] text-sm mt-2 max-w-xl mx-auto leading-relaxed">
+                Informasi seputar pendaftaran siswa baru, keamanan dokumen Kartu Keluarga (KK), jadwal latihan, dan fasilitas SSB Mekar Jaya Subang.
+            </p>
+        </div>
+
+        <!-- FAQ Accordion List -->
+        <div class="space-y-3.5" id="faq-accordion">
+            
+            <!-- FAQ 1 -->
+            <div class="faq-item bg-white rounded-2xl border border-[#EAEAEA] shadow-sm overflow-hidden transition-colors">
+                <button type="button" onclick="toggleFaq(this)" aria-expanded="false" class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <span class="font-bold text-sm text-[#111111]">
+                        1. Mengapa pendaftaran siswa SSB Mekar Jaya mewajibkan upload foto Kartu Keluarga (KK)?
+                    </span>
+                    <i class="fa-solid fa-chevron-down text-xs text-[#666666] faq-icon transition-transform duration-200"></i>
+                </button>
+                <div class="faq-content hidden px-5 pb-5 text-xs sm:text-sm text-[#666666] leading-relaxed border-t border-gray-50 pt-3">
+                    Dokumen Kartu Keluarga dibutuhkan untuk memverifikasi keabsahan tanggal dan tahun kelahiran anak. Dalam pembinaan sepak bola usia dini, keaslian data kelahiran sangat krusial agar anak ditempatkan pada Kelompok Umur (KU) yang tepat (seperti U-10, U-12, U-14, U-16, atau U-18), serta memenuhi syarat pendaftaran atlet resmi pada turnamen Askab PSSI Subang tanpa risiko diskualifikasi usia.
+                </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="faq-item bg-white rounded-2xl border border-[#EAEAEA] shadow-sm overflow-hidden transition-colors">
+                <button type="button" onclick="toggleFaq(this)" aria-expanded="false" class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <span class="font-bold text-sm text-[#111111]">
+                        2. Bagaimana SSB Mekar Jaya menjaga keamanan dan privasi foto KK anak saya?
+                    </span>
+                    <i class="fa-solid fa-chevron-down text-xs text-[#666666] faq-icon transition-transform duration-200"></i>
+                </button>
+                <div class="faq-content hidden px-5 pb-5 text-xs sm:text-sm text-[#666666] leading-relaxed border-t border-gray-50 pt-3">
+                    Kami memperlakukan dokumen KK sebagai data sensitif sesuai prinsip Undang-Undang No. 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP). Dokumen disimpan di server dengan akses berizin terbatas dan hanya dapat dibuka oleh staf administrasi SSB untuk verifikasi data. Berkas tidak akan pernah dipublikasikan, diperjualbelikan, atau diserahkan ke pihak ketiga di luar kepengurusan kompetisi resmi sepak bola.
+                </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="faq-item bg-white rounded-2xl border border-[#EAEAEA] shadow-sm overflow-hidden transition-colors">
+                <button type="button" onclick="toggleFaq(this)" aria-expanded="false" class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <span class="font-bold text-sm text-[#111111]">
+                        3. Bagaimana jika ukuran foto KK saya besar (misalnya lebih dari 2 MB)?
+                    </span>
+                    <i class="fa-solid fa-chevron-down text-xs text-[#666666] faq-icon transition-transform duration-200"></i>
+                </button>
+                <div class="faq-content hidden px-5 pb-5 text-xs sm:text-sm text-[#666666] leading-relaxed border-t border-gray-50 pt-3">
+                    Anda tidak perlu khawatir. Sistem kami dilengkapi teknologi kompresi otomatis. Apabila foto dokumen KK yang Anda unggah berukuran lebih dari 2 MB, sistem kami secara otomatis merampingkan ukuran file sebelum disimpan di server, dengan tetap mempertahankan kejelasan teks dan ketajaman nomor dokumen.
+                </div>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="faq-item bg-white rounded-2xl border border-[#EAEAEA] shadow-sm overflow-hidden transition-colors">
+                <button type="button" onclick="toggleFaq(this)" aria-expanded="false" class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <span class="font-bold text-sm text-[#111111]">
+                        4. Format file apa saja yang diperbolehkan saat upload dokumen KK?
+                    </span>
+                    <i class="fa-solid fa-chevron-down text-xs text-[#666666] faq-icon transition-transform duration-200"></i>
+                </button>
+                <div class="faq-content hidden px-5 pb-5 text-xs sm:text-sm text-[#666666] leading-relaxed border-t border-gray-50 pt-3">
+                    Sistem kami menerima format gambar standar yang aman, yaitu JPG, JPEG, PNG, dan WEBP. Dokumen harus berupa foto hasil tangkapan kamera smartphone atau hasil scan yang jelas, tidak buram, dan teks nama anak serta tanggal lahir dapat terbaca dengan baik.
+                </div>
+            </div>
+
+            <!-- FAQ 5 -->
+            <div class="faq-item bg-white rounded-2xl border border-[#EAEAEA] shadow-sm overflow-hidden transition-colors">
+                <button type="button" onclick="toggleFaq(this)" aria-expanded="false" class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <span class="font-bold text-sm text-[#111111]">
+                        5. Kapan jadwal latihan rutin SSB Mekar Jaya dan di mana lokasinya?
+                    </span>
+                    <i class="fa-solid fa-chevron-down text-xs text-[#666666] faq-icon transition-transform duration-200"></i>
+                </button>
+                <div class="faq-content hidden px-5 pb-5 text-xs sm:text-sm text-[#666666] leading-relaxed border-t border-gray-50 pt-3">
+                    Sesi latihan rutin diadakan 3 kali seminggu, yaitu setiap hari Selasa dan Kamis sore (pukul 15.30 – 17.30 WIB) serta Minggu pagi (pukul 07.30 – 09.30 WIB) bertempat di Lapangan Veteran Dangdeur, Subang.
+                </div>
+            </div>
+
+            <!-- FAQ 6 -->
+            <div class="faq-item bg-white rounded-2xl border border-[#EAEAEA] shadow-sm overflow-hidden transition-colors">
+                <button type="button" onclick="toggleFaq(this)" aria-expanded="false" class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <span class="font-bold text-sm text-[#111111]">
+                        6. Bagaimana alur proses setelah saya mengirim formulir pendaftaran online?
+                    </span>
+                    <i class="fa-solid fa-chevron-down text-xs text-[#666666] faq-icon transition-transform duration-200"></i>
+                </button>
+                <div class="faq-content hidden px-5 pb-5 text-xs sm:text-sm text-[#666666] leading-relaxed border-t border-gray-50 pt-3">
+                    Setelah formulir dikirim, sistem akan menerbitkan Kode Pendaftaran unik. Pengurus SSB akan memeriksa dan memvalidasi dokumen KK dalam waktu maksimal 1x24 jam kerja. Setelah disetujui, admin akan menghubungi nomor WhatsApp orang tua untuk penyerahan Nomor Induk Siswa (NIS), ukuran seragam tim, dan konfirmasi sesi latihan perdana.
+                </div>
+            </div>
+
+            <!-- FAQ 7 -->
+            <div class="faq-item bg-white rounded-2xl border border-[#EAEAEA] shadow-sm overflow-hidden transition-colors">
+                <button type="button" onclick="toggleFaq(this)" aria-expanded="false" class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <span class="font-bold text-sm text-[#111111]">
+                        7. Bagaimana cara orang tua memantau nilai rapor perkembangan anak?
+                    </span>
+                    <i class="fa-solid fa-chevron-down text-xs text-[#666666] faq-icon transition-transform duration-200"></i>
+                </button>
+                <div class="faq-content hidden px-5 pb-5 text-xs sm:text-sm text-[#666666] leading-relaxed border-t border-gray-50 pt-3">
+                    Orang tua dapat mengunjungi menu <strong>Portal Orang Tua</strong> pada website ini kapan saja. Cukup masukkan Nomor Induk Siswa (NIS) atau nomor WhatsApp yang terdaftar untuk melihat kartu anggota digital serta grafik spider radar penilaian teknik (passing, dribbling, shooting, fisik, disiplin, taktik) yang diperbarui secara berkala oleh tim pelatih.
+                </div>
+            </div>
+
+            <!-- FAQ 8 -->
+            <div class="faq-item bg-white rounded-2xl border border-[#EAEAEA] shadow-sm overflow-hidden transition-colors">
+                <button type="button" onclick="toggleFaq(this)" aria-expanded="false" class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <span class="font-bold text-sm text-[#111111]">
+                        8. Apakah pemesanan lapangan Mini Soccer Mekar Jaya dapat dilakukan secara online di web ini?
+                    </span>
+                    <i class="fa-solid fa-chevron-down text-xs text-[#666666] faq-icon transition-transform duration-200"></i>
+                </button>
+                <div class="faq-content hidden px-5 pb-5 text-xs sm:text-sm text-[#666666] leading-relaxed border-t border-gray-50 pt-3">
+                    Untuk menjaga akurasi jadwal sewa lapangan rumput sintetis secara langsung dan fleksibel, reservasi lapangan Mini Soccer dilayani secara langsung melalui kontak WhatsApp pengelola kami di <strong>0851-3346-3626</strong>.
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Help Banner (16px rounded card) -->
+        <div class="mt-12 p-6 rounded-2xl bg-white border border-[#EAEAEA] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div>
+                <h4 class="font-bold text-sm text-[#111111]">Masih Memiliki Pertanyaan Lain?</h4>
+                <p class="text-xs text-[#666666] mt-0.5">Pengurus SSB Mekar Jaya Subang siap membantu Anda melalui layanan komunikasi WhatsApp.</p>
+            </div>
+            <a href="https://wa.me/6285133463626?text={{ rawurlencode('Halo Pengurus SSB Mekar Jaya, saya ingin bertanya seputar pendaftaran siswa...') }}" target="_blank"
+               class="btn-primary text-xs py-2.5 px-4 font-semibold inline-flex items-center gap-2 flex-shrink-0">
+                <i class="fa-brands fa-whatsapp text-sm"></i> Chat Sekretariat WA
+            </a>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- SCRIPTS UNTUK ACCORDION FAQ -->
+<script>
+    function toggleFaq(btn) {
+        const item = btn.closest('.faq-item');
+        const content = item.querySelector('.faq-content');
+        const icon = item.querySelector('.faq-icon');
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+        // Close other items for neat accordion behavior
+        document.querySelectorAll('.faq-item').forEach(function(otherItem) {
+            if (otherItem !== item) {
+                const otherBtn = otherItem.querySelector('button');
+                const otherContent = otherItem.querySelector('.faq-content');
+                const otherIcon = otherItem.querySelector('.faq-icon');
+                if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+                if (otherContent) otherContent.classList.add('hidden');
+                if (otherIcon) otherIcon.classList.remove('rotate-180');
+            }
+        });
+
+        if (isExpanded) {
+            btn.setAttribute('aria-expanded', 'false');
+            content.classList.add('hidden');
+            icon.classList.remove('rotate-180');
+        } else {
+            btn.setAttribute('aria-expanded', 'true');
+            content.classList.remove('hidden');
+            icon.classList.add('rotate-180');
+        }
+    }
+</script>
+
 @endsection
+

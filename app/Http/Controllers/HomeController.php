@@ -90,11 +90,13 @@ class HomeController extends Controller
             'address' => 'nullable|string',
             'health_notes' => 'nullable|string',
             'kk_document' => 'required|file|image|mimes:jpeg,jpg,png,webp|max:10240',
+            'terms_agreement' => 'accepted',
         ], [
             'kk_document.required' => 'Dokumen Kartu Keluarga (KK) wajib diunggah.',
             'kk_document.image' => 'File dokumen KK harus berupa gambar.',
             'kk_document.mimes' => 'Format file dokumen KK harus JPG, JPEG, PNG, atau WEBP.',
             'kk_document.max' => 'Ukuran file dokumen KK maksimal 10 MB.',
+            'terms_agreement.accepted' => 'Anda wajib menyetujui Syarat & Ketentuan serta Kebijakan Privasi Dokumen KK.',
         ]);
 
         $kkPath = null;
@@ -108,6 +110,7 @@ class HomeController extends Controller
         $birthYear = date('Y', strtotime($validated['birth_date']));
         $regCode = 'REG-MJ-' . date('Ym') . rand(100, 999);
 
+        unset($validated['terms_agreement']);
         unset($validated['kk_document']);
 
         Registration::create(array_merge($validated, [
