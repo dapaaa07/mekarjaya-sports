@@ -26,7 +26,16 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.02em;
-    color: #111111;
+    color: inherit;
+}
+
+#mini-soccer h1, 
+#mini-soccer h2, 
+#mini-soccer h3, 
+#mini-soccer h4, 
+#mini-soccer h5, 
+#mini-soccer h6 {
+    color: #FFFFFF !important;
 }
 
 /* Cooking App Design System - Card Component (16px radius, white bg, soft shadow) */

@@ -11,11 +11,6 @@
             
             <!-- Left Hero Content -->
             <div class="lg:col-span-7 space-y-6 text-left">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-[#FF6B00] text-xs font-bold tracking-tight">
-                    <span class="w-2 h-2 rounded-full bg-[#FF6B00] animate-pulse"></span>
-                    <span>Akademi Sepak Bola & Mini Soccer Subang</span>
-                </div>
-
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#111111] tracking-tight leading-[1.1]">
                     Mencetak Pesepakbola <span class="text-[#FF6B00]">Berkarakter</span> & Berprestasi
                 </h1>
@@ -108,12 +103,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="max-w-3xl mb-10">
-            <span class="text-xs font-bold text-[#FF6B00] uppercase tracking-widest block">Fitur Utama Mitra</span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight mt-1">
-                Daftar & Pencarian Pemain Berdasarkan Tahun Lahir
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
+                Direktori & Data Siswa SSB Mekar Jaya
             </h2>
             <p class="text-[#666666] mt-2 text-sm sm:text-base leading-relaxed">
-                Memudahkan pelatih, pengurus, dan orang tua dalam memfilter data siswa SSB Mekar Jaya Subang sesuai angkatan kelahiran dan Kelompok Umur (KU).
+                Informasi resmi seluruh siswa aktif Akademi Sepak Bola Mekar Jaya Subang. Saring data berdasarkan nama, Nomor Induk Siswa (NIS), tahun kelahiran, maupun Kelompok Umur (KU).
             </p>
         </div>
 
@@ -343,11 +337,11 @@
         
         <div class="max-w-3xl mb-12">
             <span class="text-xs font-bold text-[#FF6B00] uppercase tracking-widest block">Fasilitas Mini Soccer</span>
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mt-1">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold !text-white text-white tracking-tight mt-1">
                 Sewa Lapangan Mekar Jaya Mini Soccer
             </h2>
-            <p class="text-gray-400 mt-2 text-sm sm:text-base leading-relaxed">
-                Lapangan Mini Soccer sintetis berkualitas di Jl. Arief Rahman Hakim No.18, Cigadung, Subang. Buka setiap hari pukul 06.00 – 00.00 WIB.
+            <p class="text-gray-200 mt-2 text-sm sm:text-base leading-relaxed">
+                Lapangan Mini Soccer sintetis berkualitas di Jl. Arief Rahman Hakim No.18, Cigadung, Subang. Buka setiap hari pukul 06.00 - 00.00 WIB.
             </p>
         </div>
 
@@ -356,23 +350,23 @@
             @foreach($miniSoccerRates as $rate)
                 <div class="bg-[#1C1C1E] p-8 rounded-2xl border border-gray-800 flex flex-col justify-between hover:border-[#FF6B00] transition-colors">
                     <div>
-                        <div class="inline-block px-3 py-1 rounded-full bg-[#FF6B00]/10 text-[#FF6B00] text-xs font-bold mb-4 border border-[#FF6B00]/20">
+                        <div class="inline-block px-3 py-1 rounded-full bg-[#FF6B00]/15 text-[#FF6B00] text-xs font-bold mb-4 border border-[#FF6B00]/30">
                             {{ $rate->day_type }}
                         </div>
-                        <h3 class="font-bold text-white text-base mb-2">{{ $rate->time_slot }}</h3>
+                        <h3 class="font-bold !text-white text-white text-base mb-2">{{ $rate->time_slot }}</h3>
                         <div class="mb-6">
                             <span class="text-3xl font-extrabold text-[#FF6B00] font-mono">
                                 Rp {{ number_format($rate->price_per_hour, 0, ',', '.') }}
                             </span>
-                            <span class="text-sm text-gray-400">/ Jam</span>
+                            <span class="text-sm text-gray-300">/ Jam</span>
                         </div>
-                        <p class="text-xs text-gray-300 leading-relaxed border-t border-gray-800 pt-4">
+                        <p class="text-xs text-gray-200 leading-relaxed border-t border-gray-800 pt-4">
                             <i class="fa-solid fa-check text-emerald-400 mr-1.5"></i> {{ $rate->facilities }}
                         </p>
                     </div>
 
                     <a href="https://wa.me/6285133463626?text=Halo%20Mekar%20Jaya%20Mini%20Soccer,%20saya%20ingin%20booking%20lapangan%20slot%20{{ urlencode($rate->time_slot) }}" target="_blank"
-                       class="mt-8 w-full py-3 btn-primary text-center inline-flex items-center justify-center gap-2">
+                       class="mt-8 w-full py-3 btn-primary text-center inline-flex items-center justify-center gap-2 font-semibold !text-white">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Booking Lapangan
                     </a>
                 </div>
@@ -490,7 +484,7 @@
                     </div>
 
                     <div>
-                        <label for="birth_date" class="block font-bold text-[#111111] uppercase mb-1.5">Tanggal Lahir * (Penentu KU)</label>
+                        <label for="birth_date" class="block font-bold text-[#111111] uppercase mb-1.5">Tanggal Lahir *</label>
                         <input type="date" id="birth_date" name="birth_date" required value="{{ old('birth_date') }}"
                             class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
                     </div>
