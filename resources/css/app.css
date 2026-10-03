@@ -1,107 +1,147 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
 @import 'tailwindcss';
 
 @theme {
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
     
-    /* DESIGN.md Color Tokens */
-    --color-canvas: #f5f1ec;
-    --color-surface-white: #ffffff;
-    --color-surface-cream: #ebe7e1;
-    --color-inverse-canvas: #111111;
-    
-    --color-hairline: #d3cec6;
-    --color-hairline-soft: #ebe7e1;
-    
-    --color-ink: #111111;
-    --color-ink-muted: #626260;
-    --color-ink-subtle: #7b7b78;
-    --color-ink-tertiary: #9c9fa5;
-    
-    --color-fin-orange: #ff5600;
-    --color-turf-green: #16A34A;
-    --color-turf-dark: #14532D;
+    /* Cooking App Design System Color Tokens */
+    --color-primary: #FF6B00;
+    --color-secondary: #000000;
+    --color-background: #FFFFFF;
+    --color-surface: #FFFFFF;
+    --color-text-primary: #111111;
+    --color-text-secondary: #666666;
+    --color-text-inverse: #FFFFFF;
+    --color-border: #EAEAEA;
+    --color-border-dark: #222222;
 }
 
 body {
     font-family: var(--font-sans);
-    background-color: var(--color-canvas);
-    color: var(--color-ink);
+    background-color: #FFFFFF;
+    color: #111111;
     -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.02em;
+    color: #111111;
 }
 
-/* DESIGN.md Floating Tile Cards */
-.editorial-card {
-    background-color: var(--color-surface-white);
-    border: 1px solid var(--color-hairline);
+/* Cooking App Design System - Card Component (16px radius, white bg, soft shadow) */
+.editorial-card, .tile {
+    background-color: #FFFFFF;
+    color: #111111;
+    border: 1px solid #EAEAEA;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.editorial-card:hover, .tile:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06), 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+/* Cooking App Design System - Primary Button (12px radius, #FF6B00 orange bg, white text) */
+.btn-primary, .btn-fin {
+    background-color: #FF6B00;
+    color: #FFFFFF;
     border-radius: 12px;
-}
-
-.editorial-card-lg {
-    background-color: var(--color-surface-white);
-    border: 1px solid var(--color-hairline);
-    border-radius: 16px;
-}
-
-.editorial-card-dark {
-    background-color: var(--color-inverse-canvas);
-    color: #ffffff;
-    border-radius: 16px;
-}
-
-/* DESIGN.md Button Styles */
-.btn-primary {
-    background-color: var(--color-ink);
-    color: #ffffff;
-    border-radius: 8px;
-    padding: 10px 18px;
-    font-weight: 500;
-    font-size: 15px;
-    transition: background-color 0.15s ease;
-}
-.btn-primary:hover {
-    background-color: #262626;
-}
-
-.btn-fin {
-    background-color: var(--color-fin-orange);
-    color: #ffffff;
-    border-radius: 8px;
-    padding: 10px 18px;
+    padding: 10px 20px;
     font-weight: 600;
-    font-size: 15px;
-    transition: background-color 0.15s ease;
-}
-.btn-fin:hover {
-    background-color: #e04b00;
+    font-size: 14px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.25);
+    cursor: pointer;
 }
 
+.btn-primary:hover, .btn-fin:hover {
+    background-color: #e56000;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(255, 107, 0, 0.35);
+}
+
+.btn-primary:active, .btn-fin:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(255, 107, 0, 0.2);
+}
+
+/* Secondary Button (12px radius, #000000 black bg, white text) */
 .btn-secondary {
-    background-color: var(--color-surface-white);
-    color: var(--color-ink);
-    border: 1px solid var(--color-hairline);
-    border-radius: 8px;
-    padding: 10px 18px;
-    font-weight: 500;
-    font-size: 15px;
-    transition: background-color 0.15s ease;
+    background-color: #000000;
+    color: #FFFFFF;
+    border: 1px solid #000000;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    cursor: pointer;
 }
+
 .btn-secondary:hover {
-    background-color: var(--color-surface-cream);
+    background-color: #222222;
+    border-color: #222222;
 }
 
-.text-fin-orange {
-    color: var(--color-fin-orange);
+/* Badges */
+.badge-primary {
+    background-color: rgba(255, 107, 0, 0.1);
+    color: #FF6B00;
+    border: 1px solid rgba(255, 107, 0, 0.2);
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
 }
 
-.bg-fin-orange {
-    background-color: var(--color-fin-orange);
+.badge-secondary {
+    background-color: #F5F5F5;
+    color: #111111;
+    border: 1px solid #EAEAEA;
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
 }
 
-.border-hairline {
-    border-color: var(--color-hairline);
+.badge-success {
+    background-color: rgba(22, 163, 74, 0.1);
+    color: #16A34A;
+    border: 1px solid rgba(22, 163, 74, 0.2);
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.badge-danger {
+    background-color: rgba(196, 28, 28, 0.1);
+    color: #C41C1C;
+    border: 1px solid rgba(196, 28, 28, 0.2);
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #111111;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #333333;
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #FF6B00;
 }

@@ -7,19 +7,19 @@
 
 <div class="space-y-6">
 
-    <!-- Date & Schedule Filter Controls (DESIGN.md Editorial Card) -->
+    <!-- Date & Schedule Filter Controls (Cooking App 16px Card) -->
     <div class="editorial-card p-6">
         <form action="{{ route('admin.attendances.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end text-xs">
             
             <div class="md:col-span-3">
-                <label for="date" class="block font-medium text-[#626260] uppercase mb-1">Tanggal Sesi Latihan *</label>
+                <label for="date" class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Tanggal Sesi Latihan *</label>
                 <input type="date" id="date" name="date" value="{{ $date }}" 
-                    class="w-full px-3.5 py-2 rounded-md border border-[#d3cec6] bg-white text-[#111111] focus:outline-none focus:ring-1 focus:ring-[#111111] font-bold">
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-white text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] font-bold">
             </div>
 
             <div class="md:col-span-4">
-                <label for="schedule_id" class="block font-medium text-[#626260] uppercase mb-1">Pilih Sesi Jadwal Terdaftar</label>
-                <select id="schedule_id" name="schedule_id" class="w-full px-3.5 py-2 rounded-md border border-[#d3cec6] bg-white text-[#111111] focus:outline-none focus:ring-1 focus:ring-[#111111] font-semibold">
+                <label for="schedule_id" class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Pilih Sesi Jadwal Terdaftar</label>
+                <select id="schedule_id" name="schedule_id" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-white text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] font-semibold">
                     <option value="">-- Presensi Bebas Tanpa Sesi --</option>
                     @foreach($todaySchedules as $ts)
                         <option value="{{ $ts->id }}" {{ ($selectedSchedule && $selectedSchedule->id == $ts->id) ? 'selected' : '' }}>
@@ -30,8 +30,8 @@
             </div>
 
             <div class="md:col-span-3">
-                <label for="year" class="block font-medium text-[#626260] uppercase mb-1">Filter Tahun Lahir Siswa</label>
-                <select id="year" name="year" class="w-full px-3.5 py-2 rounded-md border border-[#d3cec6] bg-white text-[#111111] focus:outline-none focus:ring-1 focus:ring-[#111111] font-medium">
+                <label for="year" class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Filter Tahun Lahir Siswa</label>
+                <select id="year" name="year" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-white text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] font-medium">
                     <option value="">-- Semua Tahun Lahir --</option>
                     @foreach($availableYears as $yr)
                         <option value="{{ $yr }}" {{ request('year') == $yr ? 'selected' : '' }}>
@@ -41,8 +41,8 @@
                 </select>
             </div>
 
-            <div class="md:col-span-2 flex gap-1">
-                <button type="submit" class="w-full btn-primary text-xs py-2 flex items-center justify-center gap-1">
+            <div class="md:col-span-2 flex gap-1.5">
+                <button type="submit" class="w-full btn-primary text-xs py-2.5 rounded-xl flex items-center justify-center gap-1 font-medium shadow-sm">
                     <i class="fa-solid fa-search"></i> Tampilkan
                 </button>
             </div>
@@ -52,26 +52,26 @@
 
     <!-- Active Correlated Schedule Banner -->
     @if($selectedSchedule)
-        <div class="bg-[#111111] text-white p-5 rounded-xl border border-[#313130] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs">
+        <div class="bg-[#111111] text-white p-5 rounded-2xl border border-[#222222] shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs">
             <div class="space-y-1">
                 <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded bg-[#ff5600] text-white font-mono font-bold text-[10px]">
+                    <span class="px-2.5 py-0.5 rounded-lg bg-[#FF6B00] text-white font-mono font-bold text-[10px]">
                         SESI JADWAL #{{ $selectedSchedule->id }}
                     </span>
-                    <h3 class="font-bold text-white text-sm">{{ $selectedSchedule->title }}</h3>
+                    <h3 class="font-extrabold text-white text-sm">{{ $selectedSchedule->title }}</h3>
                 </div>
-                <p class="text-[#9c9fa5]">
-                    <i class="fa-solid fa-clock text-[#ff5600] mr-1"></i> {{ date('l, d M Y', strtotime($selectedSchedule->schedule_date)) }} ({{ $selectedSchedule->formatted_time }})
-                    <span class="mx-1 text-[#313130]">|</span>
+                <p class="text-[#888888]">
+                    <i class="fa-solid fa-clock text-[#FF6B00] mr-1"></i> {{ date('l, d M Y', strtotime($selectedSchedule->schedule_date)) }} ({{ $selectedSchedule->formatted_time }})
+                    <span class="mx-1 text-[#333333]">|</span>
                     <i class="fa-solid fa-location-dot text-[#16A34A] mr-1"></i> {{ $selectedSchedule->location }}
-                    <span class="mx-1 text-[#313130]">|</span>
-                    <i class="fa-solid fa-user-shield text-[#ff5600] mr-1"></i> Pelatih: {{ $selectedSchedule->coach_in_charge ?? 'Tim Pelatih' }}
+                    <span class="mx-1 text-[#333333]">|</span>
+                    <i class="fa-solid fa-user-shield text-[#FF6B00] mr-1"></i> Pelatih: {{ $selectedSchedule->coach_in_charge ?? 'Tim Pelatih' }}
                 </p>
             </div>
 
             <div class="flex items-center gap-2">
                 {!! $selectedSchedule->status_badge !!}
-                <a href="{{ route('admin.schedules.index') }}" class="btn-secondary text-[11px] py-1 px-3">
+                <a href="{{ route('admin.schedules.index') }}" class="btn-secondary text-[11px] py-1.5 px-3 rounded-xl font-medium">
                     &larr; Lihat Semua Jadwal
                 </a>
             </div>
@@ -86,12 +86,12 @@
 
         <div class="editorial-card overflow-hidden">
             
-            <div class="p-5 bg-[#ebe7e1] border-b border-[#d3cec6] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="p-5 bg-[#FAFAFA] border-b border-[#EAEAEA] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h3 class="font-bold text-[#111111] text-base">
+                    <h3 class="font-extrabold text-[#111111] text-base">
                         Checklist Presensi: {{ date('l, d F Y', strtotime($date)) }}
                     </h3>
-                    <p class="text-xs text-[#626260]">
+                    <p class="text-xs text-[#666666]">
                         @if($selectedSchedule)
                             Pilih status kehadiran siswa untuk sesi <strong>{{ $selectedSchedule->title }}</strong> (Target: {{ $selectedSchedule->target_ku }}).
                         @else
@@ -100,14 +100,14 @@
                     </p>
                 </div>
 
-                <button type="submit" class="btn-fin text-xs py-2 px-4 flex items-center gap-1.5">
+                <button type="submit" class="btn-primary text-xs py-2.5 px-5 rounded-xl flex items-center gap-1.5 font-semibold shadow-sm">
                     <i class="fa-solid fa-floppy-disk text-xs"></i> Simpan Presensi Sesi Ini
                 </button>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs text-[#111111]">
-                    <thead class="bg-[#ebe7e1] text-[#111111] font-semibold uppercase border-b border-[#d3cec6]">
+                    <thead class="bg-[#FAFAFA] text-[#111111] font-semibold uppercase text-[11px] border-b border-[#EAEAEA]">
                         <tr>
                             <th class="p-4 text-center">No</th>
                             <th class="p-4">Siswa & NIS</th>
@@ -116,20 +116,20 @@
                             <th class="p-4 text-center">Status Kehadiran (Hadir / Izin / Sakit / Alpa)</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-[#ebe7e1]">
+                    <tbody class="divide-y divide-[#EAEAEA]">
                         @forelse($players as $index => $player)
                             @php
                                 $att = $attendances->get($player->id);
                                 $currentStatus = $att ? $att->status : 'hadir';
                             @endphp
-                            <tr class="hover:bg-[#ebe7e1]/40 transition-colors">
-                                <td class="p-4 text-[#626260] font-mono text-center">{{ $index + 1 }}</td>
+                            <tr class="hover:bg-[#FAFAFA] transition-colors">
+                                <td class="p-4 text-[#666666] font-mono text-center">{{ $index + 1 }}</td>
                                 <td class="p-4">
                                     <span class="font-bold text-[#111111] text-sm block leading-tight">{{ $player->full_name }}</span>
-                                    <span class="text-[11px] text-[#626260] font-mono">{{ $player->nis }}</span>
+                                    <span class="text-[11px] text-[#666666] font-mono">{{ $player->nis }}</span>
                                 </td>
                                 <td class="p-4">
-                                    <span class="px-2 py-0.5 rounded bg-[#111111] text-white font-mono font-bold text-xs">
+                                    <span class="px-2.5 py-1 rounded-lg bg-[#111111] text-white font-mono font-bold text-xs">
                                         {{ $player->birth_year }}
                                     </span>
                                     <span class="text-xs text-[#111111] font-medium ml-1">({{ $player->age_category_badge }})</span>
@@ -138,7 +138,7 @@
                                     {{ $player->position }}
                                 </td>
                                 <td class="p-4 text-center">
-                                    <div class="inline-flex items-center gap-3 bg-[#f5f1ec] p-1.5 rounded-md border border-[#d3cec6]">
+                                    <div class="inline-flex items-center gap-3 bg-[#FAFAFA] p-2 rounded-xl border border-[#EAEAEA]">
                                         <label class="flex items-center gap-1.5 cursor-pointer">
                                             <input type="radio" name="attendance[{{ $player->id }}]" value="hadir" {{ $currentStatus == 'hadir' ? 'checked' : '' }} class="text-[#16A34A] focus:ring-[#16A34A]">
                                             <span class="font-semibold text-[#16A34A] text-xs">Hadir</span>
@@ -148,19 +148,19 @@
                                             <span class="font-semibold text-[#111111] text-xs">Izin</span>
                                         </label>
                                         <label class="flex items-center gap-1.5 cursor-pointer">
-                                            <input type="radio" name="attendance[{{ $player->id }}]" value="sakit" {{ $currentStatus == 'sakit' ? 'checked' : '' }} class="text-[#ff5600] focus:ring-[#ff5600]">
-                                            <span class="font-semibold text-[#ff5600] text-xs">Sakit</span>
+                                            <input type="radio" name="attendance[{{ $player->id }}]" value="sakit" {{ $currentStatus == 'sakit' ? 'checked' : '' }} class="text-[#FF6B00] focus:ring-[#FF6B00]">
+                                            <span class="font-semibold text-[#FF6B00] text-xs">Sakit</span>
                                         </label>
                                         <label class="flex items-center gap-1.5 cursor-pointer">
-                                            <input type="radio" name="attendance[{{ $player->id }}]" value="alpa" {{ $currentStatus == 'alpa' ? 'checked' : '' }} class="text-[#c41c1c] focus:ring-[#c41c1c]">
-                                            <span class="font-semibold text-[#c41c1c] text-xs">Alpa</span>
+                                            <input type="radio" name="attendance[{{ $player->id }}]" value="alpa" {{ $currentStatus == 'alpa' ? 'checked' : '' }} class="text-[#EF4444] focus:ring-[#EF4444]">
+                                            <span class="font-semibold text-[#EF4444] text-xs">Alpa</span>
                                         </label>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="p-12 text-center text-[#626260]">
+                                <td colspan="5" class="p-12 text-center text-[#666666]">
                                     Tidak ada pemain aktif untuk kriteria ini.
                                 </td>
                             </tr>
@@ -169,8 +169,8 @@
                 </table>
             </div>
 
-            <div class="p-5 bg-[#ebe7e1] border-t border-[#d3cec6] flex justify-end">
-                <button type="submit" class="btn-fin text-xs py-2.5 px-6 flex items-center gap-1.5">
+            <div class="p-5 bg-[#FAFAFA] border-t border-[#EAEAEA] flex justify-end">
+                <button type="submit" class="btn-primary text-xs py-2.5 px-6 rounded-xl flex items-center gap-1.5 font-semibold shadow-sm">
                     <i class="fa-solid fa-floppy-disk text-xs"></i> Simpan Presensi Sesi Ini
                 </button>
             </div>

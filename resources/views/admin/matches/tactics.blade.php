@@ -6,25 +6,25 @@
 @section('content')
 <div x-data="tacticsManager()" class="space-y-6">
 
-    <!-- Header Banner & Action Buttons -->
-    <div class="tile flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <!-- Header Banner & Action Buttons (Cooking App 16px Card) -->
+    <div class="editorial-card p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
             <div class="flex items-center gap-2">
-                <span class="bg-[#111111] text-[#ff5600] font-mono text-xs px-2 py-0.5 rounded font-bold uppercase">{{ $match->match_type }}</span>
-                <span class="text-xs text-[#626260] font-mono font-bold">KU: {{ $match->target_ku }}</span>
+                <span class="bg-[#111111] text-[#FF6B00] font-mono text-xs px-2.5 py-0.5 rounded-lg font-bold uppercase">{{ $match->match_type }}</span>
+                <span class="text-xs text-[#666666] font-mono font-bold">KU: {{ $match->target_ku }}</span>
             </div>
-            <h2 class="font-bold text-xl text-[#111111] tracking-tight mt-1">{{ $match->match_title }}</h2>
-            <p class="text-xs text-[#626260]">
-                <i class="fa-solid fa-calendar text-[#ff5600] mr-1"></i> {{ $match->match_date->format('d F Y') }}
+            <h2 class="font-extrabold text-xl text-[#111111] tracking-tight mt-1">{{ $match->match_title }}</h2>
+            <p class="text-xs text-[#666666]">
+                <i class="fa-solid fa-calendar text-[#FF6B00] mr-1"></i> {{ $match->match_date->format('d F Y') }}
                 @if($match->opponent_name) | <strong class="text-[#111111]">vs {{ $match->opponent_name }}</strong> @endif
             </p>
         </div>
 
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.matches.index') }}" class="btn-secondary text-xs py-2 px-4">
+            <a href="{{ route('admin.matches.index') }}" class="btn-secondary text-xs py-2.5 px-4 rounded-xl font-medium">
                 &larr; Kembali Ke List Match
             </a>
-            <button type="button" @click="submitForm()" class="btn-fin text-xs py-2 px-5 flex items-center gap-2">
+            <button type="button" @click="submitForm()" class="btn-primary text-xs py-2.5 px-5 flex items-center gap-2 rounded-xl font-semibold shadow-sm">
                 <i class="fa-solid fa-floppy-disk"></i> Simpan Formasi & Lineup
             </button>
         </div>
@@ -36,15 +36,15 @@
         <!-- Left Controls: Formation Selector & Squad Options -->
         <div class="lg:col-span-4 space-y-6">
             
-            <div class="tile space-y-4">
-                <h3 class="font-bold text-sm text-[#111111] border-b border-[#ebe7e1] pb-2.5 flex items-center justify-between">
-                    <span><i class="fa-solid fa-sliders text-[#ff5600] mr-1.5"></i> Skema Formasi Taktis</span>
-                    <span class="text-[10px] font-mono text-[#9c9fa5] bg-[#111111] text-white px-2 py-0.5 rounded">FM STYLE</span>
+            <div class="editorial-card p-6 space-y-4">
+                <h3 class="font-extrabold text-sm text-[#111111] border-b border-[#EAEAEA] pb-3 flex items-center justify-between">
+                    <span><i class="fa-solid fa-sliders text-[#FF6B00] mr-1.5"></i> Skema Formasi Taktis</span>
+                    <span class="text-[10px] font-mono text-[#FF6B00] bg-[#FFF2E8] border border-[#FFE0CC] px-2.5 py-0.5 rounded-lg font-bold">FM STYLE</span>
                 </h3>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-[#626260] uppercase mb-1">Pilih Formasi Tim *</label>
-                    <select x-model="formation" @change="changeFormation()" class="w-full bg-[#f5f1ec] border border-[#d3cec6] rounded-md px-3.5 py-2.5 text-xs font-bold text-[#111111] focus:ring-[#ff5600] focus:border-[#ff5600]">
+                    <label class="block text-[11px] font-semibold text-[#111111] uppercase tracking-wider mb-1.5">Pilih Formasi Tim *</label>
+                    <select x-model="formation" @change="changeFormation()" class="w-full bg-white border border-[#EAEAEA] rounded-xl px-3.5 py-2.5 text-xs font-bold text-[#111111] focus:ring-2 focus:ring-[#FF6B00] focus:outline-none">
                         <option value="4-3-3">4 - 3 - 3 (Klasik Penyerang Sayap)</option>
                         <option value="4-4-2">4 - 4 - 2 (Dual Striker Offensif)</option>
                         <option value="3-5-2">3 - 5 - 2 (Wing-Back Dominasi Tengah)</option>
@@ -53,30 +53,30 @@
                     </select>
                 </div>
 
-                <div class="p-3 bg-[#f5f1ec] rounded-md border border-[#d3cec6] text-xs space-y-1">
+                <div class="p-3.5 bg-[#FAFAFA] rounded-xl border border-[#EAEAEA] text-xs space-y-1">
                     <span class="font-semibold text-[#111111] block">Petunjuk Pengaturan Lineup:</span>
-                    <p class="text-[11px] text-[#626260]">Pilih nama pemain SSB pada masing-masing posisi di atas papan lapangan hijau. Susunan pemain akan tersimpan otomatis dan dapat dilihat di portal publik.</p>
+                    <p class="text-[11px] text-[#666666]">Pilih nama pemain SSB pada masing-masing posisi di atas papan lapangan hijau. Susunan pemain akan tersimpan otomatis dan dapat dilihat di portal publik.</p>
                 </div>
             </div>
 
             <!-- Available Players Quick Reference -->
-            <div class="tile space-y-3">
-                <h3 class="font-bold text-sm text-[#111111] border-b border-[#ebe7e1] pb-2 flex items-center justify-between">
+            <div class="editorial-card p-6 space-y-3">
+                <h3 class="font-extrabold text-sm text-[#111111] border-b border-[#EAEAEA] pb-3 flex items-center justify-between">
                     <span><i class="fa-solid fa-users text-[#16A34A] mr-1.5"></i> Skuad SSB Mekar Jaya ({{ count($availablePlayers) }})</span>
-                    <span class="text-[10px] font-mono text-[#16A34A] bg-[#16A34A]/10 px-2 py-0.5 rounded font-bold">AKTIF</span>
+                    <span class="text-[10px] font-mono text-[#16A34A] bg-[#16A34A]/10 px-2.5 py-0.5 rounded-lg font-bold">AKTIF</span>
                 </h3>
 
-                <div class="max-h-72 overflow-y-auto space-y-1.5 pr-1">
+                <div class="max-h-72 overflow-y-auto space-y-2 pr-1">
                     @forelse($availablePlayers as $p)
-                        <div class="p-2 rounded bg-[#f5f1ec] hover:bg-[#ebe7e1] border border-[#d3cec6] flex items-center justify-between text-xs transition-colors">
+                        <div class="p-2.5 rounded-xl bg-[#FAFAFA] hover:bg-white border border-[#EAEAEA] flex items-center justify-between text-xs transition-colors">
                             <div>
                                 <span class="font-bold text-[#111111] block leading-tight">{{ $p->full_name }}</span>
-                                <span class="text-[10px] text-[#626260]">NIS: {{ $p->nis }} | Lahir {{ $p->birth_year }}</span>
+                                <span class="text-[10px] text-[#666666]">NIS: {{ $p->nis }} | Lahir {{ $p->birth_year }}</span>
                             </div>
-                            <span class="text-[10px] font-semibold bg-[#111111] text-white px-2 py-0.5 rounded">{{ $p->position }}</span>
+                            <span class="text-[10px] font-semibold bg-[#111111] text-white px-2 py-0.5 rounded-lg">{{ $p->position }}</span>
                         </div>
                     @empty
-                        <p class="text-xs text-[#626260] text-center py-4">Tidak ada data pemain untuk KU ini.</p>
+                        <p class="text-xs text-[#666666] text-center py-4">Tidak ada data pemain untuk KU ini.</p>
                     @endforelse
                 </div>
             </div>
@@ -108,10 +108,10 @@
                 <!-- FM Pitch Header Badge -->
                 <div class="relative z-10 flex items-center justify-between text-white border-b border-white/20 pb-3 mb-4">
                     <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-[#ff5600] fa-soccer-ball text-[#ff5600] text-lg"></i>
-                        <span class="font-extrabold text-sm tracking-wider uppercase">PAPAN TAKTIK FORMASI <span class="text-[#ff5600]" x-text="formation"></span></span>
+                        <i class="fa-solid fa-soccer-ball text-[#FF6B00] text-lg"></i>
+                        <span class="font-extrabold text-sm tracking-wider uppercase">PAPAN TAKTIK FORMASI <span class="text-[#FF6B00]" x-text="formation"></span></span>
                     </div>
-                    <span class="text-[10px] font-mono bg-[#ff5600] text-white px-2 py-0.5 rounded font-bold uppercase">SSB MEKAR JAYA SUBANG</span>
+                    <span class="text-[10px] font-mono bg-[#FF6B00] text-white px-2.5 py-0.5 rounded-lg font-bold uppercase">SSB MEKAR JAYA SUBANG</span>
                 </div>
 
                 <!-- Dynamic Pitch Nodes Container -->
@@ -125,18 +125,18 @@
                             <template x-for="(pos, posIndex) in row" :key="pos.key">
                                 <div class="flex flex-col items-center text-center group relative w-28 sm:w-32">
                                     <!-- Position Label Badge -->
-                                    <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded bg-[#111111] text-[#ff5600] border border-[#ff5600]/40 mb-1 shadow-md"
+                                    <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-lg bg-[#111111] text-[#FF6B00] border border-[#FF6B00]/40 mb-1 shadow-md"
                                           x-text="pos.role"></span>
 
                                     <!-- Circular FM Player Icon -->
-                                    <div class="w-11 h-11 rounded-full bg-gradient-to-br from-[#ff5600] to-[#111111] border-2 border-white flex items-center justify-center text-white font-black text-sm shadow-lg group-hover:scale-110 transition-transform">
+                                    <div class="w-11 h-11 rounded-full bg-gradient-to-br from-[#FF6B00] to-[#111111] border-2 border-white flex items-center justify-center text-white font-black text-sm shadow-lg group-hover:scale-110 transition-transform">
                                         <i class="fa-solid fa-shirt text-xs"></i>
                                     </div>
 
                                     <!-- Player Select Dropdown -->
                                     <select :name="'lineup[' + pos.key + ']'" 
                                             x-model="lineup[pos.key]"
-                                            class="mt-1 w-full bg-[#111111]/90 text-white border border-white/30 rounded px-1.5 py-1 text-[10px] font-semibold focus:ring-1 focus:ring-[#ff5600] focus:border-[#ff5600] truncate text-center">
+                                            class="mt-1 w-full bg-[#111111]/90 text-white border border-white/30 rounded-lg px-1.5 py-1 text-[10px] font-semibold focus:ring-1 focus:ring-[#FF6B00] focus:border-[#FF6B00] truncate text-center">
                                         <option value="">-- Pilih Pemain --</option>
                                         @foreach($availablePlayers as $p)
                                             <option value="{{ $p->full_name }} ({{ $p->position }})">{{ $p->full_name }} [{{ $p->position }}]</option>
@@ -150,7 +150,7 @@
 
                 <!-- Pitch Footer Legend -->
                 <div class="relative z-10 flex items-center justify-between text-[10px] text-white/80 border-t border-white/20 pt-3 mt-4">
-                    <span>⚽ Direction of Attack: <strong class="text-[#ff5600]">Ke Atas Gawang Lawan</strong></span>
+                    <span>⚽ Direction of Attack: <strong class="text-[#FF6B00]">Ke Atas Gawang Lawan</strong></span>
                     <span>Strategi Laga SSB Mekar Jaya Subang</span>
                 </div>
 

@@ -20,84 +20,84 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[#f5f1ec] text-[#111111] font-sans antialiased flex flex-col min-h-screen">
+<body class="bg-[#FFFFFF] text-[#111111] font-sans antialiased flex flex-col min-h-screen">
 
-    <!-- Top Announcement Bar (Editorial Style) -->
-    <div class="bg-[#111111] text-[#ffffff] py-2 text-xs border-b border-[#313130]">
+    <!-- Top Announcement Bar -->
+    <div class="bg-[#000000] text-[#FFFFFF] py-2 text-xs border-b border-[#222222]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center gap-2">
             <div class="flex items-center gap-2">
-                <span class="bg-[#ff5600] text-white px-2 py-0.5 rounded text-[11px] font-semibold tracking-tight">INFO SSB</span>
-                <span class="text-[#ebe7e1] text-xs font-normal">Pendaftaran Siswa Baru SSB Mekar Jaya Subang Angkatan {{ date('Y') }} Telah Dibuka</span>
+                <span class="bg-[#FF6B00] text-white px-2 py-0.5 rounded-lg text-[11px] font-bold tracking-tight">INFO SSB</span>
+                <span class="text-[#FFFFFF]/90 text-xs font-normal">Pendaftaran Siswa Baru SSB Mekar Jaya Subang Angkatan {{ date('Y') }} Telah Dibuka</span>
             </div>
-            <div class="flex items-center gap-4 text-xs text-[#9c9fa5]">
-                <span><i class="fa-solid fa-location-dot text-[#ff5600] mr-1"></i> Cigadung & Lapangan Veteran Subang</span>
-                <span class="hidden md:inline text-[#313130]">|</span>
-                <a href="https://wa.me/6285133463626" target="_blank" class="hover:text-white transition-colors">
-                    <i class="fa-brands fa-whatsapp text-[#16A34A] mr-1"></i> 0851-3346-3626
+            <div class="flex items-center gap-4 text-xs text-[#FFFFFF]/70">
+                <span><i class="fa-solid fa-location-dot text-[#FF6B00] mr-1"></i> Cigadung & Lapangan Veteran Subang</span>
+                <span class="hidden md:inline text-white/30">|</span>
+                <a href="https://wa.me/6285133463626" target="_blank" class="hover:text-[#FF6B00] transition-colors">
+                    <i class="fa-brands fa-whatsapp text-[#FF6B00] mr-1"></i> 0851-3346-3626
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Main Navigation Bar (DESIGN.md top-nav style) -->
-    <header class="sticky top-0 z-50 bg-[#f5f1ec]/95 backdrop-blur-md border-b border-[#d3cec6] transition-all">
+    <!-- Main Navigation Bar (Clean White Canvas & #FF6B00 Accent) -->
+    <header class="sticky top-0 z-50 bg-[#FFFFFF]/95 backdrop-blur-md border-b border-[#EAEAEA] transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 
-                <!-- Brand Logo (Official Partner Logo) -->
+                <!-- Brand Logo -->
                 <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                    <img src="{{ asset('images/logo-mekarjaya.jpg') }}" alt="Mekar Jaya Sports Logo" class="h-10 w-auto rounded-md object-contain border border-[#d3cec6]">
+                    <img src="{{ asset('images/logo-mekarjaya.jpg') }}" alt="Mekar Jaya Sports Logo" class="h-10 w-auto rounded-xl object-contain border border-[#EAEAEA]">
                     <div class="hidden sm:block">
-                        <span class="font-bold text-base text-[#111111] tracking-tight block leading-tight">MEKARJAYA</span>
-                        <span class="text-[10px] font-semibold text-[#ff5600] tracking-widest uppercase block">.SPORTS SUBANG</span>
+                        <span class="font-bold text-base text-[#111111] tracking-tight block leading-tight">MEKARJAYA<span class="text-[#FF6B00]">.SPORTS</span></span>
+                        <span class="text-[10px] font-bold text-[#666666] tracking-widest uppercase block">SUBANG ACADEMY</span>
                     </div>
                 </a>
 
                 <!-- Desktop Navigation Links -->
-                <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-[#626260]">
-                    <a href="{{ route('home') }}" class="hover:text-[#111111] transition-colors py-1">Beranda</a>
-                    <a href="{{ route('home') }}#roster" class="hover:text-[#111111] transition-colors py-1 flex items-center gap-1.5 text-[#111111] font-semibold">
-                        <i class="fa-solid fa-calendar-days text-[#ff5600] text-xs"></i> Roster Per Tahun
+                <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-[#111111]">
+                    <a href="{{ route('home') }}" class="hover:text-[#FF6B00] transition-colors py-1 font-semibold">Beranda</a>
+                    <a href="{{ route('home') }}#roster" class="hover:text-[#FF6B00] transition-colors py-1 flex items-center gap-1.5 font-medium">
+                        <i class="fa-solid fa-calendar-days text-xs text-[#FF6B00]"></i> Roster Per Tahun
                     </a>
-                    <a href="{{ route('parent.portal') }}" class="hover:text-[#111111] transition-colors py-1 text-[#111111] font-semibold flex items-center gap-1.5">
-                        <i class="fa-solid fa-id-card text-[#16A34A]"></i> Portal Orang Tua
+                    <a href="{{ route('parent.portal') }}" class="hover:text-[#FF6B00] transition-colors py-1 font-medium flex items-center gap-1.5">
+                        <i class="fa-solid fa-id-card text-xs text-[#FF6B00]"></i> Portal Orang Tua
                     </a>
-                    <a href="{{ route('home') }}#program" class="hover:text-[#111111] transition-colors py-1">Program KU</a>
-                    <a href="{{ route('home') }}#pelatih" class="hover:text-[#111111] transition-colors py-1">Tim Pelatih</a>
-                    <a href="{{ route('home') }}#mini-soccer" class="hover:text-[#111111] transition-colors py-1">Mini Soccer</a>
+                    <a href="{{ route('home') }}#program" class="hover:text-[#FF6B00] transition-colors py-1">Program KU</a>
+                    <a href="{{ route('home') }}#pelatih" class="hover:text-[#FF6B00] transition-colors py-1">Tim Pelatih</a>
+                    <a href="{{ route('home') }}#mini-soccer" class="hover:text-[#FF6B00] transition-colors py-1">Mini Soccer</a>
                 </nav>
 
-                <!-- Action Buttons (DESIGN.md button-primary & button-fin) -->
+                <!-- Action Buttons -->
                 <div class="hidden sm:flex items-center gap-3">
-                    <a href="{{ route('login') }}" class="px-3.5 py-2 text-xs font-semibold text-[#626260] hover:text-[#111111] transition-colors">
-                        <i class="fa-solid fa-lock mr-1 text-[#626260]"></i> Admin Portal
+                    <a href="{{ route('login') }}" class="px-3.5 py-2 text-xs font-semibold text-[#111111] hover:text-[#FF6B00] transition-colors border border-[#EAEAEA] rounded-xl hover:border-[#111111]">
+                        <i class="fa-solid fa-lock mr-1"></i> Admin Portal
                     </a>
-                    <a href="#pendaftaran" class="btn-fin text-xs py-2 px-4 shadow-xs flex items-center gap-1.5">
+                    <a href="#pendaftaran" class="btn-primary text-xs py-2 px-4 flex items-center gap-1.5">
                         <i class="fa-solid fa-user-plus text-xs"></i> Daftar Siswa
                     </a>
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button type="button" id="mobile-menu-btn" class="lg:hidden p-2 rounded-md text-[#111111] hover:bg-[#ebe7e1] focus:outline-none">
+                <button type="button" id="mobile-menu-btn" class="lg:hidden p-2 rounded-xl bg-gray-100 text-[#111111] hover:bg-[#FF6B00] hover:text-white focus:outline-none transition-colors">
                     <i class="fa-solid fa-bars text-lg"></i>
                 </button>
             </div>
         </div>
 
         <!-- Mobile Drawer Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden border-t border-[#d3cec6] bg-[#f5f1ec] px-4 pt-3 pb-6 space-y-3">
-            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-md font-medium text-[#111111] hover:bg-[#ebe7e1]">Beranda</a>
-            <a href="{{ route('home') }}#roster" class="block px-3 py-2 rounded-md font-medium text-[#111111] hover:bg-[#ebe7e1]">Roster Pemain Per Tahun</a>
-            <a href="{{ route('parent.portal') }}" class="block px-3 py-2 rounded-md font-medium text-[#111111] hover:bg-[#ebe7e1]">Portal Orang Tua & Rapor</a>
-            <a href="{{ route('home') }}#program" class="block px-3 py-2 rounded-md font-medium text-[#111111] hover:bg-[#ebe7e1]">Program Kelompok Umur</a>
-            <a href="{{ route('home') }}#pelatih" class="block px-3 py-2 rounded-md font-medium text-[#111111] hover:bg-[#ebe7e1]">Tim Pelatih</a>
-            <a href="{{ route('home') }}#mini-soccer" class="block px-3 py-2 rounded-md font-medium text-[#111111] hover:bg-[#ebe7e1]">Tarif Mini Soccer</a>
-            <a href="{{ route('home') }}#pendaftaran" class="block px-3 py-2 rounded-md font-medium text-[#111111] hover:bg-[#ebe7e1]">Pendaftaran Online</a>
-            <div class="pt-3 border-t border-[#d3cec6] flex flex-col gap-2">
-                <a href="{{ route('login') }}" class="w-full py-2.5 text-center rounded-md border border-[#d3cec6] bg-white text-[#111111] font-semibold text-xs">
-                    <i class="fa-solid fa-lock text-[#626260] mr-1"></i> Admin Portal
+        <div id="mobile-menu" class="hidden lg:hidden border-b border-[#EAEAEA] bg-white px-4 pt-3 pb-6 space-y-3">
+            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-xl font-semibold text-[#111111] hover:bg-gray-50">Beranda</a>
+            <a href="{{ route('home') }}#roster" class="block px-3 py-2 rounded-xl bg-orange-50 text-[#FF6B00] font-bold">Roster Pemain Per Tahun</a>
+            <a href="{{ route('parent.portal') }}" class="block px-3 py-2 rounded-xl text-[#111111] hover:bg-gray-50 font-medium">Portal Orang Tua & Rapor</a>
+            <a href="{{ route('home') }}#program" class="block px-3 py-2 rounded-xl font-medium text-[#111111]">Program Kelompok Umur</a>
+            <a href="{{ route('home') }}#pelatih" class="block px-3 py-2 rounded-xl font-medium text-[#111111]">Tim Pelatih</a>
+            <a href="{{ route('home') }}#mini-soccer" class="block px-3 py-2 rounded-xl font-medium text-[#111111]">Tarif Mini Soccer</a>
+            <a href="{{ route('home') }}#pendaftaran" class="block px-3 py-2 rounded-xl font-medium text-[#111111]">Pendaftaran Online</a>
+            <div class="pt-3 border-t border-[#EAEAEA] flex flex-col gap-2">
+                <a href="{{ route('login') }}" class="w-full py-2.5 text-center rounded-xl border border-[#EAEAEA] bg-white text-[#111111] font-bold text-xs">
+                    <i class="fa-solid fa-lock mr-1"></i> Admin Portal
                 </a>
-                <a href="#pendaftaran" class="w-full py-2.5 text-center rounded-md bg-[#ff5600] text-white font-semibold text-xs">
+                <a href="#pendaftaran" class="w-full py-2.5 text-center rounded-xl btn-primary text-white font-bold text-xs">
                     Daftar Siswa Baru
                 </a>
             </div>
@@ -105,7 +105,9 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-grow">
+    <main class="flex-grow bg-[#FFFFFF]">
+        @yield('content')
+    </main>
         @yield('content')
     </main>
 
@@ -118,16 +120,16 @@
                 <div class="space-y-4">
                     <div class="flex items-center gap-3">
                         <img src="{{ asset('images/logo-mekarjaya.jpg') }}" alt="Mekar Jaya Sports Logo" class="h-9 w-auto rounded-md object-contain border border-[#313130]">
-                        <span class="font-bold text-base text-white tracking-tight">MEKARJAYA<span class="text-[#ff5600]">.SPORTS</span></span>
+                        <span class="font-bold text-base text-white tracking-tight">MEKARJAYA<span class="text-[#FF6B00]">.SPORTS</span></span>
                     </div>
                     <p class="text-xs text-[#9c9fa5] leading-relaxed">
                         Akademi Sekolah Sepak Bola (SSB) berlisensi & Penyedia Lapangan Mini Soccer di Subang, Jawa Barat. Pembinaan karakter, teknik dasar, dan kompetisi usia dini.
                     </p>
                     <div class="flex items-center gap-2 pt-1">
-                        <a href="https://facebook.com" target="_blank" class="w-8 h-8 rounded-md bg-[#313130] hover:bg-[#ff5600] text-white flex items-center justify-center transition-colors text-xs">
+                        <a href="https://facebook.com" target="_blank" class="w-8 h-8 rounded-md bg-[#313130] hover:bg-[#FF6B00] text-white flex items-center justify-center transition-colors text-xs">
                             <i class="fa-brands fa-facebook-f"></i>
                         </a>
-                        <a href="https://instagram.com" target="_blank" class="w-8 h-8 rounded-md bg-[#313130] hover:bg-[#ff5600] text-white flex items-center justify-center transition-colors text-xs">
+                        <a href="https://instagram.com" target="_blank" class="w-8 h-8 rounded-md bg-[#313130] hover:bg-[#FF6B00] text-white flex items-center justify-center transition-colors text-xs">
                             <i class="fa-brands fa-instagram"></i>
                         </a>
                         <a href="https://wa.me/6285133463626" target="_blank" class="w-8 h-8 rounded-md bg-[#313130] hover:bg-[#16A34A] text-white flex items-center justify-center transition-colors text-xs">
@@ -171,7 +173,7 @@
                         </li>
                         <li class="flex items-center justify-between">
                             <span>KU U-18 (2008-2009)</span>
-                            <span class="text-[10px] bg-[#ff5600]/20 text-[#ff5600] px-2 py-0.5 rounded font-mono">Senior Muda</span>
+                            <span class="text-[10px] bg-[#FF6B00]/20 text-[#FF6B00] px-2 py-0.5 rounded font-mono">Senior Muda</span>
                         </li>
                     </ul>
                 </div>
@@ -180,7 +182,7 @@
                 <div class="space-y-3 text-xs">
                     <h4 class="text-white font-semibold text-xs uppercase tracking-wider mb-4">Kontak & Lokasi</h4>
                     <div class="flex gap-2 text-[#9c9fa5]">
-                        <i class="fa-solid fa-map-pin text-[#ff5600] mt-0.5"></i>
+                        <i class="fa-solid fa-map-pin text-[#FF6B00] mt-0.5"></i>
                         <span><strong>Mini Soccer:</strong> Jl. Arief Rahman Hakim No.18, Cigadung, Subang.</span>
                     </div>
                     <div class="flex gap-2 text-[#9c9fa5]">
@@ -188,7 +190,7 @@
                         <span><strong>Latihan SSB:</strong> Lapangan Veteran Dangdeur, Subang.</span>
                     </div>
                     <div class="flex gap-2 text-[#9c9fa5]">
-                        <i class="fa-solid fa-phone text-[#ff5600] mt-0.5"></i>
+                        <i class="fa-solid fa-phone text-[#FF6B00] mt-0.5"></i>
                         <span>0851-3346-3626 (Sekretariat / WA)</span>
                     </div>
                 </div>
