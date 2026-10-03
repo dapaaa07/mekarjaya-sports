@@ -393,18 +393,58 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @foreach($coaches as $coach)
-                <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all text-center">
-                    <div class="w-20 h-20 rounded-2xl bg-orange-50 text-[#FF6B00] font-extrabold text-2xl flex items-center justify-center mx-auto mb-6 border border-orange-200">
-                        {{ strtoupper(substr($coach->name, 6, 1)) }}
+                <div class="bg-white rounded-2xl border border-[#EAEAEA] shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col group">
+                    <!-- Coach Photo Container -->
+                    <div class="relative h-64 sm:h-72 w-full bg-gray-100 overflow-hidden">
+                        @if($coach->photo && file_exists(public_path($coach->photo)))
+                            <img src="{{ asset($coach->photo) }}" alt="{{ $coach->name }}" 
+                                 class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+                        @else
+                            <div class="w-full h-full flex flex-col items-center justify-center bg-orange-50 text-[#FF6B00]">
+                                <div class="w-20 h-20 rounded-2xl bg-white border border-orange-200 flex items-center justify-center text-3xl font-extrabold shadow-sm">
+                                    {{ strtoupper(substr($coach->name, 6, 1)) }}
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Floating License Badge -->
+                        <div class="absolute top-4 right-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#111111]/85 text-white backdrop-blur-sm border border-white/10 shadow-sm">
+                                <i class="fa-solid fa-award text-[#FF6B00]"></i>
+                                {{ $coach->license }}
+                            </span>
+                        </div>
+
+                        <!-- Gradient Scrim for subtle photo grounding -->
+                        <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
                     </div>
-                    <h3 class="font-bold text-[#111111] text-lg">{{ $coach->name }}</h3>
-                    <p class="text-xs font-bold text-[#666666] mt-1">{{ $coach->role_title }}</p>
-                    
-                    <div class="mt-6 pt-6 border-t border-gray-100 flex items-center justify-center gap-3 text-xs">
-                        <span class="px-3 py-1 rounded-full bg-orange-50 text-[#FF6B00] font-bold border border-orange-200">
-                            Lisensi {{ $coach->license }}
-                        </span>
-                        <span class="text-[#666666]">Pengalaman {{ $coach->experience_years }} Th</span>
+
+                    <!-- Coach Details -->
+                    <div class="p-6 flex flex-col flex-grow justify-between text-left">
+                        <div>
+                            <span class="text-[11px] font-bold text-[#FF6B00] uppercase tracking-wider block">
+                                {{ $coach->role_title }}
+                            </span>
+                            <h3 class="font-bold text-[#111111] text-xl mt-1 group-hover:text-[#FF6B00] transition-colors leading-tight">
+                                {{ $coach->name }}
+                            </h3>
+                        </div>
+                        
+                        <div class="mt-5 pt-4 border-t border-[#EAEAEA] flex items-center justify-between text-xs text-[#666666]">
+                            <div class="flex items-center gap-1.5 font-medium">
+                                <i class="fa-solid fa-clock-rotate-left text-[#FF6B00]"></i>
+                                <span>Pengalaman {{ $coach->experience_years }} Tahun</span>
+                            </div>
+                            @if($coach->phone)
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $coach->phone) }}?text=Halo%20{{ urlencode($coach->name) }},%20saya%20ingin%20bertanya%20mengenai%20latihan%20di%20SSB%20Mekar%20Jaya" 
+                                   target="_blank" 
+                                   class="text-[#16A34A] hover:text-[#15803d] font-semibold flex items-center gap-1 transition-colors"
+                                   title="Hubungi Coach via WhatsApp">
+                                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                                    <span>Konsultasi</span>
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
             @endforeach

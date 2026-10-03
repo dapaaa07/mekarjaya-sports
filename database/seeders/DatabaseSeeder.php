@@ -93,6 +93,7 @@ class DatabaseSeeder extends Seeder
                 'role_title' => 'Head Coach & Direktur Teknik SSB',
                 'license' => 'Lisensi B AFC / PSSI',
                 'experience_years' => 12,
+                'photo' => 'images/coaches/coach_1.jpg',
                 'phone' => '0812-3456-7890',
             ],
             [
@@ -100,6 +101,7 @@ class DatabaseSeeder extends Seeder
                 'role_title' => 'Pelatih Kepala U-12 & U-14',
                 'license' => 'Lisensi C PSSI',
                 'experience_years' => 8,
+                'photo' => 'images/coaches/coach_2.jpg',
                 'phone' => '0813-9876-5432',
             ],
             [
@@ -107,6 +109,7 @@ class DatabaseSeeder extends Seeder
                 'role_title' => 'Pelatih Kiper (Goalkeeper Coach)',
                 'license' => 'Lisensi Kiper Level 1 PSSI',
                 'experience_years' => 6,
+                'photo' => 'images/coaches/coach_3.jpg',
                 'phone' => '0857-1122-3344',
             ],
         ];
