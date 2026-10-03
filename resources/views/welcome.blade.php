@@ -393,58 +393,52 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @foreach($coaches as $coach)
-                <div class="bg-white rounded-2xl border border-[#EAEAEA] shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col group">
-                    <!-- Coach Photo Container -->
-                    <div class="relative h-64 sm:h-72 w-full bg-gray-100 overflow-hidden">
-                        @if($coach->photo && file_exists(public_path($coach->photo)))
-                            <img src="{{ asset($coach->photo) }}" alt="{{ $coach->name }}" 
-                                 class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
-                        @else
-                            <div class="w-full h-full flex flex-col items-center justify-center bg-orange-50 text-[#FF6B00]">
-                                <div class="w-20 h-20 rounded-2xl bg-white border border-orange-200 flex items-center justify-center text-3xl font-extrabold shadow-sm">
-                                    {{ strtoupper(substr($coach->name, 6, 1)) }}
+                <div class="bg-white p-7 sm:p-8 rounded-2xl border border-[#EAEAEA] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between text-center group">
+                    <div>
+                        <!-- Framed Coach Portrait (Neat & Balanced, No aggressive cropping) -->
+                        <div class="w-36 h-36 sm:w-40 sm:h-40 mx-auto mb-5 rounded-2xl overflow-hidden bg-gray-50 border-2 border-orange-100/80 shadow-sm relative group-hover:border-[#FF6B00] transition-colors">
+                            @if($coach->photo && file_exists(public_path($coach->photo)))
+                                <img src="{{ asset($coach->photo) }}" alt="{{ $coach->name }}" 
+                                     class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
+                            @else
+                                <div class="w-full h-full flex flex-col items-center justify-center bg-orange-50 text-[#FF6B00]">
+                                    <div class="w-16 h-16 rounded-xl bg-white border border-orange-200 flex items-center justify-center text-2xl font-extrabold shadow-sm">
+                                        {{ strtoupper(substr($coach->name, 6, 1)) }}
+                                    </div>
                                 </div>
-                            </div>
-                        @endif
-
-                        <!-- Floating License Badge -->
-                        <div class="absolute top-4 right-4">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#111111]/85 text-white backdrop-blur-sm border border-white/10 shadow-sm">
-                                <i class="fa-solid fa-award text-[#FF6B00]"></i>
-                                {{ $coach->license }}
-                            </span>
-                        </div>
-
-                        <!-- Gradient Scrim for subtle photo grounding -->
-                        <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
-                    </div>
-
-                    <!-- Coach Details -->
-                    <div class="p-6 flex flex-col flex-grow justify-between text-left">
-                        <div>
-                            <span class="text-[11px] font-bold text-[#FF6B00] uppercase tracking-wider block">
-                                {{ $coach->role_title }}
-                            </span>
-                            <h3 class="font-bold text-[#111111] text-xl mt-1 group-hover:text-[#FF6B00] transition-colors leading-tight">
-                                {{ $coach->name }}
-                            </h3>
-                        </div>
-                        
-                        <div class="mt-5 pt-4 border-t border-[#EAEAEA] flex items-center justify-between text-xs text-[#666666]">
-                            <div class="flex items-center gap-1.5 font-medium">
-                                <i class="fa-solid fa-clock-rotate-left text-[#FF6B00]"></i>
-                                <span>Pengalaman {{ $coach->experience_years }} Tahun</span>
-                            </div>
-                            @if($coach->phone)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $coach->phone) }}?text=Halo%20{{ urlencode($coach->name) }},%20saya%20ingin%20bertanya%20mengenai%20latihan%20di%20SSB%20Mekar%20Jaya" 
-                                   target="_blank" 
-                                   class="text-[#16A34A] hover:text-[#15803d] font-semibold flex items-center gap-1 transition-colors"
-                                   title="Hubungi Coach via WhatsApp">
-                                    <i class="fa-brands fa-whatsapp text-sm"></i>
-                                    <span>Konsultasi</span>
-                                </a>
                             @endif
                         </div>
+
+                        <!-- License Badge -->
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-orange-50 text-[#FF6B00] border border-orange-200 mb-3">
+                            <i class="fa-solid fa-certificate text-xs"></i>
+                            <span>{{ $coach->license }}</span>
+                        </div>
+
+                        <!-- Coach Name & Role -->
+                        <h3 class="font-bold text-[#111111] text-lg sm:text-xl group-hover:text-[#FF6B00] transition-colors leading-snug">
+                            {{ $coach->name }}
+                        </h3>
+                        <p class="text-xs font-semibold text-[#666666] mt-1">
+                            {{ $coach->role_title }}
+                        </p>
+                    </div>
+
+                    <!-- Footer Row: Experience & WhatsApp Consultation -->
+                    <div class="mt-6 pt-5 border-t border-gray-100 flex items-center justify-between text-xs text-[#666666]">
+                        <div class="flex items-center gap-1.5 font-medium">
+                            <i class="fa-solid fa-clock-rotate-left text-[#FF6B00]"></i>
+                            <span>Pengalaman {{ $coach->experience_years }} Th</span>
+                        </div>
+                        @if($coach->phone)
+                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $coach->phone) }}?text=Halo%20{{ urlencode($coach->name) }},%20saya%20ingin%20bertanya%20mengenai%20latihan%20di%20SSB%20Mekar%20Jaya" 
+                               target="_blank" 
+                               class="text-[#16A34A] hover:text-[#15803d] font-bold flex items-center gap-1 transition-colors"
+                               title="Hubungi Coach via WhatsApp">
+                                <i class="fa-brands fa-whatsapp text-sm"></i>
+                                <span>Konsultasi</span>
+                            </a>
+                        @endif
                     </div>
                 </div>
             @endforeach
