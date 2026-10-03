@@ -9,7 +9,7 @@ class MatchController extends Controller
 {
     public function index()
     {
-        $matches = MatchModel::orderBy('match_date', 'desc')->paginate(15);
+        $matches = MatchModel::orderBy('match_date', 'desc')->orderBy('id', 'desc')->paginate(15);
         return view('admin.matches.index', compact('matches'));
     }
 

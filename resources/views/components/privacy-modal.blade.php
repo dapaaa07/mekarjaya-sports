@@ -18,10 +18,12 @@
         <!-- Modal Body (Scrollable) -->
         <div class="p-6 overflow-y-auto text-xs sm:text-sm text-[#333333] space-y-5 leading-relaxed">
             
-            <div class="p-4 rounded-xl bg-orange-50/70 border border-orange-200/60 text-xs text-[#111111] flex items-start gap-3">
-                <i class="fa-solid fa-shield-halved text-[#FF6B00] text-base mt-0.5"></i>
-                <p>
-                    SSB Mekar Jaya Subang berkomitmen menjaga keamanan dan kerahasiaan data pribadi calon atlet dan orang tua/wali sesuai dengan prinsip <strong>Undang-Undang Nomor 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP)</strong>.
+            <div class="p-4 rounded-xl bg-white border border-orange-200/90 border-l-4 border-l-[#FF6B00] text-xs text-[#111111] flex items-start gap-3.5 shadow-xs">
+                <div class="w-8 h-8 rounded-lg bg-orange-50 text-[#FF6B00] border border-orange-200/80 flex items-center justify-center shrink-0 mt-0.5">
+                    <i class="fa-solid fa-shield-halved text-sm"></i>
+                </div>
+                <p class="leading-relaxed text-[#4B5563]">
+                    SSB Mekar Jaya Subang berkomitmen menjaga keamanan dan kerahasiaan data pribadi calon atlet dan orang tua/wali sesuai dengan prinsip <strong class="text-[#111111]">Undang-Undang Nomor 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP)</strong>.
                 </p>
             </div>
 

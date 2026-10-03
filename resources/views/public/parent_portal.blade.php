@@ -170,9 +170,22 @@
                     });
                 </script>
             @else
-                <div class="editorial-card p-12 text-center">
-                    <h3 class="font-bold text-[#111111] text-lg">Data Pemain Tidak Ditemukan</h3>
-                    <p class="text-[#666666] text-xs mt-1">Pastikan Anda memasukkan NIS, nama pemain, atau nomor WhatsApp orang tua dengan benar.</p>
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-8 sm:p-12 text-center shadow-sm max-w-2xl mx-auto">
+                    <div class="w-16 h-16 rounded-2xl bg-orange-50 border border-orange-200/80 text-[#FF6B00] flex items-center justify-center mx-auto mb-4 shadow-xs">
+                        <i class="fa-solid fa-magnifying-glass text-2xl"></i>
+                    </div>
+                    <h3 class="font-extrabold text-[#111111] text-lg sm:text-xl tracking-tight">Data Pemain Tidak Ditemukan</h3>
+                    <p class="text-[#666666] text-xs sm:text-sm max-w-md mx-auto mt-2 leading-relaxed">
+                        Sistem tidak menemukan data siswa untuk kata kunci pencarian tersebut. Pastikan Anda memasukkan Nomor Induk Siswa (NIS, contoh: <strong class="text-[#111111]">SSB-MJ-1701</strong>), nama lengkap siswa, atau nomor WhatsApp orang tua dengan benar.
+                    </p>
+                    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+                        <a href="{{ route('parent.portal') }}" class="px-5 py-2.5 rounded-xl border border-slate-200 text-[#111111] text-xs font-bold hover:bg-slate-50 transition-colors inline-flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-left text-slate-400"></i> Reset Pencarian
+                        </a>
+                        <a href="https://wa.me/6285133463626?text=Halo%20Admin%20SSB%20Mekar%20Jaya,%20saya%20ingin%20menanyakan%20NIS%20anak%20saya" target="_blank" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors inline-flex items-center gap-2 shadow-xs">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Bantuan WhatsApp
+                        </a>
+                    </div>
                 </div>
             @endif
         @endif

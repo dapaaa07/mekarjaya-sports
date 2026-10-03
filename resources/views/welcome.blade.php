@@ -462,28 +462,25 @@
 
         <!-- Alert Success Notification -->
         @if(session('success'))
-            <div class="mb-8 p-5 bg-emerald-50 border border-emerald-200 text-[#111111] rounded-2xl flex items-start gap-4 text-sm shadow-sm">
-                <i class="fa-solid fa-circle-check text-xl mt-0.5 text-emerald-600"></i>
-                <div>
-                    <h4 class="font-bold text-emerald-800">Pendaftaran Berhasil!</h4>
-                    <p class="mt-1 leading-relaxed text-[#666666]">{{ session('success') }}</p>
+            <x-alert type="success" title="Pendaftaran Berhasil!" class="mb-8">
+                <p class="leading-relaxed">{{ session('success') }}</p>
+                <div class="mt-2.5 pt-2.5 border-t border-emerald-100 flex items-center gap-2 text-emerald-800 text-[11px] font-semibold">
+                    <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                    <span>Pengurus SSB akan segera memverifikasi kelengkapan berkas pendaftaran Anda.</span>
                 </div>
-            </div>
+            </x-alert>
         @endif
 
         <!-- Alert Error Notification -->
         @if($errors->any())
-            <div class="mb-8 p-5 bg-red-50 border border-red-200 text-red-700 rounded-2xl flex items-start gap-4 text-sm shadow-sm">
-                <i class="fa-solid fa-circle-exclamation text-xl mt-0.5 text-red-600"></i>
-                <div>
-                    <h4 class="font-bold text-red-800">Mohon Periksa Kembali Formulir Anda</h4>
-                    <ul class="mt-1 list-disc list-inside text-xs text-red-600 space-y-0.5">
-                        @foreach($errors->all() as $err)
-                            <li>{{ $err }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
+            <x-alert type="error" title="Mohon Periksa Kembali Formulir Anda" class="mb-8">
+                <p class="mb-2 font-medium text-rose-900">Terdapat beberapa kesalahan pengisian formulir:</p>
+                <ul class="list-disc list-inside space-y-1 text-xs">
+                    @foreach($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </x-alert>
         @endif
 
         <div class="bg-white p-8 sm:p-10 rounded-2xl border border-gray-100 shadow-md">

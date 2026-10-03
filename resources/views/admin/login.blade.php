@@ -27,9 +27,9 @@
         </div>
 
         @if($errors->any())
-            <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl">
-                <i class="fa-solid fa-circle-exclamation mr-1"></i> {{ $errors->first() }}
-            </div>
+            <x-alert type="error" title="Gagal Masuk" class="mb-6">
+                <p>{{ $errors->first() }}</p>
+            </x-alert>
         @endif
 
         <form action="{{ route('login') }}" method="POST" class="space-y-4 text-xs">

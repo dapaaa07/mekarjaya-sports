@@ -17,11 +17,7 @@
         </a>
     </div>
 
-    @if($errors->any())
-        <div class="p-3.5 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl">
-            <i class="fa-solid fa-circle-exclamation mr-1"></i> Mohon lengkapi semua field yang wajib diisi.
-        </div>
-    @endif
+
 
     <form action="{{ route('admin.schedules.store') }}" method="POST" class="space-y-6 text-xs">
         @csrf

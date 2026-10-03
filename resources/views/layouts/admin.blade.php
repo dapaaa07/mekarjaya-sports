@@ -153,23 +153,39 @@
 
         <!-- Main Workspace Area -->
         <main class="p-4 sm:p-6 lg:p-8 flex-grow bg-[#FFFFFF]">
-            <!-- Flash Messages -->
+            <!-- Flash & Validation Alerts -->
             @if(session('success'))
-                <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-[#111111] rounded-2xl text-xs flex items-center justify-between shadow-sm">
-                    <div class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-                        <span class="font-medium">{{ session('success') }}</span>
-                    </div>
-                </div>
+                <x-alert type="success" title="Berhasil" class="mb-6">
+                    <p>{{ session('success') }}</p>
+                </x-alert>
             @endif
 
             @if(session('info'))
-                <div class="mb-6 p-4 bg-orange-50 border border-[#FF6B00]/30 text-[#111111] rounded-2xl text-xs flex items-center justify-between shadow-sm">
-                    <div class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-info-circle text-[#FF6B00] text-base"></i>
-                        <span class="font-medium">{{ session('info') }}</span>
-                    </div>
-                </div>
+                <x-alert type="info" title="Pemberitahuan" class="mb-6">
+                    <p>{{ session('info') }}</p>
+                </x-alert>
+            @endif
+
+            @if(session('warning'))
+                <x-alert type="warning" title="Peringatan" class="mb-6">
+                    <p>{{ session('warning') }}</p>
+                </x-alert>
+            @endif
+
+            @if(session('error'))
+                <x-alert type="error" title="Terjadi Kesalahan" class="mb-6">
+                    <p>{{ session('error') }}</p>
+                </x-alert>
+            @endif
+
+            @if($errors->any())
+                <x-alert type="error" title="Mohon Periksa Kembali Form Anda" class="mb-6">
+                    <ul class="list-disc list-inside space-y-1 text-xs">
+                        @foreach($errors->all() as $err)
+                            <li>{{ $err }}</li>
+                        @endforeach
+                    </ul>
+                </x-alert>
             @endif
 
             @yield('content')
