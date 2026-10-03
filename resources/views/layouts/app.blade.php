@@ -44,8 +44,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 
-                <!-- Brand Logo -->
-                <a href="{{ route('home') }}" class="flex items-center gap-3 group">
+                <!-- Brand Logo (With Secret Admin Multi-Click Trigger) -->
+                <a href="{{ route('home') }}" id="secret-logo-trigger" class="flex items-center gap-3 group select-none">
                     <img src="{{ asset('images/logo-mekarjaya.jpg') }}" alt="Mekar Jaya Sports Logo" class="h-10 w-auto rounded-xl object-contain border border-[#EAEAEA]">
                     <div class="hidden sm:block">
                         <span class="font-bold text-base text-[#111111] tracking-tight block leading-tight">MEKARJAYA<span class="text-[#FF6B00]">.SPORTS</span></span>
@@ -68,12 +68,9 @@
                     <a href="{{ route('home') }}#faq" class="hover:text-[#FF6B00] transition-colors py-1">FAQ</a>
                 </nav>
 
-                <!-- Action Buttons -->
+                <!-- Action Buttons (Single Public CTA) -->
                 <div class="hidden sm:flex items-center gap-3">
-                    <a href="{{ route('login') }}" class="px-3.5 py-2 text-xs font-semibold text-[#111111] hover:text-[#FF6B00] transition-colors border border-[#EAEAEA] rounded-xl hover:border-[#111111]">
-                        <i class="fa-solid fa-lock mr-1"></i> Admin Portal
-                    </a>
-                    <a href="#pendaftaran" class="btn-primary text-xs py-2 px-4 flex items-center gap-1.5">
+                    <a href="{{ route('home') }}#pendaftaran" class="btn-primary text-xs py-2 px-4 flex items-center gap-1.5 shadow-sm">
                         <i class="fa-solid fa-user-plus text-xs"></i> Daftar Siswa
                     </a>
                 </div>
@@ -96,9 +93,6 @@
             <a href="{{ route('home') }}#pendaftaran" class="block px-3 py-2 rounded-xl font-medium text-[#111111]">Pendaftaran Online</a>
             <a href="{{ route('home') }}#faq" class="block px-3 py-2 rounded-xl font-medium text-[#111111]">FAQ (Tanya Jawab)</a>
             <div class="pt-3 border-t border-[#EAEAEA] flex flex-col gap-2">
-                <a href="{{ route('login') }}" class="w-full py-2.5 text-center rounded-xl border border-[#EAEAEA] bg-white text-[#111111] font-bold text-xs">
-                    <i class="fa-solid fa-lock mr-1"></i> Admin Portal
-                </a>
                 <a href="#pendaftaran" class="w-full py-2.5 text-center rounded-xl btn-primary text-white font-bold text-xs">
                     Daftar Siswa Baru
                 </a>
@@ -201,7 +195,7 @@
 
             <!-- Bottom Copyright -->
             <div class="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-[#7b7b78] gap-4">
-                <p>&copy; {{ date('Y') }} Mekar Jaya Sport Subang. All rights reserved.</p>
+                <p><span id="secret-footer-trigger" class="cursor-default select-none" title="Mekar Jaya Sports">&copy;</span> {{ date('Y') }} Mekar Jaya Sport Subang. All rights reserved.</p>
                 <div class="flex items-center gap-4">
                     <button type="button" onclick="openPrivacyModal()" class="hover:text-white transition-colors underline focus:outline-none">
                         Syarat & Ketentuan serta Kebijakan Privasi Dokumen KK
@@ -213,12 +207,70 @@
 
     @include('components.privacy-modal')
 
-    <!-- Mobile Menu Toggle Script -->
+    <!-- Hidden Admin Access & Mobile Menu Toggle Script -->
     <script>
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+        // Mobile Drawer Toggle
+        document.getElementById('mobile-menu-btn')?.addEventListener('click', function() {
             var menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+            if (menu) menu.classList.toggle('hidden');
         });
+
+        // 1. Keyboard Shortcut: Ctrl + Shift + A or Ctrl + Alt + A (Cmd for Mac)
+        window.addEventListener('keydown', function(e) {
+            const isModifier = e.ctrlKey || e.metaKey;
+            const isSecondary = e.shiftKey || e.altKey;
+            if (isModifier && isSecondary && (e.key === 'a' || e.key === 'A')) {
+                e.preventDefault();
+                window.location.href = "{{ route('login') }}";
+            }
+        });
+
+        // 2. Secret Triple-Click on Brand Logo
+        let logoClicks = 0;
+        let logoTimer = null;
+        const logoTrigger = document.getElementById('secret-logo-trigger');
+        if (logoTrigger) {
+            logoTrigger.addEventListener('click', function(e) {
+                logoClicks++;
+                if (logoClicks >= 3) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    clearTimeout(logoTimer);
+                    logoClicks = 0;
+                    window.location.href = "{{ route('login') }}";
+                    return;
+                }
+                if (logoClicks === 1) {
+                    e.preventDefault();
+                    logoTimer = setTimeout(() => {
+                        logoClicks = 0;
+                        window.location.href = "{{ route('home') }}";
+                    }, 350);
+                } else {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // 3. Secret Triple-Click on Footer Copyright (c) Symbol
+        let footerClicks = 0;
+        let footerTimer = null;
+        const footerTrigger = document.getElementById('secret-footer-trigger');
+        if (footerTrigger) {
+            footerTrigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                footerClicks++;
+                clearTimeout(footerTimer);
+                if (footerClicks >= 3) {
+                    footerClicks = 0;
+                    window.location.href = "{{ route('login') }}";
+                } else {
+                    footerTimer = setTimeout(() => {
+                        footerClicks = 0;
+                    }, 800);
+                }
+            });
+        }
     </script>
 </body>
 </html>
