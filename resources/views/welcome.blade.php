@@ -437,8 +437,23 @@
             </div>
         @endif
 
+        <!-- Alert Error Notification -->
+        @if($errors->any())
+            <div class="mb-8 p-5 bg-red-50 border border-red-200 text-red-700 rounded-2xl flex items-start gap-4 text-sm shadow-sm">
+                <i class="fa-solid fa-circle-exclamation text-xl mt-0.5 text-red-600"></i>
+                <div>
+                    <h4 class="font-bold text-red-800">Mohon Periksa Kembali Formulir Anda</h4>
+                    <ul class="mt-1 list-disc list-inside text-xs text-red-600 space-y-0.5">
+                        @foreach($errors->all() as $err)
+                            <li>{{ $err }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
         <div class="bg-white p-8 sm:p-10 rounded-2xl border border-gray-100 shadow-md">
-            <form action="{{ route('public.register') }}" method="POST" class="space-y-6">
+            <form action="{{ route('public.register') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 
                 <h3 class="font-bold text-[#111111] text-base border-b border-gray-100 pb-4 flex items-center gap-3">
@@ -528,6 +543,25 @@
                         <input type="text" id="health_notes" name="health_notes" value="{{ old('health_notes') }}"
                             placeholder="Contoh: Tidak ada"
                             class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-[#111111] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-[#111111] text-base border-b border-gray-100 pb-4 pt-4 flex items-center gap-3">
+                    <span class="w-6 h-6 rounded-full bg-[#111111] text-white flex items-center justify-center text-xs font-mono font-bold">3</span>
+                    Dokumen Persyaratan
+                </h3>
+
+                <div class="space-y-4 text-xs">
+                    <div>
+                        <label for="kk_document" class="block font-bold text-[#111111] uppercase mb-1.5">
+                            Upload Dokumen Kartu Keluarga (KK) *
+                        </label>
+                        <input type="file" id="kk_document" name="kk_document" required accept="image/jpeg,image/png,image/webp,image/jpg"
+                               class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-[#111111] text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#FF6B00] file:text-white hover:file:bg-[#e05e00] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] cursor-pointer">
+                        <div class="flex items-center gap-2 mt-2 text-[11px] text-[#666666]">
+                            <i class="fa-solid fa-circle-info text-[#FF6B00]"></i>
+                            <span>Wajib berupa foto/scan gambar (JPG, JPEG, PNG, WEBP). File di atas 2 MB akan dikompresi otomatis oleh sistem sebelum disimpan.</span>
+                        </div>
                     </div>
                 </div>
 

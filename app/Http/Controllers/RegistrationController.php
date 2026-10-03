@@ -26,6 +26,7 @@ class RegistrationController extends Controller
         $player = Player::create([
             'nis' => $nis,
             'full_name' => $registration->full_name,
+            'nickname' => explode(' ', trim($registration->full_name))[0],
             'birth_place' => $registration->birth_place,
             'birth_date' => $registration->birth_date,
             'birth_year' => $registration->birth_year,
@@ -34,9 +35,10 @@ class RegistrationController extends Controller
             'school_name' => $registration->school_name,
             'parent_name' => $registration->parent_name,
             'parent_phone' => $registration->parent_phone,
+            'kk_document' => $registration->kk_document,
             'status' => 'aktif',
             'spp_status' => 'Lunas',
-            'joined_year' => date('Y'),
+            'joined_year' => (int) date('Y'),
         ]);
 
         Evaluation::create([

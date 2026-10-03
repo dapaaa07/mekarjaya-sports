@@ -118,6 +118,14 @@
                         <span class="text-[#666666]">Tahun Bergabung:</span>
                         <span class="font-medium text-[#111111]">{{ $player->joined_year }}</span>
                     </div>
+                    @if($player->kk_document)
+                    <div class="flex justify-between items-center py-2 border-t border-[#EAEAEA]">
+                        <span class="text-[#666666]">Dokumen KK:</span>
+                        <a href="{{ asset('storage/' . $player->kk_document) }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-orange-50 text-[#FF6B00] border border-orange-200 text-xs font-bold hover:bg-orange-100 transition-colors">
+                            <i class="fa-solid fa-file-image"></i> Lihat Dokumen KK
+                        </a>
+                    </div>
+                    @endif
                 </div>
             </div>
 

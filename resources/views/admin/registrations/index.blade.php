@@ -28,6 +28,7 @@
                         <th class="p-4">Posisi Diminati</th>
                         <th class="p-4">Orang Tua / WA</th>
                         <th class="p-4">Sekolah Asal</th>
+                        <th class="p-4">Dokumen KK</th>
                         <th class="p-4">Status</th>
                         <th class="p-4 text-right">Aksi Verifikasi</th>
                     </tr>
@@ -59,6 +60,15 @@
                                 {{ $reg->school_name ?? '-' }}
                             </td>
                             <td class="p-4">
+                                @if($reg->kk_document)
+                                    <a href="{{ asset('storage/' . $reg->kk_document) }}" target="_blank" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-50 text-[#FF6B00] border border-orange-200 text-[11px] font-bold hover:bg-orange-100 transition-colors">
+                                        <i class="fa-solid fa-file-image"></i> Lihat KK
+                                    </a>
+                                @else
+                                    <span class="text-[11px] text-[#999999] italic">Tidak Ada</span>
+                                @endif
+                            </td>
+                            <td class="p-4">
                                 <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase {{ $reg->status == 'pending' ? 'bg-[#FFF2E8] text-[#FF6B00] border border-[#FFE0CC]' : ($reg->status == 'approved' ? 'bg-[#16A34A]/10 text-[#16A34A] border border-[#16A34A]/30' : 'bg-[#EF4444]/10 text-[#EF4444] border border-[#EF4444]/30') }}">
                                     {{ $reg->status }}
                                 </span>
@@ -86,7 +96,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="p-12 text-center text-[#666666]">
+                            <td colspan="8" class="p-12 text-center text-[#666666]">
                                 Belum ada permohonan pendaftaran online.
                             </td>
                         </tr>

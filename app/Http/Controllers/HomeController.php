@@ -8,6 +8,7 @@ use App\Models\Coach;
 use App\Models\MiniSoccerRate;
 use App\Models\Registration;
 use App\Models\TrainingSchedule;
+use App\Services\ImageCompressionService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -75,7 +76,7 @@ class HomeController extends Controller
         ));
     }
 
-    public function storeRegistration(Request $request)
+    public function storeRegistration(Request $request, ImageCompressionService $compressionService)
     {
         $validated = $request->validate([
             'full_name' => 'required|string|max:255',
@@ -88,14 +89,31 @@ class HomeController extends Controller
             'school_name' => 'nullable|string|max:255',
             'address' => 'nullable|string',
             'health_notes' => 'nullable|string',
+            'kk_document' => 'required|file|image|mimes:jpeg,jpg,png,webp|max:10240',
+        ], [
+            'kk_document.required' => 'Dokumen Kartu Keluarga (KK) wajib diunggah.',
+            'kk_document.image' => 'File dokumen KK harus berupa gambar.',
+            'kk_document.mimes' => 'Format file dokumen KK harus JPG, JPEG, PNG, atau WEBP.',
+            'kk_document.max' => 'Ukuran file dokumen KK maksimal 10 MB.',
         ]);
+
+        $kkPath = null;
+        if ($request->hasFile('kk_document')) {
+            $kkPath = $compressionService->processAndStore(
+                $request->file('kk_document'),
+                'documents/kk'
+            );
+        }
 
         $birthYear = date('Y', strtotime($validated['birth_date']));
         $regCode = 'REG-MJ-' . date('Ym') . rand(100, 999);
 
+        unset($validated['kk_document']);
+
         Registration::create(array_merge($validated, [
             'registration_code' => $regCode,
             'birth_year' => $birthYear,
+            'kk_document' => $kkPath,
             'status' => 'pending',
         ]));
 
