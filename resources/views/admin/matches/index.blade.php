@@ -69,10 +69,6 @@
                             </td>
                             <td class="py-3.5 px-4 text-right">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <a href="{{ route('admin.matches.tactics', $m->id) }}" class="btn-primary text-[10px] py-1.5 px-2.5 rounded-xl font-bold transition-colors flex items-center gap-1 shadow-sm">
-                                        <i class="fa-solid fa-shirt text-xs"></i> Formasi FM ({{ $m->formation ?? '4-3-3' }})
-                                    </a>
-
                                     <form action="{{ route('admin.matches.destroy', $m->id) }}" method="POST" onsubmit="return confirm('Hapus catatan pertandingan ini?')" class="inline-block">
                                         @csrf
                                         @method('DELETE')

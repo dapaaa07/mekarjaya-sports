@@ -108,8 +108,6 @@
     <main class="flex-grow bg-[#FFFFFF]">
         @yield('content')
     </main>
-        @yield('content')
-    </main>
 
     <!-- Footer Section (DESIGN.md Editorial Footer style) -->
     <footer class="bg-[#111111] text-[#9c9fa5] pt-16 pb-12 border-t border-[#313130]">

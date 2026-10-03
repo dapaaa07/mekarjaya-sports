@@ -94,10 +94,6 @@
                             </div>
                         @endif
 
-                        <div class="bg-orange-50/60 p-4 rounded-xl border border-orange-100 text-center space-y-1">
-                            <span class="text-xs font-bold text-[#FF6B00] block uppercase tracking-wide">Pencarian Instant Berbasis Tahun Lahir</span>
-                            <p class="text-xs text-[#666666]">Memudahkan pengelompokan siswa SSB per angkatan kelahiran (2008 – 2018).</p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -207,7 +203,7 @@
 
         <!-- Player Card Grid (16px rounded, white cards with soft shadow) -->
         @if($players->count() > 0)
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div id="roster-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach($players as $player)
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group">
                         
@@ -340,89 +336,6 @@
     </div>
 </section>
 
-<!-- SECTION 2.5: FOOTBALL MANAGER TACTICAL MATCH PITCH (Clean Card Wrapper) -->
-@if(count($upcomingMatches) > 0)
-<section id="taktik-match" class="relative py-16 lg:py-20 bg-white border-b border-[#EAEAEA]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10">
-            <div>
-                <span class="text-xs font-bold text-[#FF6B00] uppercase tracking-widest block">Match Center & Taktik Tim</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight mt-1">
-                    Formasi Laga & Starting XI Football Manager
-                </h2>
-                <p class="text-[#666666] mt-1 text-sm">
-                    Pratinjau susunan 11 pemain inti & strategi formasi taktis laga mendatang SSB Mekar Jaya Subang.
-                </p>
-            </div>
-            <a href="{{ route('admin.matches.index') }}" class="btn-primary text-xs py-2.5 px-5 inline-flex items-center gap-1.5">
-                <i class="fa-solid fa-shirt"></i> Kelola Formasi Match
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            @foreach($upcomingMatches as $match)
-                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow space-y-6">
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-                        <div>
-                            <span class="bg-[#FF6B00] text-white px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase">{{ $match->match_type }}</span>
-                            <span class="text-xs font-bold text-[#666666] ml-2 font-mono">KU: {{ $match->target_ku }}</span>
-                            <h3 class="font-bold text-[#111111] text-lg leading-tight mt-1.5">{{ $match->match_title }}</h3>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-[10px] text-[#666666] block font-mono uppercase tracking-wider font-semibold">FORMASI TAKTIK</span>
-                            <span class="text-2xl font-mono font-extrabold text-[#FF6B00]">{{ $match->formation ?? '4-3-3' }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Mini Pitch Display -->
-                    <div class="bg-[#081c15] p-6 rounded-2xl border-2 border-[#1b4332] relative overflow-hidden min-h-[350px] flex flex-col justify-between shadow-inner">
-                        <!-- Pitch lines mockup -->
-                        <div class="absolute inset-2 border border-white/20 rounded pointer-events-none"></div>
-                        <div class="absolute top-1/2 left-2 right-2 h-0.5 bg-white/20 -translate-y-1/2 pointer-events-none"></div>
-                        <div class="absolute top-1/2 left-1/2 w-24 h-24 border border-white/20 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
-
-                        <div class="relative z-10 space-y-4">
-                            <p class="text-[11px] text-white/70 italic text-center">Formasi Taktik Disusun oleh Pelatih Head Coach SSB Mekar Jaya Subang</p>
-                            
-                            <!-- Lineup badges grid -->
-                            @if(!empty($match->lineup_json))
-                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-                                    @foreach($match->lineup_json as $posKey => $playerName)
-                                        @if(!empty($playerName))
-                                            <div class="bg-[#111111]/90 border border-[#FF6B00]/40 p-2 rounded-xl flex items-center gap-2">
-                                                <div class="w-6 h-6 rounded-full bg-[#FF6B00] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
-                                                    <i class="fa-solid fa-shirt"></i>
-                                                </div>
-                                                <div class="min-w-0">
-                                                    <span class="block text-[10px] font-bold text-white truncate">{{ $playerName }}</span>
-                                                    <span class="block text-[8px] font-mono text-[#FF6B00] uppercase">{{ strtoupper($posKey) }}</span>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="py-12 text-center text-xs text-white/60 italic">
-                                    Formasi taktik belum dikonfigurasi untuk match ini. Pelatih dapat mengaturnya di Admin Match Center.
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between text-xs text-[#666666] border-t border-gray-100 pt-4">
-                        <span><i class="fa-solid fa-calendar mr-2 text-[#FF6B00]"></i> {{ $match->match_date->format('d M Y') }}</span>
-                        @if($match->score_result)
-                            <span class="font-mono font-bold text-white bg-[#111111] px-3 py-1 rounded-lg">Skor: {{ $match->score_result }}</span>
-                        @endif
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-    </div>
-</section>
-@endif
 
 <!-- SECTION 3: MEKAR JAYA MINI SOCCER (Modern Contrast Section) -->
 <section id="mini-soccer" class="relative py-16 lg:py-20 bg-[#111111] text-white">

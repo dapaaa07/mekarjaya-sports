@@ -63,8 +63,6 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Inventory & Equipment Management
     Route::resource('inventories', InventoryController::class)->only(['index', 'store', 'destroy']);
 
-    // Match Center & Football Manager Tactical Pitch
-    Route::get('/matches/{match}/tactics', [MatchController::class, 'tactics'])->name('matches.tactics');
-    Route::post('/matches/{match}/tactics', [MatchController::class, 'updateTactics'])->name('matches.tactics.update');
+    // Match Center Pertandingan
     Route::resource('matches', MatchController::class)->only(['index', 'store', 'destroy']);
 });

@@ -35,33 +35,4 @@ class MatchController extends Controller
         $match->delete();
         return redirect()->route('admin.matches.index')->with('success', 'Data pertandingan berhasil dihapus.');
     }
-
-    public function tactics(MatchModel $match)
-    {
-        $query = \App\Models\Player::where('status', 'aktif');
-        if ($match->target_ku !== 'Semua KU') {
-            $cat = \App\Models\AgeCategory::where('code', $match->target_ku)->first();
-            if ($cat) {
-                $query->whereBetween('birth_year', [$cat->min_birth_year, $cat->max_birth_year]);
-            }
-        }
-        $availablePlayers = $query->orderBy('birth_year', 'desc')->orderBy('full_name', 'asc')->get();
-
-        return view('admin.matches.tactics', compact('match', 'availablePlayers'));
-    }
-
-    public function updateTactics(Request $request, MatchModel $match)
-    {
-        $validated = $request->validate([
-            'formation' => 'required|string',
-            'lineup' => 'nullable|array',
-        ]);
-
-        $match->update([
-            'formation' => $validated['formation'],
-            'lineup_json' => $validated['lineup'] ?? [],
-        ]);
-
-        return redirect()->route('admin.matches.index')->with('success', "Formasi taktik FM {$validated['formation']} untuk pertandingan {$match->match_title} berhasil disimpan!");
-    }
 }
