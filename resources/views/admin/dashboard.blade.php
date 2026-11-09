@@ -7,92 +7,124 @@
 
 <div class="space-y-8">
 
-    <!-- Quick Stats Cards (Cooking App 16px Tiles) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        <!-- Total Active Siswa -->
-        <div class="editorial-card p-6 flex items-center justify-between">
-            <div>
-                <span class="text-xs font-semibold text-[#666666] uppercase tracking-wider block">Total Siswa Aktif</span>
-                <span class="text-3xl font-extrabold font-mono text-[#111111] mt-1 block">{{ $totalPlayers }}</span>
-                <span class="text-xs text-[#16A34A] font-semibold flex items-center gap-1 mt-1">
-                    <i class="fa-solid fa-users"></i> Terdaftar di SSB
-                </span>
-            </div>
-            <div class="w-12 h-12 rounded-xl bg-[#FFF2E8] text-[#FF6B00] flex items-center justify-center text-xl font-bold border border-[#FFE0CC]">
-                <i class="fa-solid fa-user-graduate"></i>
-            </div>
-        </div>
+    <!-- ASYMMETRIC MONDRIAN KPI STRIP (No 4-column equal cards) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-        <!-- Presensi Today -->
-        <div class="editorial-card p-6 flex items-center justify-between">
-            <div>
-                <span class="text-xs font-semibold text-[#666666] uppercase tracking-wider block">Presensi Hari Ini</span>
-                <span class="text-3xl font-extrabold font-mono text-[#111111] mt-1 block">{{ $todayHadir }}</span>
-                <span class="text-xs text-[#666666] mt-1 block">Dari {{ $todayAtt }} siswa hadir</span>
-            </div>
-            <div class="w-12 h-12 rounded-xl bg-[#F9F9F9] text-[#111111] flex items-center justify-center text-xl font-bold border border-[#EAEAEA]">
-                <i class="fa-solid fa-clipboard-user"></i>
-            </div>
-        </div>
-
-        <!-- Pending Registrations -->
-        <div class="editorial-card p-6 flex items-center justify-between">
-            <div>
-                <span class="text-xs font-semibold text-[#666666] uppercase tracking-wider block">Pendaftaran Baru</span>
-                <span class="text-3xl font-extrabold font-mono text-[#FF6B00] mt-1 block">{{ $pendingRegistrations }}</span>
-                <span class="text-xs text-[#FF6B00] font-semibold mt-1 block">Membutuhkan Verifikasi</span>
-            </div>
-            <div class="w-12 h-12 rounded-xl bg-[#FFF2E8] text-[#FF6B00] flex items-center justify-center text-xl font-bold border border-[#FFE0CC]">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-            </div>
-        </div>
-
-        <!-- SPP Status -->
-        <div class="editorial-card p-6 flex items-center justify-between">
-            <div>
-                <span class="text-xs font-semibold text-[#666666] uppercase tracking-wider block">Status SPP Bulanan</span>
-                <div class="flex items-center gap-2 mt-1">
-                    <span class="text-xl font-bold text-[#16A34A] font-mono">{{ $sppLunas }} <span class="text-xs font-normal text-[#666666]">Lunas</span></span>
-                    <span class="text-[#EAEAEA]">|</span>
-                    <span class="text-xl font-bold text-[#EF4444] font-mono">{{ $sppMenunggak }} <span class="text-xs font-normal text-[#666666]">Tunggak</span></span>
+        <!-- 1. Total Active Siswa (Dark Focus Hero Tile - 5 cols) -->
+        <div class="lg:col-span-5 bg-[#111111] text-white border-2 border-[#111111] p-6 flex flex-col justify-between gap-4 dark-surface shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <span class="text-xs font-mono font-bold text-[#FFFF00] uppercase tracking-wider block">Total Siswa Aktif</span>
+                    <span class="text-4xl font-bold font-mono text-white mt-2 block">{{ $totalPlayers }}</span>
                 </div>
-                <span class="text-xs text-[#666666] mt-1 block">Bulan Berjalan</span>
+                <div class="w-12 h-12 bg-[#0000FF] text-white border-2 border-[#FFFFFF] flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-user-graduate" aria-hidden="true"></i>
+                </div>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-[#F9F9F9] text-[#111111] flex items-center justify-center text-xl font-bold border border-[#EAEAEA]">
-                <i class="fa-solid fa-wallet"></i>
+            <div class="pt-3 border-t border-[#333333] flex items-center justify-between gap-2 text-xs">
+                <span class="text-[#D4D4D4]"><i class="fa-solid fa-users text-[#FFFF00] mr-1" aria-hidden="true"></i> Terdaftar di SSB Mekar Jaya</span>
+                <a href="{{ route('admin.players.index') }}" class="font-mono font-bold text-[#FFFF00] hover:underline whitespace-nowrap shrink-0">Buka Roster</a>
+            </div>
+        </div>
+
+        <!-- 2. Pending Registrations (Yellow/Red Action Block - 4 cols) -->
+        <div class="lg:col-span-4 {{ $pendingRegistrations > 0 ? 'bg-[#FFFF00]' : 'bg-white' }} border-2 border-[#111111] p-6 flex flex-col justify-between gap-4 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <span class="text-xs font-mono font-bold text-[#111111] uppercase tracking-wider block">Pendaftaran Baru</span>
+                    <span class="text-4xl font-bold font-mono text-[#111111] mt-2 block">{{ $pendingRegistrations }}</span>
+                </div>
+                <div class="w-12 h-12 bg-[#FF0000] text-[#000000] border-2 border-[#111111] flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="pt-3 border-t-2 border-[#111111] flex items-center justify-between gap-2 text-xs">
+                <span class="font-bold text-[#111111]">Verifikasi KK</span>
+                <a href="{{ route('admin.registrations.index') }}" class="font-mono font-bold bg-[#111111] text-white px-2.5 py-1 hover:bg-[#0000FF] transition-colors whitespace-nowrap shrink-0">
+                    Cek Antrean
+                </a>
+            </div>
+        </div>
+
+        <!-- 3. Presensi Today (White Structural Tile with Blue Accent - 3 cols) -->
+        <div class="lg:col-span-3 bg-white border-2 border-[#111111] border-t-[6px] border-t-[#0000FF] p-6 flex flex-col justify-between gap-4 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <span class="text-xs font-mono font-bold text-[#0000FF] uppercase tracking-wider block">Presensi Hari Ini</span>
+                    <span class="text-4xl font-bold font-mono text-[#111111] mt-2 block">{{ $todayHadir }}</span>
+                </div>
+                <div class="w-11 h-11 bg-[#F4F4F4] text-[#111111] border-2 border-[#111111] flex items-center justify-center text-lg shrink-0">
+                    <i class="fa-solid fa-clipboard-user" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="pt-3 border-t border-[#D4D4D4] flex items-center justify-between gap-2 text-xs text-[#525252]">
+                <span>Dari {{ $todayAtt }} siswa hadir</span>
+                <a href="{{ route('admin.attendances.index') }}" class="font-mono font-bold text-[#0000FF] hover:underline whitespace-nowrap shrink-0">Input Presensi</a>
             </div>
         </div>
 
     </div>
 
+    <!-- SECONDARY FULL-WIDTH SPP LEDGER STRIP (Asymmetric 7/5 Split) -->
+    @php
+        $sppTotal = max(1, $sppLunas + $sppMenunggak);
+        $lunasPct = round(($sppLunas / $sppTotal) * 100);
+    @endphp
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 bg-white border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+        <div class="lg:col-span-7 p-5 sm:p-6 border-b-2 lg:border-b-0 lg:border-r-2 border-[#111111] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <span class="text-xs font-mono font-bold text-[#525252] uppercase tracking-wider block">Status SPP Bulanan</span>
+                <div class="flex flex-wrap items-center gap-3 mt-1.5">
+                    <span class="badge-success text-sm font-mono">{{ $sppLunas }} Lunas</span>
+                    <span class="badge-danger text-sm font-mono">{{ $sppMenunggak }} Tunggak</span>
+                    <span class="text-xs text-[#525252]">Bulan Berjalan ({{ $lunasPct }}% Terbayar)</span>
+                </div>
+            </div>
+            <div class="w-full sm:w-44 shrink-0">
+                <div class="w-full h-4 border-2 border-[#111111] bg-[#FEE2E2]">
+                    <div class="h-full bg-[#166534] border-r border-[#111111]" style="width: {{ $lunasPct }}%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="lg:col-span-5 p-5 sm:p-6 bg-[#F4F4F4] flex flex-wrap items-center justify-between gap-3">
+            <span class="text-xs font-mono font-bold text-[#111111] uppercase">Aksi Cepat Hari Ini</span>
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('admin.attendances.index') }}" class="btn-blue text-xs py-2 px-3.5">
+                    <i class="fa-solid fa-check-double" aria-hidden="true"></i> Presensi Latihan
+                </a>
+                <a href="{{ route('admin.schedules.create') }}" class="btn-secondary text-xs py-2 px-3.5">
+                    <i class="fa-solid fa-calendar-plus" aria-hidden="true"></i> Jadwal Baru
+                </a>
+            </div>
+        </div>
+    </div>
 
     <!-- CORE ANALYTICS: DISTRIBUTION OF PLAYERS BY BIRTH YEAR -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        <!-- Chart & Distribution Table -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Chart & Distribution Table (8 Cols) -->
         <div class="lg:col-span-8 editorial-card p-6 space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAEAEA] pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-[#111111] pb-4">
                 <div>
-                    <h3 class="font-extrabold text-[#111111] text-base flex items-center gap-2">
-                        <i class="fa-solid fa-chart-column text-[#FF6B00]"></i> Distribusi Data Pemain Berdasarkan Tahun Lahir
+                    <h3 class="font-bold text-[#111111] text-base sm:text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-[#0000FF]" aria-hidden="true"></i> Distribusi Data Pemain Berdasarkan Tahun Lahir
                     </h3>
-                    <p class="text-xs text-[#666666]">Pengelompokan siswa SSB Mekar Jaya Subang per angkatan kelahiran.</p>
+                    <p class="text-xs text-[#525252]">Pengelompokan siswa SSB Mekar Jaya Subang per angkatan kelahiran.</p>
                 </div>
-                <a href="{{ route('admin.players.index') }}" class="btn-secondary text-xs py-2 px-4 rounded-xl self-start">
-                    Filter Pemain <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i>
+                <a href="{{ route('admin.players.index') }}" class="btn-secondary text-xs py-2 px-4 self-start">
+                    Filter Pemain <i class="fa-solid fa-arrow-right text-[11px]" aria-hidden="true"></i>
                 </a>
             </div>
 
             <!-- Visual Bar Chart -->
-            <div class="h-64">
+            <div class="h-64 bg-white">
                 <canvas id="birthYearChart"></canvas>
             </div>
 
             <!-- Detailed Year Breakdown Table -->
-            <div class="overflow-x-auto border border-[#EAEAEA] rounded-xl">
+            <div class="overflow-x-auto border-2 border-[#111111]">
                 <table class="w-full text-left text-xs text-[#111111]">
-                    <thead class="bg-[#FAFAFA] text-[#111111] font-semibold uppercase text-[11px] border-b border-[#EAEAEA]">
+                    <thead class="bg-[#111111] text-white font-mono font-bold uppercase text-[11px]">
                         <tr>
                             <th class="p-3.5">Tahun Lahir</th>
                             <th class="p-3.5">Perkiraan Usia</th>
@@ -101,7 +133,7 @@
                             <th class="p-3.5 text-right">Aksi Filter</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-[#EAEAEA] font-medium">
+                    <tbody class="divide-y-2 divide-[#111111] font-medium bg-white">
                         @foreach($playersByYear as $py)
                             @php
                                 $age = date('Y') - $py->birth_year;
@@ -111,22 +143,20 @@
                                 elseif ($age > 14 && $age <= 16) $kuLabel = 'U-16';
                                 elseif ($age > 16) $kuLabel = 'U-18';
                             @endphp
-                            <tr class="hover:bg-[#FAFAFA] transition-colors">
+                            <tr class="hover:bg-[#F4F4F4] transition-colors">
                                 <td class="p-3.5 font-bold text-[#111111]">
-                                    <span class="px-2.5 py-1 bg-[#111111] text-white rounded-lg font-mono font-bold text-xs">
+                                    <span class="px-2.5 py-1 bg-[#111111] text-[#FFFF00] font-mono font-bold text-xs inline-block">
                                         {{ $py->birth_year }}
                                     </span>
                                 </td>
                                 <td class="p-3.5 text-[#111111] font-medium">{{ $age }} Tahun</td>
                                 <td class="p-3.5">
-                                    <span class="px-2.5 py-1 rounded-lg bg-[#F9F9F9] text-[#111111] font-semibold text-[11px] border border-[#EAEAEA]">
-                                        {{ $kuLabel }}
-                                    </span>
+                                    <span class="badge-secondary font-mono">{{ $kuLabel }}</span>
                                 </td>
-                                <td class="p-3.5 font-bold text-[#16A34A] text-xs font-mono">{{ $py->total }} Pemain</td>
+                                <td class="p-3.5 font-bold text-[#166534] text-xs font-mono">{{ $py->total }} Pemain</td>
                                 <td class="p-3.5 text-right">
-                                    <a href="{{ route('admin.players.index', ['year' => $py->birth_year]) }}" 
-                                       class="btn-primary text-[11px] py-1.5 px-3 rounded-xl inline-block">
+                                    <a href="{{ route('admin.players.index', ['year' => $py->birth_year]) }}"
+                                       class="btn-primary text-xs py-1.5 px-3 min-h-[40px]">
                                         Lihat List {{ $py->birth_year }}
                                     </a>
                                 </td>
@@ -138,35 +168,39 @@
 
         </div>
 
-        <!-- Recent Online Registrations Sidebar -->
+        <!-- Recent Online Registrations Sidebar (4 Cols) -->
         <div class="lg:col-span-4 editorial-card p-6 space-y-4">
-            <div class="flex items-center justify-between border-b border-[#EAEAEA] pb-3">
-                <h3 class="font-extrabold text-[#111111] text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-clock-rotate-left text-[#FF6B00]"></i> Pendaftaran Terbaru
+            <div class="flex items-center justify-between border-b-2 border-[#111111] pb-3">
+                <h3 class="font-bold text-[#111111] text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-[#CC0000]" aria-hidden="true"></i> Pendaftaran Terbaru
                 </h3>
-                <a href="{{ route('admin.registrations.index') }}" class="text-xs text-[#FF6B00] font-semibold hover:underline">Lihat Semua</a>
+                <a href="{{ route('admin.registrations.index') }}" class="text-xs text-[#0000FF] font-mono font-bold hover:underline">Lihat Semua</a>
             </div>
 
             @if($recentRegs->count() > 0)
                 <div class="space-y-3">
                     @foreach($recentRegs as $reg)
-                        <div class="p-4 rounded-xl border border-[#EAEAEA] bg-[#FAFAFA] space-y-2">
-                            <div class="flex justify-between items-start">
+                        <div class="p-4 border-2 border-[#111111] bg-[#F4F4F4] space-y-2.5">
+                            <div class="flex justify-between items-start gap-2">
                                 <div>
                                     <h4 class="font-bold text-[#111111] text-xs">{{ $reg->full_name }}</h4>
-                                    <span class="text-[10px] text-[#666666]">Lahir {{ date('d M Y', strtotime($reg->birth_date)) }} ({{ $reg->birth_year }})</span>
+                                    <span class="text-[11px] font-mono text-[#525252]">Lahir {{ date('d M Y', strtotime($reg->birth_date)) }} ({{ $reg->birth_year }})</span>
                                 </div>
-                                <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase {{ $reg->status == 'pending' ? 'bg-[#FFF2E8] text-[#FF6B00] border border-[#FFE0CC]' : ($reg->status == 'approved' ? 'bg-[#16A34A]/10 text-[#16A34A]' : 'bg-[#EF4444]/10 text-[#EF4444]') }}">
-                                    {{ $reg->status }}
-                                </span>
+                                @if($reg->status == 'pending')
+                                    <span class="badge-primary text-[10px] font-mono uppercase">Pending</span>
+                                @elseif($reg->status == 'approved')
+                                    <span class="badge-success text-[10px] font-mono uppercase">Approved</span>
+                                @else
+                                    <span class="badge-danger text-[10px] font-mono uppercase">{{ $reg->status }}</span>
+                                @endif
                             </div>
 
-                            <div class="flex items-center justify-between pt-2.5 border-t border-[#EAEAEA] text-xs">
-                                <span class="text-[#666666] text-[11px]"><i class="fa-solid fa-phone text-[#16A34A] mr-1"></i> {{ $reg->parent_phone }}</span>
+                            <div class="flex items-center justify-between pt-2.5 border-t border-[#111111] text-xs">
+                                <span class="text-[#111111] font-mono text-[11px]"><i class="fa-solid fa-phone text-[#166534] mr-1" aria-hidden="true"></i> {{ $reg->parent_phone }}</span>
                                 @if($reg->status == 'pending')
                                     <form action="{{ route('admin.registrations.approve', $reg->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn-primary text-[10px] py-1 px-2.5 rounded-lg">
+                                        <button type="submit" class="btn-primary text-xs py-1.5 px-3 min-h-[36px]">
                                             Setujui
                                         </button>
                                     </form>
@@ -176,7 +210,10 @@
                     @endforeach
                 </div>
             @else
-                <p class="text-xs text-[#666666] py-6 text-center">Belum ada pendaftaran siswa baru.</p>
+                <div class="py-10 text-center space-y-2 border-2 border-dashed border-[#111111]">
+                    <i class="fa-solid fa-inbox text-2xl text-[#525252]" aria-hidden="true"></i>
+                    <p class="text-xs text-[#525252]">Belum ada pendaftaran siswa baru.</p>
+                </div>
             @endif
         </div>
 
@@ -198,8 +235,10 @@
                 datasets: [{
                     label: 'Jumlah Siswa SSB',
                     data: data,
-                    backgroundColor: '#FF6B00',
-                    borderRadius: 8,
+                    backgroundColor: '#0000FF',
+                    borderColor: '#111111',
+                    borderWidth: 2,
+                    borderRadius: 0,
                 }]
             },
             options: {
@@ -209,9 +248,14 @@
                     legend: { display: false }
                 },
                 scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#111111', font: { family: 'JetBrains Mono, monospace', weight: '700' } }
+                    },
                     y: {
                         beginAtZero: true,
-                        ticks: { stepSize: 1 }
+                        grid: { color: '#E5E5E5' },
+                        ticks: { stepSize: 1, color: '#111111' }
                     }
                 }
             }

@@ -7,48 +7,48 @@
 
 <div class="space-y-6">
 
-    <!-- Header Control Bar (Cooking App 16px Card) -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 editorial-card p-6">
+    <!-- Header Control Bar -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 editorial-card p-6 border-l-[6px] border-l-[#0000FF]">
         <div>
-            <h2 class="font-extrabold text-[#111111] text-base flex items-center gap-2">
-                <i class="fa-solid fa-users text-[#FF6B00]"></i> Master Data Siswa SSB Mekar Jaya
+            <h2 class="font-bold text-[#111111] text-base sm:text-lg flex items-center gap-2">
+                <i class="fa-solid fa-users text-[#0000FF]" aria-hidden="true"></i> Master Data Siswa SSB Mekar Jaya
             </h2>
-            <p class="text-xs text-[#666666]">Total {{ $players->total() }} pemain terdaftar (Berdasarkan filter aktif).</p>
+            <p class="text-xs text-[#525252] mt-0.5">Total <strong class="font-mono text-[#111111]">{{ $players->total() }}</strong> pemain terdaftar (berdasarkan filter aktif).</p>
         </div>
 
-        <div class="flex items-center gap-3">
-            <a href="{{ route('admin.players.print', request()->all()) }}" target="_blank" 
-               class="btn-secondary text-xs py-2.5 px-4 flex items-center gap-1.5 rounded-xl font-medium">
-                <i class="fa-solid fa-print"></i> Cetak Roster Filter Ini
+        <div class="flex flex-wrap items-center gap-2.5">
+            <a href="{{ route('admin.players.print', request()->all()) }}" target="_blank"
+               class="btn-secondary text-xs py-2.5 px-4">
+                <i class="fa-solid fa-print" aria-hidden="true"></i> Cetak Roster Filter Ini
             </a>
-            <a href="{{ route('admin.players.create') }}" 
-               class="btn-primary text-xs py-2.5 px-4 flex items-center gap-1.5 rounded-xl font-medium shadow-sm">
-                <i class="fa-solid fa-plus text-xs"></i> Tambah Pemain Baru
+            <a href="{{ route('admin.players.create') }}"
+               class="btn-primary text-xs py-2.5 px-4">
+                <i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Tambah Pemain Baru
             </a>
         </div>
     </div>
 
-
-    <!-- FILTER SYSTEM (PRIMARY SOLVED REQUIREMENT) -->
+    <!-- FILTER SYSTEM -->
     <div class="editorial-card p-6">
         <form action="{{ route('admin.players.index') }}" method="GET" class="space-y-4">
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 items-end text-xs">
-                
+
                 <!-- Search Input -->
                 <div class="md:col-span-4">
-                    <label for="search" class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Cari Nama / NIS / Panggilan</label>
-                    <input type="text" id="search" name="search" value="{{ request('search') }}" 
-                        placeholder="Contoh: Fatih, SSB-MJ..."
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-white text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <label for="search" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Cari Nama / NIS / Panggilan</label>
+                    <input type="text" id="search" name="search" value="{{ request('search') }}"
+                           autocorrect="off" autocapitalize="off" spellcheck="false"
+                           placeholder="Contoh: Fatih, SSB-MJ..."
+                           class="ds-input text-sm py-2.5">
                 </div>
 
-                <!-- Filter by Birth Year (Key Feature) -->
+                <!-- Filter by Birth Year -->
                 <div class="md:col-span-3">
-                    <label for="year" class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">
-                        <i class="fa-solid fa-calendar text-[#FF6B00] mr-1"></i> Filter Tahun Lahir
+                    <label for="year" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">
+                        <i class="fa-solid fa-calendar text-[#CC0000] mr-1" aria-hidden="true"></i> Filter Tahun Lahir
                     </label>
-                    <select id="year" name="year" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-white text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] font-medium">
+                    <select id="year" name="year" class="ds-input text-sm py-2.5 font-medium">
                         <option value="">-- Semua Tahun Lahir --</option>
                         @foreach($availableYears as $yr)
                             <option value="{{ $yr }}" {{ request('year') == $yr ? 'selected' : '' }}>
@@ -60,8 +60,8 @@
 
                 <!-- Filter by Kelompok Umur -->
                 <div class="md:col-span-2">
-                    <label for="ku" class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Kelompok Umur</label>
-                    <select id="ku" name="ku" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-white text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <label for="ku" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Kelompok Umur</label>
+                    <select id="ku" name="ku" class="ds-input text-sm py-2.5">
                         <option value="">-- Semua KU --</option>
                         @foreach($ageCategories as $cat)
                             <option value="{{ $cat->code }}" {{ request('ku') == $cat->code ? 'selected' : '' }}>
@@ -73,22 +73,24 @@
 
                 <!-- Filter by SPP Status -->
                 <div class="md:col-span-2">
-                    <label for="spp_status" class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Status SPP</label>
-                    <select id="spp_status" name="spp_status" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-white text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                    <label for="spp_status" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Status SPP</label>
+                    <select id="spp_status" name="spp_status" class="ds-input text-sm py-2.5">
                         <option value="">-- Semua SPP --</option>
                         <option value="Lunas" {{ request('spp_status') == 'Lunas' ? 'selected' : '' }}>Lunas</option>
                         <option value="Belum Bayar" {{ request('spp_status') == 'Belum Bayar' ? 'selected' : '' }}>Belum Bayar</option>
                     </select>
                 </div>
 
-                <!-- Submit Button -->
+                <!-- Submit & Reset Button -->
                 <div class="md:col-span-1 flex gap-1.5">
-                    <button type="submit" class="w-full btn-primary text-xs py-2.5 rounded-xl flex items-center justify-center font-medium shadow-sm">
-                        <i class="fa-solid fa-filter"></i>
+                    <button type="submit" aria-label="Terapkan filter pemain" title="Terapkan Filter"
+                            class="w-full btn-primary text-xs py-2.5 px-3">
+                        <i class="fa-solid fa-filter" aria-hidden="true"></i>
                     </button>
                     @if(request()->hasAny(['year', 'ku', 'search', 'spp_status']))
-                        <a href="{{ route('admin.players.index') }}" class="btn-secondary text-xs py-2.5 px-3 rounded-xl flex items-center justify-center font-medium">
-                            <i class="fa-solid fa-rotate-left"></i>
+                        <a href="{{ route('admin.players.index') }}" aria-label="Reset filter" title="Reset Filter"
+                           class="btn-secondary text-xs py-2.5 px-3">
+                            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                         </a>
                     @endif
                 </div>
@@ -96,15 +98,15 @@
             </div>
 
             <!-- Quick Year Filter Chips Bar -->
-            <div class="pt-3 border-t border-[#EAEAEA] flex flex-wrap items-center gap-1.5">
-                <span class="text-[11px] font-semibold text-[#666666] uppercase tracking-wider mr-1">Filter Instan Tahun:</span>
-                <a href="{{ route('admin.players.index') }}" 
-                   class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {{ !request('year') ? 'bg-[#111111] text-white' : 'bg-[#F9F9F9] text-[#111111] hover:bg-[#EAEAEA] border border-[#EAEAEA]' }}">
+            <div class="pt-4 border-t-2 border-[#111111] flex flex-wrap items-center gap-2">
+                <span class="text-xs font-mono font-bold text-[#525252] uppercase tracking-wider mr-1">Filter Instan Tahun:</span>
+                <a href="{{ route('admin.players.index') }}"
+                   class="min-h-[40px] px-3 py-1.5 text-xs font-mono font-bold border-2 border-[#111111] inline-flex items-center transition-colors {{ !request('year') ? 'bg-[#111111] text-[#FFFF00]' : 'bg-[#F4F4F4] text-[#111111] hover:bg-[#FFFF00]' }}">
                     Semua
                 </a>
                 @foreach($availableYears as $yr)
-                    <a href="{{ route('admin.players.index', ['year' => $yr]) }}" 
-                       class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {{ request('year') == $yr ? 'bg-[#FF6B00] text-white shadow-sm' : 'bg-[#F9F9F9] text-[#111111] hover:bg-[#EAEAEA] border border-[#EAEAEA]' }}">
+                    <a href="{{ route('admin.players.index', ['year' => $yr]) }}"
+                       class="min-h-[40px] px-3 py-1.5 text-xs font-mono font-bold border-2 border-[#111111] inline-flex items-center transition-colors {{ request('year') == $yr ? 'bg-[#0000FF] text-white' : 'bg-[#F4F4F4] text-[#111111] hover:bg-[#FFFF00]' }}">
                         {{ $yr }}
                     </a>
                 @endforeach
@@ -113,13 +115,12 @@
         </form>
     </div>
 
+    <!-- Player Data Table -->
+    <div class="editorial-card p-0 overflow-hidden">
 
-    <!-- Player Data Table (Cooking App 16px Rounded Card) -->
-    <div class="editorial-card overflow-hidden">
-        
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs text-[#111111]">
-                <thead class="bg-[#FAFAFA] text-[#111111] font-semibold uppercase text-[11px] border-b border-[#EAEAEA]">
+                <thead class="bg-[#111111] text-white font-mono font-bold uppercase text-[11px]">
                     <tr>
                         <th class="p-4">NIS & Pemain</th>
                         <th class="p-4">Tahun Lahir & Usia</th>
@@ -130,52 +131,50 @@
                         <th class="p-4 text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-[#EAEAEA]">
+                <tbody class="divide-y-2 divide-[#111111] bg-white">
                     @forelse($players as $player)
-                        <tr class="hover:bg-[#FAFAFA] transition-colors">
-                            
+                        <tr class="hover:bg-[#F4F4F4] transition-colors">
+
                             <!-- NIS & Player Name -->
                             <td class="p-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-xl bg-[#111111] text-white font-bold flex items-center justify-center text-xs flex-shrink-0">
+                                    <div class="w-10 h-10 bg-[#0000FF] text-white border-2 border-[#111111] font-mono font-bold flex items-center justify-center text-sm flex-shrink-0">
                                         {{ strtoupper(substr($player->full_name, 0, 1)) }}
                                     </div>
                                     <div>
-                                        <a href="{{ route('admin.players.show', $player->id) }}" class="font-bold text-[#111111] hover:text-[#FF6B00] text-sm block leading-tight transition-colors">
+                                        <a href="{{ route('admin.players.show', $player->id) }}" class="font-bold text-[#111111] hover:text-[#0000FF] hover:underline text-sm block leading-tight transition-colors">
                                             {{ $player->full_name }}
                                         </a>
-                                        <span class="text-[11px] text-[#666666] font-mono">{{ $player->nis }}</span>
+                                        <span class="text-xs text-[#525252] font-mono">{{ $player->nis }}</span>
                                     </div>
                                 </div>
                             </td>
 
-                            <!-- Birth Year & Age (KEY SOLVED COLUMN) -->
+                            <!-- Birth Year & Age -->
                             <td class="p-4">
-                                <span class="px-2.5 py-1 rounded-lg bg-[#111111] text-white font-mono font-bold text-xs inline-block">
+                                <span class="px-2.5 py-1 bg-[#111111] text-[#FFFF00] font-mono font-bold text-xs inline-block">
                                     {{ $player->birth_year }}
                                 </span>
-                                <span class="text-xs font-semibold text-[#111111] ml-1">({{ $player->age }} Thn)</span>
-                                <span class="block text-[10px] text-[#666666]">{{ date('d M Y', strtotime($player->birth_date)) }}</span>
+                                <span class="text-xs font-bold text-[#111111] ml-1">({{ $player->age }} Thn)</span>
+                                <span class="block text-[11px] font-mono text-[#525252] mt-0.5">{{ date('d M Y', strtotime($player->birth_date)) }}</span>
                             </td>
 
                             <!-- Kelompok Umur Badge -->
                             <td class="p-4">
-                                <span class="px-2.5 py-1 rounded-lg bg-[#F9F9F9] text-[#111111] font-semibold text-xs border border-[#EAEAEA]">
-                                    {{ $player->age_category_badge }}
-                                </span>
+                                <span class="badge-secondary font-mono">{{ $player->age_category_badge }}</span>
                             </td>
 
                             <!-- Position -->
                             <td class="p-4">
-                                <span class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#FAFAFA] text-[#111111] border border-[#EAEAEA]">
+                                <span class="px-2.5 py-1 border border-[#111111] bg-white text-[#111111] text-xs font-semibold">
                                     {{ $player->position }}
                                 </span>
                             </td>
 
                             <!-- Parent Info -->
                             <td class="p-4">
-                                <span class="block font-medium text-[#111111]">{{ $player->parent_name }}</span>
-                                <span class="text-[11px] text-[#666666]"><i class="fa-brands fa-whatsapp text-[#16A34A] mr-1"></i> {{ $player->parent_phone }}</span>
+                                <span class="block font-bold text-[#111111]">{{ $player->parent_name }}</span>
+                                <span class="text-xs font-mono text-[#525252]"><i class="fa-brands fa-whatsapp text-[#166534] mr-1" aria-hidden="true"></i> {{ $player->parent_phone }}</span>
                             </td>
 
                             <!-- SPP Badge (1-click toggle) -->
@@ -183,14 +182,14 @@
                                 <form action="{{ route('admin.players.toggle-spp', $player->id) }}" method="POST">
                                     @csrf
                                     @if($player->spp_status == 'Lunas')
-                                        <button type="submit" title="Klik untuk ubah ke Belum Bayar" 
-                                                class="px-2.5 py-1 rounded-lg bg-[#16A34A]/10 hover:bg-[#16A34A]/20 text-[#16A34A] font-semibold border border-[#16A34A]/30 text-[11px] transition-colors">
-                                            <i class="fa-solid fa-check text-[#16A34A] mr-1"></i> Lunas
+                                        <button type="submit" title="Klik untuk ubah ke Belum Bayar"
+                                                class="min-h-[38px] px-3 py-1.5 bg-[#DCFCE7] hover:bg-[#BBF7D0] text-[#14532D] font-bold border-2 border-[#166534] text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer">
+                                            <i class="fa-solid fa-check" aria-hidden="true"></i> Lunas
                                         </button>
                                     @else
-                                        <button type="submit" title="Klik untuk ubah ke Lunas" 
-                                                class="px-2.5 py-1 rounded-lg bg-[#EF4444]/10 hover:bg-[#EF4444]/20 text-[#EF4444] font-semibold border border-[#EF4444]/30 text-[11px] transition-colors">
-                                            <i class="fa-solid fa-exclamation-circle text-[#EF4444] mr-1"></i> Belum Bayar
+                                        <button type="submit" title="Klik untuk ubah ke Lunas"
+                                                class="min-h-[38px] px-3 py-1.5 bg-[#FEE2E2] hover:bg-[#FECACA] text-[#991B1B] font-bold border-2 border-[#B91C1C] text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer">
+                                            <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Belum Bayar
                                         </button>
                                     @endif
                                 </form>
@@ -199,23 +198,26 @@
                             <!-- Action Buttons -->
                             <td class="p-4 text-right">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <a href="{{ route('admin.players.show', $player->id) }}" 
+                                    <a href="{{ route('admin.players.show', $player->id) }}"
                                        title="Lihat Rapor Radar"
-                                       class="w-8 h-8 rounded-xl bg-[#FAFAFA] text-[#111111] hover:bg-[#111111] hover:text-white flex items-center justify-center transition-colors border border-[#EAEAEA]">
-                                        <i class="fa-solid fa-eye text-xs"></i>
+                                       aria-label="Lihat rapor {{ $player->full_name }}"
+                                       class="w-10 h-10 bg-white text-[#111111] hover:bg-[#0000FF] hover:text-white border-2 border-[#111111] flex items-center justify-center transition-colors">
+                                        <i class="fa-solid fa-eye text-xs" aria-hidden="true"></i>
                                     </a>
-                                    <a href="{{ route('admin.players.edit', $player->id) }}" 
+                                    <a href="{{ route('admin.players.edit', $player->id) }}"
                                        title="Edit Data"
-                                       class="w-8 h-8 rounded-xl bg-[#FAFAFA] text-[#111111] hover:bg-[#FF6B00] hover:text-white flex items-center justify-center transition-colors border border-[#EAEAEA]">
-                                        <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                       aria-label="Edit data {{ $player->full_name }}"
+                                       class="w-10 h-10 bg-white text-[#111111] hover:bg-[#FFFF00] hover:text-[#111111] border-2 border-[#111111] flex items-center justify-center transition-colors">
+                                        <i class="fa-solid fa-pen-to-square text-xs" aria-hidden="true"></i>
                                     </a>
                                     <form action="{{ route('admin.players.destroy', $player->id) }}" method="POST" onsubmit="return confirm('Hapus data pemain {{ $player->full_name }}?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" 
+                                        <button type="submit"
                                                 title="Hapus Pemain"
-                                                class="w-8 h-8 rounded-xl bg-[#FAFAFA] text-[#EF4444] hover:bg-[#EF4444] hover:text-white flex items-center justify-center transition-colors border border-[#EAEAEA]">
-                                            <i class="fa-solid fa-trash text-xs"></i>
+                                                aria-label="Hapus {{ $player->full_name }}"
+                                                class="w-10 h-10 bg-white text-[#991B1B] hover:bg-[#FF0000] hover:text-[#000000] border-2 border-[#111111] flex items-center justify-center transition-colors cursor-pointer">
+                                            <i class="fa-solid fa-trash text-xs" aria-hidden="true"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -224,7 +226,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="p-12 text-center text-[#666666]">
+                            <td colspan="7" class="p-12 text-center text-[#525252]">
                                 Tidak ada data pemain yang cocok dengan kriteria filter.
                             </td>
                         </tr>
@@ -234,7 +236,7 @@
         </div>
 
         <!-- Pagination -->
-        <div class="p-4 border-t border-[#EAEAEA]">
+        <div class="p-4 border-t-2 border-[#111111] bg-white">
             {{ $players->links() }}
         </div>
 

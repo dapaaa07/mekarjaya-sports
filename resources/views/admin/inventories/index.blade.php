@@ -6,38 +6,38 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- Header Summary & Quick Action Button (Cooking App 16px Card) -->
-    <div class="editorial-card p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <!-- Header Summary & Quick Action Button -->
+    <div class="editorial-card p-6 border-l-[6px] border-l-[#FFFF00] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-            <h2 class="font-extrabold text-base text-[#111111] flex items-center gap-2">
-                <i class="fa-solid fa-boxes-packing text-[#FF6B00]"></i> Master Inventaris Peralatan SSB
+            <h2 class="font-bold text-base sm:text-lg text-[#111111] flex items-center gap-2">
+                <i class="fa-solid fa-boxes-packing text-[#CC0000]" aria-hidden="true"></i> Master Inventaris Peralatan SSB
             </h2>
-            <p class="text-xs text-[#666666]">Manajemen stok bola, rompi latihan, cone, gawang, dan fasilitas medis sekretariat.</p>
+            <p class="text-xs text-[#525252] mt-0.5">Manajemen stok bola, rompi latihan, cone, gawang, dan fasilitas medis sekretariat.</p>
         </div>
-        
-        <button onclick="document.getElementById('modal-add-inventory').classList.remove('hidden')" class="btn-primary text-xs py-2.5 px-4 rounded-xl flex items-center gap-2 font-medium shadow-sm">
-            <i class="fa-solid fa-plus text-xs"></i> Tambah Barang Inventaris
+
+        <button type="button" onclick="openAddInventoryModal()" class="btn-primary text-xs py-2.5 px-4">
+            <i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Tambah Barang Inventaris
         </button>
     </div>
 
     <!-- Inventory Filter & Search Bar -->
     <div class="editorial-card p-6">
-        <form action="{{ route('admin.inventories.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <form action="{{ route('admin.inventories.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             <div>
-                <label class="block text-[11px] font-semibold text-[#111111] uppercase tracking-wider mb-1.5">Kategori Barang</label>
-                <select name="category" onchange="this.form.submit()" class="w-full bg-white border border-[#EAEAEA] rounded-xl px-3.5 py-2.5 text-xs text-[#111111] focus:ring-2 focus:ring-[#FF6B00] focus:outline-none">
+                <label class="block text-xs font-bold text-[#111111] uppercase tracking-wider mb-1.5">Kategori Barang</label>
+                <select name="category" onchange="this.form.submit()" class="ds-input text-sm py-2.5">
                     <option value="">-- Semua Kategori --</option>
                     <option value="Bola" {{ request('category') == 'Bola' ? 'selected' : '' }}>Bola</option>
                     <option value="Rompi" {{ request('category') == 'Rompi' ? 'selected' : '' }}>Rompi Latihan</option>
-                    <option value="Cone" {{ request('category') == 'Cone' ? 'selected' : '' }}>Cone & Agility Ladder</option>
+                    <option value="Cone" {{ request('category') == 'Cone' ? 'selected' : '' }}>Cone &amp; Agility Ladder</option>
                     <option value="Medis" {{ request('category') == 'Medis' ? 'selected' : '' }}>Medis / P3K</option>
                     <option value="Lainnya" {{ request('category') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                 </select>
             </div>
 
             <div>
-                <label class="block text-[11px] font-semibold text-[#111111] uppercase tracking-wider mb-1.5">Kondisi</label>
-                <select name="condition" onchange="this.form.submit()" class="w-full bg-white border border-[#EAEAEA] rounded-xl px-3.5 py-2.5 text-xs text-[#111111] focus:ring-2 focus:ring-[#FF6B00] focus:outline-none">
+                <label class="block text-xs font-bold text-[#111111] uppercase tracking-wider mb-1.5">Kondisi</label>
+                <select name="condition" onchange="this.form.submit()" class="ds-input text-sm py-2.5">
                     <option value="">-- Semua Kondisi --</option>
                     <option value="Baik" {{ request('condition') == 'Baik' ? 'selected' : '' }}>Baik</option>
                     <option value="Rusak Ringan" {{ request('condition') == 'Rusak Ringan' ? 'selected' : '' }}>Rusak Ringan</option>
@@ -45,18 +45,18 @@
                 </select>
             </div>
 
-            <div class="flex items-end">
-                <a href="{{ route('admin.inventories.index') }}" class="btn-secondary w-full text-xs py-2.5 rounded-xl text-center font-medium">Reset Filter</a>
+            <div>
+                <a href="{{ route('admin.inventories.index') }}" class="btn-secondary w-full text-xs py-2.5">Reset Filter</a>
             </div>
         </form>
     </div>
 
     <!-- Inventory Data Table -->
-    <div class="editorial-card overflow-hidden">
+    <div class="editorial-card p-0 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs text-[#111111]">
                 <thead>
-                    <tr class="bg-[#FAFAFA] border-b border-[#EAEAEA] text-[11px] font-semibold text-[#111111] uppercase tracking-wider">
+                    <tr class="bg-[#111111] text-white text-[11px] font-mono font-bold uppercase tracking-wider">
                         <th class="py-4 px-4">Nama Barang</th>
                         <th class="py-4 px-4">Kategori</th>
                         <th class="py-4 px-4 text-center">Jumlah Stok</th>
@@ -65,46 +65,47 @@
                         <th class="py-4 px-4 text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-[#EAEAEA]">
+                <tbody class="divide-y-2 divide-[#111111] bg-white">
                     @forelse($inventories as $inv)
-                        <tr class="hover:bg-[#FAFAFA] transition-colors">
+                        <tr class="hover:bg-[#F4F4F4] transition-colors">
                             <td class="py-3.5 px-4 font-bold text-[#111111]">
                                 {{ $inv->item_name }}
                                 @if($inv->notes)
-                                    <span class="block text-[10px] text-[#666666] font-normal mt-0.5">{{ $inv->notes }}</span>
+                                    <span class="block text-[11px] text-[#525252] font-normal mt-0.5">{{ $inv->notes }}</span>
                                 @endif
                             </td>
                             <td class="py-3.5 px-4">
-                                <span class="bg-[#F9F9F9] border border-[#EAEAEA] text-[#111111] px-2.5 py-1 rounded-lg text-[10px] font-mono font-medium">{{ $inv->category }}</span>
+                                <span class="badge-secondary font-mono">{{ $inv->category }}</span>
                             </td>
                             <td class="py-3.5 px-4 text-center font-bold font-mono text-[#111111]">
                                 {{ $inv->quantity }} unit
                             </td>
                             <td class="py-3.5 px-4">
                                 @if($inv->condition == 'Baik')
-                                    <span class="badge-success text-[10px]">Baik</span>
+                                    <span class="badge-success font-mono uppercase">Baik</span>
                                 @elseif($inv->condition == 'Rusak Ringan')
-                                    <span class="bg-amber-50 border border-amber-200 text-amber-700 px-2.5 py-0.5 rounded-lg text-[10px] font-bold">Rusak Ringan</span>
+                                    <span class="badge-primary font-mono uppercase">Rusak Ringan</span>
                                 @else
-                                    <span class="badge-danger text-[10px]">Rusak Berat</span>
+                                    <span class="badge-danger font-mono uppercase">Rusak Berat</span>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-[#666666]">
-                                <i class="fa-solid fa-location-dot text-[#FF6B00] text-[10px] mr-1"></i> {{ $inv->location }}
+                            <td class="py-3.5 px-4 text-[#525252] font-medium">
+                                <i class="fa-solid fa-location-dot text-[#CC0000] text-xs mr-1" aria-hidden="true"></i> {{ $inv->location }}
                             </td>
                             <td class="py-3.5 px-4 text-right">
                                 <form action="{{ route('admin.inventories.destroy', $inv->id) }}" method="POST" onsubmit="return confirm('Hapus barang inventaris ini?')" class="inline-block">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-8 h-8 rounded-xl bg-[#FAFAFA] text-[#EF4444] hover:bg-[#EF4444] hover:text-white flex items-center justify-center transition-colors border border-[#EAEAEA]" title="Hapus Barang">
-                                        <i class="fa-solid fa-trash text-xs"></i>
+                                    <button type="submit" aria-label="Hapus {{ $inv->item_name }}"
+                                            class="w-10 h-10 bg-white text-[#991B1B] hover:bg-[#FF0000] hover:text-[#000000] border-2 border-[#111111] inline-flex items-center justify-center transition-colors cursor-pointer" title="Hapus Barang">
+                                        <i class="fa-solid fa-trash text-xs" aria-hidden="true"></i>
                                     </button>
                                 </form>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-10 text-center text-[#666666]">
+                            <td colspan="6" class="py-10 text-center text-[#525252]">
                                 Belum ada data inventaris barang latihan.
                             </td>
                         </tr>
@@ -112,72 +113,100 @@
                 </tbody>
             </table>
         </div>
-        
-        <div class="p-4 border-t border-[#EAEAEA]">
+
+        <div class="p-4 border-t-2 border-[#111111] bg-white">
             {{ $inventories->links() }}
         </div>
     </div>
 </div>
 
-<!-- Modal Tambah Barang Inventaris (Cooking App 16px Rounded Dialog) -->
-<div id="modal-add-inventory" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#EAEAEA] space-y-4">
-        <div class="flex items-center justify-between border-b border-[#EAEAEA] pb-3">
-            <h3 class="font-extrabold text-base text-[#111111]">Tambah Barang Inventaris Baru</h3>
-            <button onclick="document.getElementById('modal-add-inventory').classList.add('hidden')" class="text-[#666666] hover:text-[#111111]">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
+<!-- Modal Tambah Barang Inventaris (De Stijl Sharp 0px Modal) -->
+<div id="modal-add-inventory" role="dialog" aria-modal="true" aria-labelledby="modal-add-inventory-title"
+     class="fixed inset-0 bg-[#111111]/75 z-[300] flex items-center justify-center hidden p-4">
+    <div class="bg-white max-w-md w-full border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] overflow-hidden">
+        <!-- Mondrian ribbon -->
+        <div class="grid grid-cols-12 h-2 border-b-2 border-[#111111]" aria-hidden="true">
+            <div class="col-span-5 bg-[#FF0000] border-r-2 border-[#111111]"></div>
+            <div class="col-span-4 bg-[#0000FF] border-r-2 border-[#111111]"></div>
+            <div class="col-span-3 bg-[#FFFF00]"></div>
         </div>
 
-        <form action="{{ route('admin.inventories.store') }}" method="POST" class="space-y-4 text-xs">
-            @csrf
-            <div>
-                <label class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Nama Barang *</label>
-                <input type="text" name="item_name" required placeholder="Contoh: Bola Speeds Size 4" class="w-full border border-[#EAEAEA] rounded-xl px-3.5 py-2.5 text-[#111111] focus:ring-2 focus:ring-[#FF6B00] focus:outline-none">
+        <div class="p-6 space-y-4">
+            <div class="flex items-center justify-between border-b-2 border-[#111111] pb-3">
+                <h3 id="modal-add-inventory-title" class="font-bold text-base text-[#111111]">Tambah Barang Inventaris Baru</h3>
+                <button type="button" onclick="closeAddInventoryModal()" aria-label="Tutup dialog"
+                        class="w-10 h-10 border-2 border-[#111111] bg-white hover:bg-[#FFFF00] text-[#111111] flex items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-xmark text-base" aria-hidden="true"></i>
+                </button>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
+            <form action="{{ route('admin.inventories.store') }}" method="POST" class="space-y-4 text-xs">
+                @csrf
                 <div>
-                    <label class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Kategori *</label>
-                    <select name="category" required class="w-full border border-[#EAEAEA] rounded-xl px-3.5 py-2.5 text-[#111111] focus:ring-2 focus:ring-[#FF6B00] focus:outline-none">
-                        <option value="Bola">Bola</option>
-                        <option value="Rompi">Rompi Latihan</option>
-                        <option value="Cone">Cone / Agility</option>
-                        <option value="Medis">Medis / P3K</option>
-                        <option value="Lainnya">Lainnya</option>
-                    </select>
+                    <label class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Nama Barang *</label>
+                    <input type="text" name="item_name" required placeholder="Contoh: Bola Speeds Size 4" class="ds-input text-sm py-2.5">
                 </div>
-                <div>
-                    <label class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Jumlah Unit *</label>
-                    <input type="number" name="quantity" min="0" required value="10" class="w-full border border-[#EAEAEA] rounded-xl px-3.5 py-2.5 text-[#111111] focus:ring-2 focus:ring-[#FF6B00] focus:outline-none font-mono">
-                </div>
-            </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Kondisi Barang *</label>
-                    <select name="condition" required class="w-full border border-[#EAEAEA] rounded-xl px-3.5 py-2.5 text-[#111111] focus:ring-2 focus:ring-[#FF6B00] focus:outline-none">
-                        <option value="Baik">Baik</option>
-                        <option value="Rusak Ringan">Rusak Ringan</option>
-                        <option value="Rusak Berat">Rusak Berat</option>
-                    </select>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Kategori *</label>
+                        <select name="category" required class="ds-input text-sm py-2.5">
+                            <option value="Bola">Bola</option>
+                            <option value="Rompi">Rompi Latihan</option>
+                            <option value="Cone">Cone / Agility</option>
+                            <option value="Medis">Medis / P3K</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Jumlah Unit *</label>
+                        <input type="number" name="quantity" min="0" required value="10" class="ds-input text-sm py-2.5 font-mono">
+                    </div>
                 </div>
-                <div>
-                    <label class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Lokasi Simpan *</label>
-                    <input type="text" name="location" required value="Gudang Sekretariat" class="w-full border border-[#EAEAEA] rounded-xl px-3.5 py-2.5 text-[#111111] focus:ring-2 focus:ring-[#FF6B00] focus:outline-none">
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Kondisi Barang *</label>
+                        <select name="condition" required class="ds-input text-sm py-2.5">
+                            <option value="Baik">Baik</option>
+                            <option value="Rusak Ringan">Rusak Ringan</option>
+                            <option value="Rusak Berat">Rusak Berat</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Lokasi Simpan *</label>
+                        <input type="text" name="location" required value="Gudang Sekretariat" class="ds-input text-sm py-2.5">
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <label class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Catatan Tambahan</label>
-                <textarea name="notes" rows="2" placeholder="Catatan opsional..." class="w-full border border-[#EAEAEA] rounded-xl px-3.5 py-2.5 text-[#111111] focus:ring-2 focus:ring-[#FF6B00] focus:outline-none"></textarea>
-            </div>
+                <div>
+                    <label class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Catatan Tambahan</label>
+                    <textarea name="notes" rows="2" placeholder="Catatan opsional..." class="ds-input text-sm py-2.5"></textarea>
+                </div>
 
-            <div class="flex justify-end gap-2.5 pt-2 border-t border-[#EAEAEA]">
-                <button type="button" onclick="document.getElementById('modal-add-inventory').classList.add('hidden')" class="btn-secondary py-2.5 px-4 rounded-xl font-medium">Batal</button>
-                <button type="submit" class="btn-primary py-2.5 px-5 rounded-xl font-semibold shadow-sm">Simpan Barang</button>
-            </div>
-        </form>
+                <div class="flex justify-end gap-2.5 pt-3 border-t-2 border-[#111111]">
+                    <button type="button" onclick="closeAddInventoryModal()" class="btn-secondary text-xs py-2.5 px-4">Batal</button>
+                    <button type="submit" class="btn-primary text-xs py-2.5 px-5 font-bold">Simpan Barang</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+<script>
+    function openAddInventoryModal() {
+        const m = document.getElementById('modal-add-inventory');
+        if (m) m.classList.remove('hidden');
+    }
+    function closeAddInventoryModal() {
+        const m = document.getElementById('modal-add-inventory');
+        if (m) m.classList.add('hidden');
+    }
+    document.getElementById('modal-add-inventory')?.addEventListener('click', function(e) {
+        if (e.target === this) closeAddInventoryModal();
+    });
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeAddInventoryModal();
+    });
+</script>
 @endsection

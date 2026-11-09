@@ -25,9 +25,9 @@ class TrainingSchedule extends Model
     public function getStatusBadgeAttribute()
     {
         return match($this->status) {
-            'completed' => '<span class="px-2.5 py-1 rounded text-[11px] font-semibold bg-[#16A34A]/10 text-[#16A34A] border border-[#16A34A]/30">Selesai</span>',
-            'cancelled' => '<span class="px-2.5 py-1 rounded text-[11px] font-semibold bg-[#c41c1c]/10 text-[#c41c1c] border border-[#c41c1c]/30">Dibatalkan</span>',
-            default => '<span class="px-2.5 py-1 rounded text-[11px] font-semibold bg-[#ebe7e1] text-[#ff5600] border border-[#ff5600]">Terjadwal</span>',
+            'completed' => '<span class="inline-block px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-[#DCFCE7] text-[#14532D] border-2 border-[#166534]">Selesai</span>',
+            'cancelled' => '<span class="inline-block px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-[#FEE2E2] text-[#991B1B] border-2 border-[#B91C1C]">Dibatalkan</span>',
+            default => '<span class="inline-block px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-[#FFFF00] text-[#111111] border-2 border-[#111111]">Terjadwal</span>',
         };
     }
 }

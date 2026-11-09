@@ -1,156 +1,423 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import 'tailwindcss';
 
 @theme {
-    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    
-    /* Cooking App Design System Color Tokens */
-    --color-primary: #FF6B00;
-    --color-secondary: #000000;
-    --color-background: #FFFFFF;
+    --font-sans: 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    /* De Stijl Abstrato Color Tokens (WCAG Verified) */
+    --color-red: #FF0000;
+    --color-red-hover: #EB0000;
+    --color-red-ink: #CC0000;
+    --color-blue: #0000FF;
+    --color-blue-hover: #0000D6;
+    --color-yellow: #FFFF00;
+    --color-yellow-hover: #E6E600;
+    --color-ink: #111111;
     --color-surface: #FFFFFF;
-    --color-text-primary: #111111;
-    --color-text-secondary: #666666;
-    --color-text-inverse: #FFFFFF;
-    --color-border: #EAEAEA;
-    --color-border-dark: #222222;
+    --color-surface-muted: #F4F4F4;
+    --color-muted: #525252;
+    --color-muted-dark: #D4D4D4;
 }
 
-body {
-    font-family: var(--font-sans);
-    background-color: #FFFFFF;
-    color: #111111;
-    -webkit-font-smoothing: antialiased;
+@layer base {
+    html {
+        font-size: 16px;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: var(--font-sans);
+        background-color: #FFFFFF;
+        color: #111111;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        letter-spacing: -0.025em;
+        color: inherit;
+    }
+
+    h1, h2 {
+        text-wrap: balance;
+    }
+
+    p {
+        text-wrap: pretty;
+    }
+
+    /* High-visibility keyboard focus indicator (R-32 + modern-web-guidance) */
+    :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+        outline: 2px solid #0000FF;
+        outline-offset: 2px;
+    }
+
+    /* Dark section focus ring override for 17.58:1 visibility */
+    .dark-surface :is(a, button, input, select, textarea):focus-visible {
+        outline: 2px solid #FFFF00;
+        outline-offset: 2px;
+    }
 }
 
-h1, h2, h3, h4, h5, h6 {
-    letter-spacing: -0.02em;
-    color: inherit;
+/* Native <dialog> modal handling per Modern Web Guidance */
+dialog#privacy-modal:modal {
+    overscroll-behavior: contain;
+}
+dialog#privacy-modal::backdrop {
+    background-color: rgba(17, 17, 17, 0.72);
+    overflow: hidden;
+    overscroll-behavior: contain;
+}
+dialog#privacy-modal[open] {
+    display: flex;
 }
 
-#mini-soccer h1, 
-#mini-soccer h2, 
-#mini-soccer h3, 
-#mini-soccer h4, 
-#mini-soccer h5, 
-#mini-soccer h6 {
-    color: #FFFFFF !important;
+/* Form validation deferred until interaction (:user-invalid / :user-valid) */
+input.ds-input:user-invalid,
+select.ds-input:user-invalid,
+textarea.ds-input:user-invalid,
+.ds-input.user-invalid-fallback {
+    border-color: #CC0000;
+    background-color: #FEF2F2;
 }
 
-/* Cooking App Design System - Card Component (16px radius, white bg, soft shadow) */
-.editorial-card, .tile {
-    background-color: #FFFFFF;
-    color: #111111;
-    border: 1px solid #EAEAEA;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-    padding: 1.5rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+input.ds-input:user-valid,
+select.ds-input:user-valid,
+textarea.ds-input:user-valid {
+    border-color: #166534;
 }
 
-.editorial-card:hover, .tile:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06), 0 2px 5px rgba(0, 0, 0, 0.03);
+@layer components {
+    /* De Stijl Structural Card (0px corners, 2px off-black line, subtle flat elevation) */
+    .editorial-card,
+    .destijl-card,
+    .tile {
+        background-color: #FFFFFF;
+        color: #111111;
+        border: 2px solid #111111;
+        border-radius: 0px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        padding: 1.5rem;
+        transition: transform 200ms ease-out, box-shadow 200ms ease-out, background-color 200ms ease-out;
+    }
+
+    /* Primary Button: #FF0000 fill + #000000 ink (5.25:1 AA) -> 8% darken #EB0000 hover (4.53:1 AA) */
+    .btn-primary,
+    .btn-fin {
+        background-color: #FF0000;
+        color: #000000;
+        border: 2px solid #111111;
+        border-radius: 0px;
+        padding: 12px 20px;
+        font-weight: 700;
+        font-size: 0.875rem;
+        line-height: 1.25;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 44px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        transition: background-color 200ms ease-out, transform 200ms ease-out, box-shadow 200ms ease-out;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover,
+    .btn-fin:hover {
+        background-color: #EB0000;
+        color: #000000;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-primary:active,
+    .btn-fin:active {
+        transform: translateY(-1px);
+    }
+
+    /* Secondary / Outline Ghost Button (2px #111111 stroke, crisp ink) */
+    .btn-secondary {
+        background-color: #FFFFFF;
+        color: #111111;
+        border: 2px solid #111111;
+        border-radius: 0px;
+        padding: 12px 20px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        line-height: 1.25;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 44px;
+        transition: background-color 200ms ease-out, transform 200ms ease-out, box-shadow 200ms ease-out;
+        cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+        background-color: #FFFF00;
+        color: #111111;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-secondary:active {
+        transform: translateY(-1px);
+    }
+
+    /* Blue Action Button (#0000FF fill + #FFFFFF text = 8.59:1 AAA) */
+    .btn-blue {
+        background-color: #0000FF;
+        color: #FFFFFF;
+        border: 2px solid #111111;
+        border-radius: 0px;
+        padding: 12px 20px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        line-height: 1.25;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 44px;
+        transition: background-color 200ms ease-out, transform 200ms ease-out, box-shadow 200ms ease-out;
+        cursor: pointer;
+    }
+
+    .btn-blue:hover {
+        background-color: #0000D6;
+        color: #FFFFFF;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-blue:active {
+        transform: translateY(-1px);
+    }
+
+    /* Yellow Action Button (#FFFF00 fill + #111111 ink = 17.58:1 AAA) */
+    .btn-yellow {
+        background-color: #FFFF00;
+        color: #111111;
+        border: 2px solid #111111;
+        border-radius: 0px;
+        padding: 12px 20px;
+        font-weight: 700;
+        font-size: 0.875rem;
+        line-height: 1.25;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 44px;
+        transition: background-color 200ms ease-out, transform 200ms ease-out, box-shadow 200ms ease-out;
+        cursor: pointer;
+    }
+
+    .btn-yellow:hover {
+        background-color: #E6E600;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-yellow:active {
+        transform: translateY(-1px);
+    }
+
+    /* Sharp Input Standard */
+    .ds-input {
+        width: 100%;
+        padding: 0.75rem 0.875rem;
+        border: 2px solid #111111;
+        border-radius: 0px;
+        background-color: #FFFFFF;
+        color: #111111;
+        font-size: 1rem;
+        line-height: 1.5;
+        min-height: 46px;
+        transition: border-color 200ms ease-out, background-color 200ms ease-out;
+    }
+
+    .ds-input::placeholder {
+        color: #525252;
+        opacity: 0.85;
+    }
+
+    /* Semantic Sharp Badges */
+    .badge-primary {
+        background-color: #FFFF00;
+        color: #111111;
+        border: 1.5px solid #111111;
+        border-radius: 0px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: inline-block;
+    }
+
+    .badge-blue {
+        background-color: #0000FF;
+        color: #FFFFFF;
+        border: 1.5px solid #111111;
+        border-radius: 0px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: inline-block;
+    }
+
+    .badge-red {
+        background-color: #FF0000;
+        color: #000000;
+        border: 1.5px solid #111111;
+        border-radius: 0px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: inline-block;
+    }
+
+    .badge-secondary {
+        background-color: #F4F4F4;
+        color: #111111;
+        border: 1.5px solid #111111;
+        border-radius: 0px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .badge-success {
+        background-color: #DCFCE7;
+        color: #14532D;
+        border: 1.5px solid #166534;
+        border-radius: 0px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: inline-block;
+    }
+
+    .badge-danger {
+        background-color: #FEE2E2;
+        color: #991B1B;
+        border: 1.5px solid #B91C1C;
+        border-radius: 0px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: inline-block;
+    }
 }
 
-/* Cooking App Design System - Primary Button (12px radius, #FF6B00 orange bg, white text) */
-.btn-primary, .btn-fin {
-    background-color: #FF6B00;
-    color: #FFFFFF;
-    border-radius: 12px;
-    padding: 10px 20px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.25);
-    cursor: pointer;
+/* Geometric Horizontal Loading Bar (Replaces circular spinners per De Stijl spec) */
+@keyframes destijl-bar-slide {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(300%);
+    }
 }
 
-.btn-primary:hover, .btn-fin:hover {
-    background-color: #e56000;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(255, 107, 0, 0.35);
+.destijl-loading-track {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    background-color: #111111;
+    overflow: hidden;
 }
 
-.btn-primary:active, .btn-fin:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(255, 107, 0, 0.2);
+.destijl-loading-bar {
+    width: 40%;
+    height: 100%;
+    background: #FFFF00;
+    animation: destijl-bar-slide 900ms cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
-/* Secondary Button (12px radius, #000000 black bg, white text) */
-.btn-secondary {
-    background-color: #000000;
-    color: #FFFFFF;
-    border: 1px solid #000000;
-    border-radius: 12px;
-    padding: 10px 20px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    cursor: pointer;
+/* Entrance Motion: Fade + Translate-Y 16px -> 0 over 420ms ease-out (MOTION 2) */
+@keyframes destijl-enter {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.btn-secondary:hover {
-    background-color: #222222;
-    border-color: #222222;
+.destijl-enter {
+    animation: destijl-enter 420ms ease-out both;
 }
 
-/* Badges */
-.badge-primary {
-    background-color: rgba(255, 107, 0, 0.1);
-    color: #FF6B00;
-    border: 1px solid rgba(255, 107, 0, 0.2);
-    border-radius: 8px;
-    padding: 2px 8px;
-    font-size: 11px;
-    font-weight: 600;
+.destijl-enter-delay-1 {
+    animation-delay: 80ms;
 }
 
-.badge-secondary {
-    background-color: #F5F5F5;
-    color: #111111;
-    border: 1px solid #EAEAEA;
-    border-radius: 8px;
-    padding: 2px 8px;
-    font-size: 11px;
-    font-weight: 600;
+.destijl-enter-delay-2 {
+    animation-delay: 160ms;
 }
 
-.badge-success {
-    background-color: rgba(22, 163, 74, 0.1);
-    color: #16A34A;
-    border: 1px solid rgba(22, 163, 74, 0.2);
-    border-radius: 8px;
-    padding: 2px 8px;
-    font-size: 11px;
-    font-weight: 600;
+.destijl-enter-delay-3 {
+    animation-delay: 240ms;
 }
 
-.badge-danger {
-    background-color: rgba(196, 28, 28, 0.1);
-    color: #C41C1C;
-    border: 1px solid rgba(196, 28, 28, 0.2);
-    border-radius: 8px;
-    padding: 2px 8px;
-    font-size: 11px;
-    font-weight: 600;
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    .destijl-enter,
+    .destijl-loading-bar {
+        animation: none !important;
+        transform: none !important;
+    }
 }
 
-/* Custom Scrollbar */
+/* Forced Colors Mode Support (Windows High Contrast) */
+@media (forced-colors: active) {
+    .editorial-card,
+    .destijl-card,
+    .btn-primary,
+    .btn-secondary,
+    .btn-blue,
+    .btn-yellow,
+    .ds-input {
+        border: 2px solid ButtonBorder;
+    }
+    :is(a, button, input, select, textarea):focus-visible {
+        outline: 2px solid Highlight;
+    }
+}
+
+/* Custom Sharp Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-    width: 5px;
+    width: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
     background: #111111;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #333333;
-    border-radius: 4px;
+    background: #525252;
+    border-radius: 0px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #FF6B00;
+    background: #FF0000;
+}
+
+/* Print optimization for Parent Portal Digital ID Card */
+@media print {
+    header,
+    footer,
+    #floating-quick-help,
+    .no-print {
+        display: none !important;
+    }
+    body {
+        background-color: #FFFFFF !important;
+        color: #111111 !important;
+    }
+    .print-card-clean {
+        break-inside: avoid;
+        box-shadow: none !important;
+        border: 2px solid #111111 !important;
+    }
 }

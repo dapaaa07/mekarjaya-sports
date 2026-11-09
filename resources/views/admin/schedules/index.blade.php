@@ -8,26 +8,26 @@
 <div class="space-y-6">
 
     <!-- Header Control Bar -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 editorial-card p-6">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 editorial-card p-6 border-l-[6px] border-l-[#0000FF]">
         <div>
-            <h2 class="font-extrabold text-[#111111] text-base flex items-center gap-2">
-                <i class="fa-solid fa-calendar-days text-[#FF6B00]"></i> Master Kelola Jadwal Latihan
+            <h2 class="font-bold text-[#111111] text-base sm:text-lg flex items-center gap-2">
+                <i class="fa-solid fa-calendar-days text-[#0000FF]" aria-hidden="true"></i> Master Kelola Jadwal Latihan
             </h2>
-            <p class="text-xs text-[#666666]">Jadwal latihan terhubung langsung dengan modul Presensi / Absensi Harian Siswa.</p>
+            <p class="text-xs text-[#525252] mt-0.5">Jadwal latihan terhubung langsung dengan modul Presensi Harian Siswa.</p>
         </div>
 
-        <a href="{{ route('admin.schedules.create') }}" class="btn-primary text-xs py-2.5 px-4 flex items-center gap-1.5 rounded-xl font-medium shadow-sm">
-            <i class="fa-solid fa-plus text-xs"></i> Tambah Sesi Latihan Baru
+        <a href="{{ route('admin.schedules.create') }}" class="btn-primary text-xs py-2.5 px-4">
+            <i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Tambah Sesi Latihan Baru
         </a>
     </div>
 
     <!-- Filter Bar -->
     <div class="editorial-card p-6">
         <form action="{{ route('admin.schedules.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 items-end text-xs">
-            
+
             <div class="md:col-span-5">
-                <label for="status" class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Status Sesi Latihan</label>
-                <select id="status" name="status" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-white text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                <label for="status" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Status Sesi Latihan</label>
+                <select id="status" name="status" class="ds-input text-sm py-2.5">
                     <option value="">-- Semua Status --</option>
                     <option value="scheduled" {{ request('status') == 'scheduled' ? 'selected' : '' }}>Terjadwal (Scheduled)</option>
                     <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Selesai (Completed)</option>
@@ -36,8 +36,8 @@
             </div>
 
             <div class="md:col-span-5">
-                <label for="ku" class="block font-semibold text-[#111111] uppercase tracking-wider text-[11px] mb-1.5">Kelompok Umur (KU)</label>
-                <select id="ku" name="ku" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-white text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF6B00]">
+                <label for="ku" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Kelompok Umur (KU)</label>
+                <select id="ku" name="ku" class="ds-input text-sm py-2.5">
                     <option value="">-- Semua KU --</option>
                     @foreach($ageCategories as $cat)
                         <option value="{{ $cat->code }}" {{ request('ku') == $cat->code ? 'selected' : '' }}>{{ $cat->code }}</option>
@@ -46,12 +46,12 @@
             </div>
 
             <div class="md:col-span-2 flex gap-1.5">
-                <button type="submit" class="w-full btn-primary text-xs py-2.5 rounded-xl flex items-center justify-center gap-1 font-medium shadow-sm">
-                    <i class="fa-solid fa-filter"></i> Filter
+                <button type="submit" class="w-full btn-primary text-xs py-2.5 px-4">
+                    <i class="fa-solid fa-filter" aria-hidden="true"></i> Filter
                 </button>
                 @if(request()->hasAny(['status', 'ku']))
-                    <a href="{{ route('admin.schedules.index') }}" class="btn-secondary text-xs py-2.5 px-3 rounded-xl flex items-center justify-center font-medium">
-                        <i class="fa-solid fa-rotate-left"></i>
+                    <a href="{{ route('admin.schedules.index') }}" aria-label="Reset filter" title="Reset Filter" class="btn-secondary text-xs py-2.5 px-3">
+                        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                     </a>
                 @endif
             </div>
@@ -60,47 +60,47 @@
     </div>
 
     <!-- Schedules Data Table -->
-    <div class="editorial-card overflow-hidden">
+    <div class="editorial-card p-0 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs text-[#111111]">
-                <thead class="bg-[#FAFAFA] text-[#111111] font-semibold uppercase text-[11px] border-b border-[#EAEAEA]">
+                <thead class="bg-[#111111] text-white font-mono font-bold uppercase text-[11px]">
                     <tr>
-                        <th class="p-4">Tanggal & Jam</th>
+                        <th class="p-4">Tanggal &amp; Jam</th>
                         <th class="p-4">Nama Sesi Latihan</th>
-                        <th class="p-4">Target KU & Lokasi</th>
+                        <th class="p-4">Target KU &amp; Lokasi</th>
                         <th class="p-4">Pelatih Penanggung Jawab</th>
                         <th class="p-4">Status</th>
-                        <th class="p-4 text-right">Presensi & Aksi</th>
+                        <th class="p-4 text-right">Presensi &amp; Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-[#EAEAEA]">
+                <tbody class="divide-y-2 divide-[#111111] bg-white">
                     @forelse($schedules as $sched)
-                        <tr class="hover:bg-[#FAFAFA] transition-colors">
-                            
+                        <tr class="hover:bg-[#F4F4F4] transition-colors">
+
                             <!-- Date & Time -->
                             <td class="p-4">
-                                <span class="font-mono font-bold text-sm block leading-tight">{{ date('d M Y', strtotime($sched->schedule_date)) }}</span>
-                                <span class="text-[11px] text-[#FF6B00] font-mono"><i class="fa-solid fa-clock mr-1"></i> {{ $sched->formatted_time }}</span>
+                                <span class="font-mono font-bold text-sm block leading-tight text-[#111111]">{{ date('d M Y', strtotime($sched->schedule_date)) }}</span>
+                                <span class="text-xs text-[#0000FF] font-mono font-bold"><i class="fa-solid fa-clock mr-1" aria-hidden="true"></i> {{ $sched->formatted_time }}</span>
                             </td>
 
                             <!-- Title & Notes -->
                             <td class="p-4">
                                 <span class="font-bold text-[#111111] text-sm block leading-tight">{{ $sched->title }}</span>
                                 @if($sched->notes)
-                                    <span class="text-[11px] text-[#666666] italic truncate max-w-xs block mt-0.5">{{ $sched->notes }}</span>
+                                    <span class="text-xs text-[#525252] truncate max-w-xs block mt-0.5">{{ $sched->notes }}</span>
                                 @endif
                             </td>
 
                             <!-- KU & Location -->
                             <td class="p-4">
-                                <span class="px-2.5 py-1 rounded-lg bg-[#111111] text-white font-mono font-bold text-[11px] inline-block mb-1">
+                                <span class="px-2.5 py-0.5 bg-[#111111] text-[#FFFF00] font-mono font-bold text-xs inline-block mb-1">
                                     {{ $sched->target_ku }}
                                 </span>
-                                <span class="block text-[11px] text-[#666666]"><i class="fa-solid fa-location-dot text-[#16A34A] mr-1"></i> {{ $sched->location }}</span>
+                                <span class="block text-xs text-[#525252]"><i class="fa-solid fa-location-dot text-[#166534] mr-1" aria-hidden="true"></i> {{ $sched->location }}</span>
                             </td>
 
                             <!-- Coach -->
-                            <td class="p-4 text-[#111111] font-medium">
+                            <td class="p-4 text-[#111111] font-bold">
                                 {{ $sched->coach_in_charge ?? '-' }}
                             </td>
 
@@ -111,23 +111,24 @@
 
                             <!-- Action & Attendance Link -->
                             <td class="p-4 text-right">
-                                <div class="flex items-center justify-end gap-2">
-                                    <!-- Direct Correlation to Attendance Flow -->
-                                    <a href="{{ route('admin.attendances.index', ['schedule_id' => $sched->id, 'date' => $sched->schedule_date->toDateString()]) }}" 
-                                       class="btn-primary text-[11px] py-1.5 px-3 rounded-xl flex items-center gap-1 shadow-sm font-medium" title="Kelola / Isi Presensi Untuk Sesi Ini">
-                                        <i class="fa-solid fa-clipboard-user text-xs"></i> Presensi
+                                <div class="flex items-center justify-end gap-1.5">
+                                    <a href="{{ route('admin.attendances.index', ['schedule_id' => $sched->id, 'date' => $sched->schedule_date->toDateString()]) }}"
+                                       class="btn-blue text-xs py-2 px-3 min-h-[40px]" title="Kelola / Isi Presensi Untuk Sesi Ini">
+                                        <i class="fa-solid fa-clipboard-user text-xs" aria-hidden="true"></i> Presensi
                                     </a>
 
-                                    <a href="{{ route('admin.schedules.edit', $sched->id) }}" 
-                                       class="w-8 h-8 rounded-xl bg-[#FAFAFA] text-[#111111] hover:bg-[#FF6B00] hover:text-white flex items-center justify-center transition-colors border border-[#EAEAEA]" title="Edit Sesi">
-                                        <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                    <a href="{{ route('admin.schedules.edit', $sched->id) }}"
+                                       aria-label="Edit sesi {{ $sched->title }}"
+                                       class="w-10 h-10 bg-white text-[#111111] hover:bg-[#FFFF00] border-2 border-[#111111] flex items-center justify-center transition-colors" title="Edit Sesi">
+                                        <i class="fa-solid fa-pen-to-square text-xs" aria-hidden="true"></i>
                                     </a>
 
                                     <form action="{{ route('admin.schedules.destroy', $sched->id) }}" method="POST" onsubmit="return confirm('Hapus jadwal latihan ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="w-8 h-8 rounded-xl bg-[#FAFAFA] text-[#EF4444] hover:bg-[#EF4444] hover:text-white flex items-center justify-center transition-colors border border-[#EAEAEA]" title="Hapus Sesi">
-                                            <i class="fa-solid fa-trash text-xs"></i>
+                                        <button type="submit" aria-label="Hapus sesi {{ $sched->title }}"
+                                                class="w-10 h-10 bg-white text-[#991B1B] hover:bg-[#FF0000] hover:text-[#000000] border-2 border-[#111111] flex items-center justify-center transition-colors cursor-pointer" title="Hapus Sesi">
+                                            <i class="fa-solid fa-trash text-xs" aria-hidden="true"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -136,7 +137,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="p-12 text-center text-[#666666]">
+                            <td colspan="6" class="p-12 text-center text-[#525252]">
                                 Belum ada jadwal latihan yang terdaftar.
                             </td>
                         </tr>
@@ -145,7 +146,7 @@
             </table>
         </div>
 
-        <div class="p-4 border-t border-[#EAEAEA]">
+        <div class="p-4 border-t-2 border-[#111111] bg-white">
             {{ $schedules->links() }}
         </div>
     </div>
