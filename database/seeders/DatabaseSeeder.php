@@ -449,7 +449,7 @@ class DatabaseSeeder extends Seeder
             \App\Models\Inventory::updateOrCreate(['item_name' => $inv['item_name']], $inv);
         }
 
-        // 9. Sample Match Center Records (lengkap dengan formasi dan 11 pemain inti)
+        // 9. Sample Match Center Records (lengkap dengan formasi, 11 pemain inti, dan pemain cadangan)
         $seededPlayers = Player::where('status', 'aktif')->orderBy('id')->get();
         $buildSeedLineup = function (string $formation) use ($seededPlayers): ?array {
             if ($seededPlayers->count() < 11) {
@@ -461,16 +461,40 @@ class DatabaseSeeder extends Seeder
             ];
             $roles = $templates[$formation] ?? $templates['4-3-3'];
             $kiper = $seededPlayers->first(fn ($p) => str_contains(strtolower($p->position), 'kiper')) ?? $seededPlayers->first();
-            $outfield = $seededPlayers->where('id', '!=', $kiper->id)->values()->take(10);
-            $squad = collect([$kiper])->merge($outfield)->values();
+            $remaining = $seededPlayers->where('id', '!=', $kiper->id)->values();
+            $outfield = $remaining->take(10);
+            $starters = collect([$kiper])->merge($outfield)->values();
 
-            return $squad->map(fn ($p, int $idx) => [
+            $starterPayload = $starters->map(fn ($p, int $idx) => [
                 'slot' => $idx + 1,
+                'role' => 'starter',
                 'player_id' => $p->id,
                 'nis' => $p->nis,
                 'player_name' => $p->full_name,
                 'position' => $roles[$idx] ?? 'Gelandang',
-            ])->all();
+            ]);
+
+            $benchPlayers = $remaining->slice(10)->take(5)->values();
+            $subPayload = $benchPlayers->map(function ($p, int $idx) {
+                $orig = strtolower((string) $p->position);
+                $mappedPos = match (true) {
+                    str_contains($orig, 'kiper') => 'Kiper',
+                    str_contains($orig, 'bek') => 'Bek',
+                    str_contains($orig, 'striker'), str_contains($orig, 'penyerang') => 'Penyerang',
+                    default => 'Gelandang',
+                };
+
+                return [
+                    'slot' => 12 + $idx,
+                    'role' => 'substitute',
+                    'player_id' => $p->id,
+                    'nis' => $p->nis,
+                    'player_name' => $p->full_name,
+                    'position' => $mappedPos,
+                ];
+            });
+
+            return $starterPayload->merge($subPayload)->values()->all();
         };
 
         $sampleMatches = [

@@ -10,7 +10,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-[#111111] pb-4">
         <div>
             <h2 class="font-bold text-[#111111] text-lg">Edit Laga: {{ $match->match_title }}</h2>
-            <p class="text-xs text-[#525252]">Perbarui hasil laga, formasi, dan susunan 11 pemain inti (Starting XI).</p>
+            <p class="text-xs text-[#525252]">Perbarui hasil laga, formasi, susunan 11 pemain inti (Starting XI), dan daftar pemain cadangan.</p>
         </div>
         <a href="{{ route('admin.matches.index') }}" class="text-xs font-mono font-bold text-[#0000FF] hover:underline inline-flex items-center gap-1 min-h-[44px]">
             &larr; Kembali Ke Match Center

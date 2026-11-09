@@ -37,7 +37,9 @@
                 <tbody class="divide-y-2 divide-[#111111] bg-white">
                     @forelse($matches as $m)
                         @php
-                            $lineupList = is_array($m->lineup_json) ? $m->lineup_json : [];
+                            $startersList = $m->starters;
+                            $subsList = $m->substitutes;
+                            $totalSquad = count($startersList) + count($subsList);
                         @endphp
                         <tr class="hover:bg-[#F4F4F4] transition-colors align-top">
                             <td class="py-3.5 px-4">
@@ -56,23 +58,51 @@
                                     <span class="block text-[11px] text-[#525252] font-normal mt-0.5">{{ $m->match_notes }}</span>
                                 @endif
 
-                                @if(count($lineupList) > 0)
+                                @if($totalSquad > 0)
                                     <details class="mt-2.5 border-2 border-[#111111] bg-[#F4F4F4]">
                                         <summary class="cursor-pointer px-3 py-2 text-[11px] font-mono font-bold text-[#111111] hover:bg-[#FFFF00] transition-colors select-none">
-                                            Lihat Starting XI ({{ count($lineupList) }} Pemain &middot; {{ $m->formation ?? '4-3-3' }})
+                                            Lihat Skuad Laga ({{ count($startersList) }} Inti{{ count($subsList) > 0 ? ' + ' . count($subsList) . ' Cadangan' : '' }} &middot; {{ $m->formation ?? '4-3-3' }})
                                         </summary>
-                                        <div class="p-3 bg-white border-t-2 border-[#111111] grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px]">
-                                            @foreach($lineupList as $slot)
-                                                <div class="flex items-center justify-between gap-2 px-2 py-1.5 bg-[#F4F4F4] border border-[#111111]">
-                                                    <span class="font-medium text-[#111111] truncate">
-                                                        <strong class="font-mono text-[#525252] mr-1">{{ str_pad((string) ($slot['slot'] ?? $loop->iteration), 2, '0', STR_PAD_LEFT) }}.</strong>
-                                                        {{ $slot['player_name'] ?? '-' }}
-                                                    </span>
-                                                    <span class="px-1.5 py-0.5 font-mono font-bold text-[10px] shrink-0 border border-[#111111] {{ ($slot['position'] ?? '') === 'Kiper' ? 'bg-[#FFFF00] text-[#111111]' : 'bg-[#111111] text-white' }}">
-                                                        {{ $slot['position'] ?? '-' }}
-                                                    </span>
+                                        <div class="p-3 bg-white border-t-2 border-[#111111] space-y-3 text-[11px]">
+                                            <div>
+                                                <div class="text-[10px] font-mono font-bold uppercase text-[#525252] mb-1.5">
+                                                    Starting XI ({{ count($startersList) }} Pemain Inti)
                                                 </div>
-                                            @endforeach
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                                                    @foreach($startersList as $slot)
+                                                        <div class="flex items-center justify-between gap-2 px-2 py-1.5 bg-[#F4F4F4] border border-[#111111]">
+                                                            <span class="font-medium text-[#111111] truncate">
+                                                                <strong class="font-mono text-[#525252] mr-1">{{ str_pad((string) ($slot['slot'] ?? $loop->iteration), 2, '0', STR_PAD_LEFT) }}.</strong>
+                                                                {{ $slot['player_name'] ?? '-' }}
+                                                            </span>
+                                                            <span class="px-1.5 py-0.5 font-mono font-bold text-[10px] shrink-0 border border-[#111111] {{ ($slot['position'] ?? '') === 'Kiper' ? 'bg-[#FFFF00] text-[#111111]' : 'bg-[#111111] text-white' }}">
+                                                                {{ $slot['position'] ?? '-' }}
+                                                            </span>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            @if(count($subsList) > 0)
+                                                <div class="pt-2.5 border-t-2 border-[#111111]">
+                                                    <div class="text-[10px] font-mono font-bold uppercase text-[#0000FF] mb-1.5">
+                                                        Pemain Cadangan ({{ count($subsList) }} Pemain)
+                                                    </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                                                        @foreach($subsList as $subSlot)
+                                                            <div class="flex items-center justify-between gap-2 px-2 py-1.5 bg-white border border-[#111111]">
+                                                                <span class="font-medium text-[#111111] truncate">
+                                                                    <strong class="font-mono text-[#0000FF] mr-1">C{{ $loop->iteration }}.</strong>
+                                                                    {{ $subSlot['player_name'] ?? '-' }}
+                                                                </span>
+                                                                <span class="px-1.5 py-0.5 font-mono font-bold text-[10px] shrink-0 border border-[#111111] {{ ($subSlot['position'] ?? '') === 'Kiper' ? 'bg-[#FFFF00] text-[#111111]' : 'bg-[#0000FF] text-white' }}">
+                                                                    {{ $subSlot['position'] ?? '-' }}
+                                                                </span>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </details>
                                 @else

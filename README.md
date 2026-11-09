@@ -45,9 +45,9 @@ Antarmuka aplikasi menerapkan gaya desain **De Stijl Abstrato** dengan struktur 
 ![Evaluasi dan SPP Pemain](docs/screenshots/player-spp-evaluation.png)
 *Line Chart perkembangan 6 aspek performa antar periode, riwayat catatan pelatih, serta pencatatan & buku besar SPP bulanan per siswa.*
 
-### 6. Match Center & Susunan 11 Pemain Inti
+### 6. Match Center & Skuad Pertandingan (Inti + Cadangan)
 ![Match Center dan Lineup](docs/screenshots/match-center-lineup.png)
-*Catatan hasil pertandingan beserta formasi taktik (`4-3-3`, `4-4-2`, `3-5-2`, `4-2-3-1`, `5-3-2`) dan susunan 11 pemain inti.*
+*Catatan hasil pertandingan beserta formasi taktik (`4-3-3`, `4-4-2`, `3-5-2`, `4-2-3-1`, `5-3-2`), 11 pemain inti (Starting XI), dan daftar pemain cadangan.*
 
 ---
 
@@ -70,8 +70,8 @@ Antarmuka aplikasi menerapkan gaya desain **De Stijl Abstrato** dengan struktur 
   * Pencatatan pembayaran berperiode bulan dan tahun dengan nominal default berdasarkan tarif Kelompok Umur, metode (`tunai`/`transfer`), pencegahan duplikasi periode, penghapusan catatan, serta sinkronisasi otomatis status SPP bulan berjalan.
 * **Riwayat Evaluasi Performa & Grafik Progres**:
   * Penyimpanan riwayat evaluasi bertanggal tanpa menimpa penilaian terdahulu, disertai **Radar Chart** profil kemampuan terkini dan **Line Chart** perkembangan 6 aspek teknik/taktik/disiplin dari waktu ke waktu (`Chart.js`).
-* **Match Center & Susunan 11 Pemain Inti**:
-  * Pencatatan hasil pertandingan lengkap dengan pilihan formasi (`4-3-3`, `4-4-2`, `3-5-2`, `4-2-3-1`, `5-3-2`) dan validator susunan `11 pemain unik` dengan tepat `1 Kiper`.
+* **Match Center, Formasi & Skuad Lengkap (Inti + Cadangan)**:
+  * Pencatatan hasil pertandingan lengkap dengan pilihan formasi (`4-3-3`, `4-4-2`, `3-5-2`, `4-2-3-1`, `5-3-2`), validator `11 pemain inti unik` dengan tepat `1 Kiper`, serta daftar dinamis pemain cadangan (hingga 15 pemain).
 * **Notifikasi In-App & Pengingat Latihan H-1**:
   * Tabel `notifications` untuk pendaftaran baru, perubahan status pendaftaran (lengkap dengan template pesan WhatsApp siap salin/kirim untuk orang tua), dan pengingat latihan H-1 ke Admin dan Pelatih via command `php artisan app:send-training-reminders` (terjadwal harian pukul `07:00`).
 
