@@ -52,9 +52,9 @@
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-[#525252] pointer-events-none">
                             <i class="fa-solid fa-envelope text-sm" aria-hidden="true"></i>
                         </span>
-                        <input type="email" id="email" name="email" required autocomplete="username" value="{{ old('email', 'admin@mekarjaya.com') }}"
+                        <input type="email" id="email" name="email" required autocomplete="username" value="{{ old('email') }}"
                                autocorrect="off" autocapitalize="off" spellcheck="false"
-                               placeholder="admin@mekarjaya.com"
+                               placeholder="admin@mekarjaya.com atau coach@mekarjaya.com"
                                class="ds-input pl-10">
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-[#525252] pointer-events-none">
                             <i class="fa-solid fa-lock text-sm" aria-hidden="true"></i>
                         </span>
-                        <input type="password" id="password" name="password" required autocomplete="current-password" value="admin123"
+                        <input type="password" id="password" name="password" required autocomplete="current-password"
                                placeholder="Masukkan kata sandi"
                                class="ds-input pl-10 pr-14">
                         <button type="button" id="toggle-password" aria-pressed="false" aria-label="Tampilkan kata sandi"
@@ -83,7 +83,7 @@
                 </div>
 
                 <button type="submit" class="w-full btn-primary py-3 text-sm font-bold">
-                    <i class="fa-solid fa-right-to-bracket text-xs" aria-hidden="true"></i> Masuk Ke Dashboard Admin
+                    <i class="fa-solid fa-right-to-bracket text-xs" aria-hidden="true"></i> Masuk Ke Portal Pengurus
                 </button>
 
                 <div class="text-center pt-4 border-t-2 border-[#111111]">

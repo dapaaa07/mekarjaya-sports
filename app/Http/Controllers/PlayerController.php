@@ -6,13 +6,16 @@ use App\Models\Player;
 use App\Models\AgeCategory;
 use App\Models\Evaluation;
 use App\Models\Attendance;
+use App\Models\SppPayment;
 use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Player::query();
+        $query = Player::with('sppPayments');
+        $currentMonth = (int) now()->month;
+        $currentYear = (int) now()->year;
 
         // Primary Pain Point Solution: Filter by Birth Year
         if ($request->filled('year')) {
@@ -32,9 +35,19 @@ class PlayerController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Filter by SPP Status
+        // Filter by Current-Month SPP Payment History Status
         if ($request->filled('spp_status')) {
-            $query->where('spp_status', $request->spp_status);
+            if ($request->spp_status === 'Lunas') {
+                $query->whereHas('sppPayments', function ($q) use ($currentMonth, $currentYear) {
+                    $q->where('periode_bulan', $currentMonth)
+                      ->where('periode_tahun', $currentYear);
+                });
+            } elseif ($request->spp_status === 'Belum Bayar') {
+                $query->whereDoesntHave('sppPayments', function ($q) use ($currentMonth, $currentYear) {
+                    $q->where('periode_bulan', $currentMonth)
+                      ->where('periode_tahun', $currentYear);
+                });
+            }
         }
 
         // Search Name, NIS, Nickname
@@ -92,6 +105,19 @@ class PlayerController extends Controller
             'joined_year' => date('Y'),
         ]));
 
+        // Record current-month SPP ledger entry when initial status is Lunas
+        if ($validated['spp_status'] === 'Lunas') {
+            SppPayment::create([
+                'player_id' => $player->id,
+                'periode_bulan' => (int) now()->month,
+                'periode_tahun' => (int) now()->year,
+                'jumlah' => $player->default_monthly_fee,
+                'tanggal_bayar' => now()->toDateString(),
+                'metode' => 'tunai',
+                'keterangan' => 'Pembayaran awal saat pendaftaran siswa.',
+            ]);
+        }
+
         // Create initial evaluation record
         Evaluation::create([
             'player_id' => $player->id,
@@ -111,13 +137,27 @@ class PlayerController extends Controller
     public function show(Player $player)
     {
         $evaluation = $player->latestEvaluation;
+        $evaluations = $player->evaluations()
+            ->orderBy('evaluation_date', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+        $evaluationTrend = $evaluations->reverse()->values();
         $attendances = $player->attendances()->orderBy('date', 'desc')->take(10)->get();
+        $sppPayments = $player->sppPayments()->get();
 
-        return view('admin.players.show', compact('player', 'evaluation', 'attendances'));
+        return view('admin.players.show', compact(
+            'player',
+            'evaluation',
+            'evaluations',
+            'evaluationTrend',
+            'attendances',
+            'sppPayments'
+        ));
     }
 
     public function edit(Player $player)
     {
+        $player->load('sppPayments');
         return view('admin.players.edit', compact('player'));
     }
 
@@ -136,7 +176,6 @@ class PlayerController extends Controller
             'parent_name' => 'required|string|max:255',
             'parent_phone' => 'required|string|max:20',
             'status' => 'required|in:aktif,alumni,non-aktif',
-            'spp_status' => 'required|in:Lunas,Belum Bayar',
         ]);
 
         $birthYear = date('Y', strtotime($validated['birth_date']));
@@ -144,6 +183,8 @@ class PlayerController extends Controller
         $player->update(array_merge($validated, [
             'birth_year' => $birthYear,
         ]));
+
+        $player->syncCurrentSppStatus();
 
         return redirect()->route('admin.players.show', $player->id)->with('success', "Data pemain {$player->full_name} berhasil diperbarui!");
     }
@@ -179,6 +220,7 @@ class PlayerController extends Controller
 
     public function printRapor(Player $player)
     {
+        $player->load('sppPayments');
         $evaluation = $player->latestEvaluation;
         $attendanceCount = $player->attendances()->where('status', 'hadir')->count();
         $totalSessions = $player->attendances()->count();
@@ -187,10 +229,63 @@ class PlayerController extends Controller
         return view('admin.players.print-rapor', compact('player', 'evaluation', 'attendanceRate'));
     }
 
-    public function toggleSpp(Player $player)
+    public function storeSppPayment(Request $request, Player $player)
     {
-        $newStatus = $player->spp_status === 'Lunas' ? 'Belum Bayar' : 'Lunas';
-        $player->update(['spp_status' => $newStatus]);
-        return back()->with('success', "Status SPP {$player->full_name} diubah menjadi {$newStatus}.");
+        $validated = $request->validate([
+            'periode_bulan' => 'required|integer|min:1|max:12',
+            'periode_tahun' => 'required|integer|min:2020|max:2099',
+            'jumlah' => 'required|integer|min:1000|max:10000000',
+            'tanggal_bayar' => 'required|date',
+            'metode' => 'required|in:tunai,transfer',
+            'keterangan' => 'nullable|string|max:255',
+        ], [
+            'periode_bulan.required' => 'Bulan periode SPP wajib dipilih.',
+            'periode_tahun.required' => 'Tahun periode SPP wajib diisi.',
+            'jumlah.required' => 'Nominal pembayaran SPP wajib diisi.',
+            'jumlah.min' => 'Nominal pembayaran minimal Rp 1.000.',
+            'tanggal_bayar.required' => 'Tanggal pembayaran wajib diisi.',
+            'metode.in' => 'Metode pembayaran harus Tunai atau Transfer.',
+        ]);
+
+        $exists = SppPayment::where('player_id', $player->id)
+            ->where('periode_bulan', $validated['periode_bulan'])
+            ->where('periode_tahun', $validated['periode_tahun'])
+            ->exists();
+
+        if ($exists) {
+            $monthName = SppPayment::MONTHS_ID[(int) $validated['periode_bulan']] ?? $validated['periode_bulan'];
+            return back()->withInput()->withErrors([
+                'periode_bulan' => "Pembayaran SPP untuk periode {$monthName} {$validated['periode_tahun']} sudah tercatat.",
+            ]);
+        }
+
+        $payment = SppPayment::create([
+            'player_id' => $player->id,
+            'periode_bulan' => $validated['periode_bulan'],
+            'periode_tahun' => $validated['periode_tahun'],
+            'jumlah' => $validated['jumlah'],
+            'tanggal_bayar' => $validated['tanggal_bayar'],
+            'metode' => $validated['metode'],
+            'keterangan' => $validated['keterangan'] ?? null,
+        ]);
+
+        $player->syncCurrentSppStatus();
+
+        return redirect()->to(route('admin.players.show', $player->id) . '#spp-section')
+            ->with('success', "Pembayaran SPP {$player->full_name} periode {$payment->period_label} ({$payment->formatted_jumlah}) berhasil dicatat.");
+    }
+
+    public function destroySppPayment(Player $player, SppPayment $sppPayment)
+    {
+        if ((int) $sppPayment->player_id !== (int) $player->id) {
+            abort(404);
+        }
+
+        $periodLabel = $sppPayment->period_label;
+        $sppPayment->delete();
+        $player->syncCurrentSppStatus();
+
+        return redirect()->to(route('admin.players.show', $player->id) . '#spp-section')
+            ->with('success', "Catatan pembayaran SPP periode {$periodLabel} berhasil dihapus.");
     }
 }

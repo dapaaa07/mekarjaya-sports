@@ -177,22 +177,28 @@
                                 <span class="text-xs font-mono text-[#525252]"><i class="fa-brands fa-whatsapp text-[#166534] mr-1" aria-hidden="true"></i> {{ $player->parent_phone }}</span>
                             </td>
 
-                            <!-- SPP Badge (1-click toggle) -->
+                            <!-- SPP Status (Derived from Current Month SppPayment Ledger) -->
                             <td class="p-4">
-                                <form action="{{ route('admin.players.toggle-spp', $player->id) }}" method="POST">
-                                    @csrf
-                                    @if($player->spp_status == 'Lunas')
-                                        <button type="submit" title="Klik untuk ubah ke Belum Bayar"
-                                                class="min-h-[38px] px-3 py-1.5 bg-[#DCFCE7] hover:bg-[#BBF7D0] text-[#14532D] font-bold border-2 border-[#166534] text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer">
-                                            <i class="fa-solid fa-check" aria-hidden="true"></i> Lunas
-                                        </button>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    @if($player->current_spp_status == 'Lunas')
+                                        <span class="badge-success text-xs font-mono">
+                                            <i class="fa-solid fa-check mr-1" aria-hidden="true"></i> Lunas
+                                        </span>
+                                        <a href="{{ route('admin.players.show', $player->id) }}#spp-section"
+                                           title="Lihat &amp; Catat Riwayat SPP {{ $player->full_name }}"
+                                           class="min-h-[40px] px-2.5 py-1 bg-white hover:bg-[#FFFF00] text-[#111111] border border-[#111111] text-[11px] font-mono font-bold inline-flex items-center transition-colors">
+                                            Riwayat
+                                        </a>
                                     @else
-                                        <button type="submit" title="Klik untuk ubah ke Lunas"
-                                                class="min-h-[38px] px-3 py-1.5 bg-[#FEE2E2] hover:bg-[#FECACA] text-[#991B1B] font-bold border-2 border-[#B91C1C] text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer">
-                                            <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Belum Bayar
-                                        </button>
+                                        <span class="badge-danger text-xs font-mono">
+                                            <i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i> Belum Bayar
+                                        </span>
+                                        <a href="{{ route('admin.players.show', $player->id) }}#spp-section"
+                                           class="min-h-[40px] px-2.5 py-1 bg-[#FFFF00] hover:bg-[#E6E600] text-[#111111] border-2 border-[#111111] text-[11px] font-bold inline-flex items-center gap-1 transition-colors">
+                                            <i class="fa-solid fa-receipt text-[10px]" aria-hidden="true"></i> Bayar SPP
+                                        </a>
                                     @endif
-                                </form>
+                                </div>
                             </td>
 
                             <!-- Action Buttons -->

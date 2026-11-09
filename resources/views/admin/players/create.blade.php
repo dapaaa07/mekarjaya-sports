@@ -96,10 +96,10 @@
             </div>
 
             <div>
-                <label for="spp_status" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Status SPP Bulanan *</label>
+                <label for="spp_status" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Pembayaran SPP Bulan Pertama *</label>
                 <select id="spp_status" name="spp_status" required class="ds-input text-sm font-semibold">
-                    <option value="Lunas">Lunas</option>
-                    <option value="Belum Bayar">Belum Bayar</option>
+                    <option value="Lunas" {{ old('spp_status', 'Lunas') == 'Lunas' ? 'selected' : '' }}>Lunas (Catat Otomatis Bulan Ini)</option>
+                    <option value="Belum Bayar" {{ old('spp_status') == 'Belum Bayar' ? 'selected' : '' }}>Belum Bayar</option>
                 </select>
             </div>
 

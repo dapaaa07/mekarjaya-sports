@@ -11,6 +11,7 @@ use App\Models\Registration;
 use App\Models\Coach;
 use App\Models\MiniSoccerRate;
 use App\Models\TrainingSchedule;
+use App\Models\SppPayment;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
@@ -19,12 +20,22 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Admin User
+        // 1. Admin & Coach Users
         User::updateOrCreate(
             ['email' => 'admin@mekarjaya.com'],
             [
                 'name' => 'Admin Mekar Jaya Subang',
-                'password' => Hash::make('admin123'),
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'coach@mekarjaya.com'],
+            [
+                'name' => 'Coach Hendra Wijaya',
+                'password' => Hash::make('password'),
+                'role' => 'coach',
             ]
         );
 
@@ -272,20 +283,73 @@ class DatabaseSeeder extends Seeder
                 ]
             );
 
-            // Create sample evaluation for player
-            Evaluation::updateOrCreate(
-                ['player_id' => $player->id],
+            // Create multi-period sample evaluations so line progression chart renders immediately
+            if ($player->evaluations()->count() === 0) {
+                $basePass = rand(66, 78);
+                $baseDrib = rand(65, 80);
+                $baseShoot = rand(62, 76);
+                $basePhys = rand(68, 82);
+                $baseDisc = rand(76, 88);
+                $baseTact = rand(62, 76);
+
+                Evaluation::create([
+                    'player_id' => $player->id,
+                    'evaluation_date' => Carbon::now()->subMonths(3)->toDateString(),
+                    'passing_score' => $basePass,
+                    'dribbling_score' => $baseDrib,
+                    'shooting_score' => $baseShoot,
+                    'physical_score' => $basePhys,
+                    'discipline_score' => $baseDisc,
+                    'tactical_score' => $baseTact,
+                    'coach_notes' => 'Evaluasi awal semester. Teknik dasar sudah baik.',
+                ]);
+
+                Evaluation::create([
+                    'player_id' => $player->id,
+                    'evaluation_date' => Carbon::now()->subMonths(1)->toDateString(),
+                    'passing_score' => min(98, $basePass + rand(4, 12)),
+                    'dribbling_score' => min(98, $baseDrib + rand(4, 12)),
+                    'shooting_score' => min(98, $baseShoot + rand(4, 12)),
+                    'physical_score' => min(98, $basePhys + rand(4, 10)),
+                    'discipline_score' => min(99, $baseDisc + rand(2, 8)),
+                    'tactical_score' => min(96, $baseTact + rand(5, 12)),
+                    'coach_notes' => 'Pemain mengalami peningkatan signifikan pada akurasi umpan dan stamina.',
+                ]);
+            }
+
+            // Create sample SPP payment history (bulan lalu + bulan berjalan jika Lunas)
+            $monthlyFee = $player->default_monthly_fee;
+            $prevPeriod = Carbon::now()->subMonth();
+            SppPayment::updateOrCreate(
                 [
-                    'evaluation_date' => Carbon::now()->subMonths(1),
-                    'passing_score' => rand(70, 92),
-                    'dribbling_score' => rand(68, 95),
-                    'shooting_score' => rand(65, 90),
-                    'physical_score' => rand(72, 94),
-                    'discipline_score' => rand(80, 98),
-                    'tactical_score' => rand(65, 88),
-                    'coach_notes' => 'Pemain memiliki potensi tinggi. Perlu meningkatkan stamina dan koordinasi tim.',
+                    'player_id' => $player->id,
+                    'periode_bulan' => (int) $prevPeriod->month,
+                    'periode_tahun' => (int) $prevPeriod->year,
+                ],
+                [
+                    'jumlah' => $monthlyFee,
+                    'tanggal_bayar' => $prevPeriod->copy()->day(10)->toDateString(),
+                    'metode' => 'transfer',
+                    'keterangan' => 'Pembayaran SPP bulanan.',
                 ]
             );
+
+            if ($pData['spp'] === 'Lunas') {
+                $curPeriod = Carbon::now();
+                SppPayment::updateOrCreate(
+                    [
+                        'player_id' => $player->id,
+                        'periode_bulan' => (int) $curPeriod->month,
+                        'periode_tahun' => (int) $curPeriod->year,
+                    ],
+                    [
+                        'jumlah' => $monthlyFee,
+                        'tanggal_bayar' => $curPeriod->copy()->day(min(10, (int) $curPeriod->day))->toDateString(),
+                        'metode' => 'tunai',
+                        'keterangan' => 'Pembayaran SPP bulan berjalan.',
+                    ]
+                );
+            }
 
             // Create sample attendances linked to training schedules
             foreach (['2026-09-01', '2026-09-03', '2026-09-08', '2026-09-10', '2026-09-15'] as $attDate) {
@@ -385,7 +449,30 @@ class DatabaseSeeder extends Seeder
             \App\Models\Inventory::updateOrCreate(['item_name' => $inv['item_name']], $inv);
         }
 
-        // 9. Sample Match Center Records
+        // 9. Sample Match Center Records (lengkap dengan formasi dan 11 pemain inti)
+        $seededPlayers = Player::where('status', 'aktif')->orderBy('id')->get();
+        $buildSeedLineup = function (string $formation) use ($seededPlayers): ?array {
+            if ($seededPlayers->count() < 11) {
+                return null;
+            }
+            $templates = [
+                '4-3-3' => ['Kiper', 'Bek', 'Bek', 'Bek', 'Bek', 'Gelandang', 'Gelandang', 'Gelandang', 'Penyerang', 'Penyerang', 'Penyerang'],
+                '4-4-2' => ['Kiper', 'Bek', 'Bek', 'Bek', 'Bek', 'Gelandang', 'Gelandang', 'Gelandang', 'Gelandang', 'Penyerang', 'Penyerang'],
+            ];
+            $roles = $templates[$formation] ?? $templates['4-3-3'];
+            $kiper = $seededPlayers->first(fn ($p) => str_contains(strtolower($p->position), 'kiper')) ?? $seededPlayers->first();
+            $outfield = $seededPlayers->where('id', '!=', $kiper->id)->values()->take(10);
+            $squad = collect([$kiper])->merge($outfield)->values();
+
+            return $squad->map(fn ($p, int $idx) => [
+                'slot' => $idx + 1,
+                'player_id' => $p->id,
+                'nis' => $p->nis,
+                'player_name' => $p->full_name,
+                'position' => $roles[$idx] ?? 'Gelandang',
+            ])->all();
+        };
+
         $sampleMatches = [
             [
                 'match_title' => 'Internal Game Seleksi Tim Inti U-12 vs U-14',
@@ -394,6 +481,8 @@ class DatabaseSeeder extends Seeder
                 'match_type' => 'Internal Game',
                 'opponent_name' => 'Tim B U-14',
                 'score_result' => '3 - 2',
+                'formation' => '4-3-3',
+                'lineup_json' => $buildSeedLineup('4-3-3'),
                 'man_of_the_match' => 'Fathan Mubina Subang',
                 'match_notes' => 'Pertandingan berjalan sengit. Pergerakan sayap sangat efektif.',
             ],
@@ -404,6 +493,8 @@ class DatabaseSeeder extends Seeder
                 'match_type' => 'Uji Tanding',
                 'opponent_name' => 'SSB Persikas Subang',
                 'score_result' => '2 - 1',
+                'formation' => '4-4-2',
+                'lineup_json' => $buildSeedLineup('4-4-2'),
                 'man_of_the_match' => 'Arya Wiguna Cigadung',
                 'match_notes' => 'Kemenangan penting untuk mental tanding tim jelang turnamen daerah.',
             ],

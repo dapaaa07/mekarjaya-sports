@@ -1,138 +1,112 @@
 <div align="center">
 
-  <img src="public/images/logo-mekarjaya.jpg" alt="Logo SSB Mekar Jaya" width="140" style="border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 12px;">
+  <img src="public/images/logo-mekarjaya.jpg" alt="Logo SSB Mekar Jaya Subang" width="128" style="border: 2px solid #111111; margin-bottom: 12px;">
 
-  # ⚽ SSB MEKAR JAYA & MINI SOCCER SUBANG
-  ### *Sistem Informasi Manajemen Sekolah Sepak Bola & Reservasi Lapangan Mini Soccer*
+  # SSB MEKAR JAYA & MINI SOCCER SUBANG
+  ### Sistem Informasi Akademi Sepak Bola & Informasi Tarif Lapangan Mini Soccer
 
-  [![Laravel Version](https://img.shields.io/badge/Laravel-v11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
-  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v3.x-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-  [![PHP Version](https://img.shields.io/badge/PHP-v8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
+  [![Laravel Version](https://img.shields.io/badge/Laravel-v13.x-FF0000?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+  [![PHP Version](https://img.shields.io/badge/PHP-v8.3+-0000FF?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.x-111111?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
   [![MySQL Database](https://img.shields.io/badge/MySQL-v8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
-  [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
-
-  ---
-
-  <p align="center">
-    <b>Platform Digital Terpadu SSB Mekar Jaya Subang</b><br>
-    Memfasilitasi pendaftaran pemain muda (KU 2008–2018), manajemen presensi terintegrasi jadwal latihan, rapor performa radar chart, kartu siswa digital, hingga penyewaan lapangan mini soccer sintetis.
-  </p>
+  [![License](https://img.shields.io/badge/License-MIT-166534.svg?style=for-the-badge)](LICENSE)
 
 </div>
 
 ---
 
-## 📌 Deskripsi Proyek
+## Deskripsi Proyek
 
-**Sistem Informasi SSB Mekar Jaya & Mini Soccer** merupakan platform web modern yang dirancang khusus untuk memodernisasi operasional Sekolah Sepak Bola (SSB) Mekar Jaya Kabupaten Subang. Proyek ini menyelesaikan tantangan pencarian dan pengelompokan pemain berdasarkan **Kelompok Umur (KU)** dan **Tahun Kelahiran (2008 s.d. 2018)** serta mengintegrasikan manajemen jadwal latihan dengan absensi harian pemain secara *real-time*.
+**Sistem Informasi SSB Mekar Jaya & Mini Soccer Subang** adalah aplikasi web untuk mengelola operasional Sekolah Sepak Bola (SSB) Mekar Jaya Kabupaten Subang serta menampilkan informasi tarif penyewaan lapangan Mini Soccer. Sistem ini mempermudah pendataan siswa berdasarkan Kelompok Umur (`U-10` s.d. `U-18`) dan tahun kelahiran (`2008` s.d. `2018`), integrasi jadwal latihan dengan presensi, pemantauan perkembangan skill jangka panjang, riwayat SPP bulanan, kartu siswa digital ber-QR Code, Match Center dengan susunan 11 pemain inti, hingga notifikasi internal pengurus dan pelatih.
 
-> [!NOTE]
-> Aplikasi ini dibangun dengan standar antarmuka **Editorial Clean Design** (Canvas Cream `#F5F1EC`, Pure White Tiles `#FFFFFF`, Ink Text `#111111`, dan Accent Fin Orange `#FF5600`), memberikan kenyamanan visual dan pengalaman pengguna (UX) yang sangat responsif baik pada tampilan Desktop, Tablet, maupun Mobile.
-
----
-
-## 📸 Tampilan Antarmuka (Screenshots Showcase)
-
-### 📊 1. Admin Dashboard Ringkasan Utama
-![Admin Dashboard](docs/screenshots/admin-dashboard.png)
-*Ringkasan statistik siswa aktif, presensi harian, verifikasi pendaftaran baru, status SPP bulanan, serta grafik distribusi siswa per tahun lahir (2008–2018).*
+Antarmuka aplikasi menerapkan gaya desain **De Stijl Abstrato** dengan struktur grid tegas, permukaan terang (`#FFFFFF` / `#F4F4F4`), garis batas `2px solid #111111`, sudut `0px`, dan warna primer `#FF0000`, `#0000FF`, serta `#FFFF00`.
 
 ---
 
-### 🌐 2. Landing Page & Portal Publik
+## Tampilan Antarmuka (Terbaru)
+
+### 1. Landing Page Publik & Portal Akademi
 ![Public Landing Page](docs/screenshots/public-landing.png)
-*Tampilan portal publik resmi SSB Mekar Jaya Subang lengkap dengan informasi akademi, pendaftaran online, dan daftar sesi latihan terdekat.*
+*Halaman utama publik dengan navigasi, informasi pendaftaran siswa baru, jadwal latihan terdekat, statistik akademi, dan tautan Portal Orang Tua.*
 
----
-
-### 🆔 3. Kartu Anggota Siswa Digital
+### 2. Kartu Siswa Digital & QR Code (Portal Orang Tua)
 ![Kartu Siswa Digital](docs/screenshots/digital-student-card.png)
-*Kartu identitas anggota siswa digital SSB Mekar Jaya Subang dengan desain dark mode eksklusif, NIS, status SPP, dan pengelompokan KU.*
+*Kartu identitas siswa digital dilengkapi QR Code SVG siap cetak menuju Portal Orang Tua beserta status SPP bulan berjalan.*
 
----
+### 3. Admin Dashboard & Lonceng Notifikasi
+![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+*Ringkasan total siswa aktif, verifikasi pendaftar baru, presensi harian, status SPP bulanan dinamis, grafik sebaran tahun lahir, dan tombol notifikasi sistem.*
 
-### 📅 4. Kelola Jadwal Latihan & Presensi Integrasi
+### 4. Kelola Jadwal Latihan & 1-Click Presensi
 ![Kelola Jadwal Latihan](docs/screenshots/schedule-management.png)
-*Master pengelolaan jadwal latihan per Kelompok Umur (KU) dengan tombol Presensi 1-Click ke pencatatan absensi harian siswa.*
+*Daftar jadwal latihan per Kelompok Umur dengan tombol cepat Presensi yang memperbarui status sesi menjadi selesai setelah disimpan.*
+
+### 5. Grafik Progres Evaluasi & Riwayat SPP Bulanan
+![Evaluasi dan SPP Pemain](docs/screenshots/player-spp-evaluation.png)
+*Line Chart perkembangan 6 aspek performa antar periode, riwayat catatan pelatih, serta pencatatan & buku besar SPP bulanan per siswa.*
+
+### 6. Match Center & Susunan 11 Pemain Inti
+![Match Center dan Lineup](docs/screenshots/match-center-lineup.png)
+*Catatan hasil pertandingan beserta formasi taktik (`4-3-3`, `4-4-2`, `3-5-2`, `4-2-3-1`, `5-3-2`) dan susunan 11 pemain inti.*
 
 ---
 
-## ✨ Fitur-Fitur Unggulan
+## Fitur Utama (Sesuai Implementasi Kode)
 
-### 👔 1. Sisi Admin (Management Portal)
-* ** Responsive Admin Layout**: Dashboard & sidebar off-canvas yang responsif dan lancar digunakan di perangkat seluler (smartphone & tablet).
-* ** Kelompok Umur & Tahun Kelahiran (2008 - 2018)**: Filter cepat data pemain berdasarkan kategori KU (KU-10, KU-12, KU-14, KU-16, KU-18) dan rentang tahun lahir 2008 hingga 2018.
-* ** Rapor Performa Pemain (Radar Chart)**: Visualisasi statistik atribut teknik pemain (Pace, Shooting, Passing, Dribbling, Defending, Physical) menggunakan Chart.js.
-* ** Kartu Siswa Digital & QR Code**: Generasi kartu identitas siswa digital SSB Mekar Jaya dengan logo resmi mitra dan nomor induk siswa (NIS).
-* ** Kelompok Jadwal Latihan & Presensi Terintegrasi**: 
-  * Fitur membuat & mengelola Jadwal Latihan spesifik per KU.
-  * Tombol **"Buka Presensi"** 1-Click yang otomatis menghubungkan sesi latihan dengan pencatatan kehadiran (Hadir, Izin, Sakit, Alpa).
-* ** Verifikasi Pendaftaran Siswa Baru**: Modul persetujuan/penolakan berkas pendaftaran calon siswa secara *real-time*.
-* ** Kelola Lapangan & Reservasi Mini Soccer**: Pemantauan jadwal sewa lapangan rumput sintetis dan konfirmasi pembayaran.
-* ** Export Roster Cetak**: Cetak daftar anggota tim/roster siap pakai untuk turnamen atau event resmi.
+### 1. Portal Publik & Orang Tua (`/`, `/portal-ortu`)
+* **Landing Page Akademi & Roster Publik**: Pencarian dan filter pemain aktif berdasarkan Kelompok Umur (`U-10`, `U-12`, `U-14`, `U-16`, `U-18`), tahun lahir, dan nama/NIS.
+* **Pendaftaran Siswa Baru Online (`POST /register-siswa`)**: Formulir mandiri dengan unggah dokumen Kartu Keluarga (KK) terkompresi otomatis (`ImageCompressionService`), persetujuan Syarat & Ketentuan, FAQ privasi berkas KK, serta notifikasi otomatis ke admin.
+* **Portal Orang Tua (`/portal-ortu`)**: Pencarian kartu siswa digital dan status perkembangan anak menggunakan NIS atau nomor WhatsApp wali, lengkap dengan QR Code SVG siap cetak.
+* **Informasi Tarif Mini Soccer**: Penayangan daftar tarif lapangan weekday/weekend (`MiniSoccerRate`) dan tombol pesan langsung via WhatsApp (tanpa sistem booking kalender online maupun payment gateway).
+* **Akses Login Terpadu (`/login`)**: Halaman login terpisah tanpa tombol admin yang menonjol di navigasi pengunjung publik.
 
-### ⚽ 2. Sisi Publik / Orang Tua / Pemain
-* ** Landing Page Interaktif**: Informasi profil SSB Mekar Jaya, jadwal latihan terbaru, dan galeri fasilitas.
-* ** Form Pendaftaran Online**: Pendaftaran calon siswa baru secara mandiri tanpa harus datang ke sekretariat.
-* ** Booking Lapangan Mini Soccer**: Antarmuka pemesanan jam main lapangan sintetis mini soccer yang transparan dan fleksibel.
-
----
-
-## 🛠️ Teknologi yang Digunakan
-
-* **Back-End Framework**: [Laravel 11.x](https://laravel.com)
-* **Front-End Framework / Styling**: [Tailwind CSS v3.x](https://tailwindcss.com) & [Alpine.js](https://alpinejs.dev)
-* **Database Engine**: [MySQL 8.0+](https://www.mysql.com)
-* **Chart & Visualisasi**: [Chart.js v4](https://www.chartjs.org)
-* **Iconography**: [Heroicons](https://heroicons.com) & Lucide Icons
-* **Local Web Server**: Apache / Nginx (XAMPP / LAMPP compatible)
+### 2. Portal Pengurus & Pelatih (`/admin`)
+* **Kontrol Akses Berbasis Role (`admin` & `coach`)**:
+  * **Admin (`admin`)**: Akses penuh ke Dashboard, Data Pemain Per Tahun & Rapor, Verifikasi Pendaftaran Online, Riwayat Pembayaran SPP Bulanan, Inventaris Peralatan, Jadwal Latihan, Presensi, Evaluasi Pemain, Match Center, dan Notifikasi.
+  * **Pelatih (`coach`)**: Fokus pembinaan lapangan dengan akses ke Dashboard, Jadwal Latihan, Presensi Latihan, Evaluasi Pemain, Match Center, dan Notifikasi (rute sensitif seperti Data Pemain/SPP/Pendaftaran/Inventaris dibatasi `403 Forbidden`).
+* **Kartu Siswa Digital & Rapor Cetak dengan QR Code (`simple-qrcode`)**:
+  * QR Code SVG terintegrasi langsung pada kartu detail pemain (`/admin/players/{id}`), Portal Orang Tua (`/portal-ortu`), dan Rapor Periodik (`/admin/players/{id}/print-rapor`) yang ikut tercetak pada tampilan `@media print`.
+* **Riwayat Pembayaran SPP Bulanan (`spp_payments`)**:
+  * Pencatatan pembayaran berperiode bulan dan tahun dengan nominal default berdasarkan tarif Kelompok Umur, metode (`tunai`/`transfer`), pencegahan duplikasi periode, penghapusan catatan, serta sinkronisasi otomatis status SPP bulan berjalan.
+* **Riwayat Evaluasi Performa & Grafik Progres**:
+  * Penyimpanan riwayat evaluasi bertanggal tanpa menimpa penilaian terdahulu, disertai **Radar Chart** profil kemampuan terkini dan **Line Chart** perkembangan 6 aspek teknik/taktik/disiplin dari waktu ke waktu (`Chart.js`).
+* **Match Center & Susunan 11 Pemain Inti**:
+  * Pencatatan hasil pertandingan lengkap dengan pilihan formasi (`4-3-3`, `4-4-2`, `3-5-2`, `4-2-3-1`, `5-3-2`) dan validator susunan `11 pemain unik` dengan tepat `1 Kiper`.
+* **Notifikasi In-App & Pengingat Latihan H-1**:
+  * Tabel `notifications` untuk pendaftaran baru, perubahan status pendaftaran (lengkap dengan template pesan WhatsApp siap salin/kirim untuk orang tua), dan pengingat latihan H-1 ke Admin dan Pelatih via command `php artisan app:send-training-reminders` (terjadwal harian pukul `07:00`).
 
 ---
 
-## 📊 Arsitektur & Alur Data
+## Teknologi yang Digunakan
 
-```mermaid
-graph TD
-    A[Public User / Orang Tua] -->|Form Pendaftaran| B(Pendataan Siswa Baru)
-    A -->|Booking Lapangan| C(Penyewaan Mini Soccer)
-    
-    D[Admin SSB Mekar Jaya] -->|Verifikasi| B
-    D -->|Kelola Jadwal Latihan| E[Modul Jadwal]
-    E -->|1-Click Presensi| F[Modul Presensi Pemain]
-    D -->|Evaluasi Skill| G[Rapor Radar Chart & Kartu Digital]
-    D -->|Filter KU 2008-2018| H[Master Data Pemain]
-```
+* **Back-End**: Laravel `13.x` (`laravel/framework ^13.17`), PHP `^8.3`
+* **Front-End**: Blade Templates, Tailwind CSS `^4.0` (`@tailwindcss/vite`), Vite `^8.0`, FontAwesome `6.5.1`, Chart.js
+* **QR Code Generator**: `simplesoftwareio/simple-qrcode` `^4.2` (output SVG inline tanpa ketergantungan `ext-gd` saat render)
+* **Database**: MySQL `8.0+` (pengembangan/produksi) & SQLite `:memory:` (pengujian otomatis PHPUnit)
+* **Pengujian**: PHPUnit `^12.5` dengan Laravel `RefreshDatabase`
 
 ---
 
-## 🚀 Panduan Instalasi & Penggunaan
-
-Ikuti langkah-langkah berikut untuk menjalankan proyek ini di lingkungan lokal Anda:
+## Panduan Instalasi & Pengujian Lokal
 
 ### 1. Prasyarat Sistem
-* PHP >= 8.2
+* PHP >= 8.3
 * Composer >= 2.x
 * Node.js >= 18.x & NPM
-* MySQL Database (XAMPP / LAMPP / Docker)
+* MySQL Database (XAMPP / LAMPP / Docker / lokal)
 
-### 2. Kloning Repositori
-```bash
-git clone https://github.com/dapaaa07/mekarjaya-sports.git
-cd mekarjaya-sports
-```
-
-### 3. Instalasi Dependensi PHP & JavaScript
+### 2. Instalasi Dependensi
 ```bash
 composer install
 npm install
 ```
 
-### 4. Konfigurasi Environment (`.env`)
-Salin file `.env.example` menjadi `.env`:
+### 3. Konfigurasi Environment (`.env`)
 ```bash
 cp .env.example .env
+php artisan key:generate
 ```
-Sesuaikan konfigurasi database pada file `.env`:
+Sesuaikan koneksi MySQL pada `.env`:
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -142,70 +116,72 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-### 5. Generate Application Key & Jalankan Migrasi + Seeder
+### 4. Migrasi & Seeder Data Awal
 ```bash
-php artisan key:generate
+php artisan storage:link
 php artisan migrate:fresh --seed
 ```
 
-### 6. Build Asset Frontend & Jalankan Web Server
+### 5. Build Aset & Jalankan Server
 ```bash
-# Terminal 1: Build & Watch asset CSS/JS
-npm run dev
-
-# Terminal 2: Jalankan Laravel Local Server
+npm run build
 php artisan serve
 ```
-Akses aplikasi melalui browser di `http://127.0.0.1:8000`.
+Akses aplikasi di `http://127.0.0.1:8000`.
+
+### 6. Menjalankan Scheduler Pengingat Latihan H-1 & Tes Otomatis
+```bash
+# Eksekusi manual command pengingat jadwal latihan besok (H-1)
+php artisan app:send-training-reminders
+
+# Menjalankan seluruh rangkaian Feature & Unit Test (SQLite :memory:)
+php artisan test
+```
 
 ---
 
-## 🔑 Kredensial Login Default (Seeder)
+## Kredensial Login Demo (Seeder)
 
-> [!IMPORTANT]
-> Gunakan akun berikut setelah menjalankan perintah `php artisan migrate:fresh --seed`:
+Setelah menjalankan `php artisan migrate:fresh --seed`, akun berikut tersedia pada halaman `/login`:
 
-| Peran (Role) | Email / Username | Password | Akses URL |
+| Peran (Role) | Email | Password | Hak Akses Utama |
 | :--- | :--- | :--- | :--- |
-| **Administrator** | `admin@mekarjaya.com` | `password` | `/admin/login` atau `/login` |
-| **Pelatih / Staf** | `coach@mekarjaya.com` | `password` | `/admin/schedules` |
+| **Admin** (`admin`) | `admin@mekarjaya.com` | `password` | Akses penuh seluruh modul manajemen SSB |
+| **Pelatih** (`coach`) | `coach@mekarjaya.com` | `password` | Jadwal latihan, presensi, evaluasi siswa, match center |
 
 ---
 
-## 📁 Struktur Direktori Utama Proyek
+## Struktur Direktori Utama
 
 ```text
 mekarjaya/
 ├── app/
-│   ├── Http/Controllers/Admin/   # Controller Admin (Player, Schedule, Attendance, Field, Registration)
-│   └── Models/                   # Model Eloquent (Player, Schedule, Attendance, Registration, Field)
+│   ├── Console/Commands/         # SendTrainingReminders (pengingat H-1 terjadwal)
+│   ├── Http/
+│   │   ├── Controllers/          # Home, Admin, Player, Registration, Attendance,
+│   │   │                         # Evaluation, Schedule, Inventory, Match, Notification
+│   │   └── Middleware/           # RoleMiddleware ('role' alias)
+│   ├── Models/                   # User, Player, Registration, AgeCategory, TrainingSchedule,
+│   │                             # Attendance, Evaluation, SppPayment, Coach, Inventory,
+│   │                             # MatchModel, MiniSoccerRate
+│   ├── Notifications/            # NewRegistration, RegistrationStatusUpdated, TrainingReminder
+│   └── Services/                 # ImageCompressionService
 ├── database/
-│   ├── migrations/               # Skema Migrasi Database
-│   └── seeders/                  # Seeder Data Pemain, Jadwal, KU 2008-2018
-├── docs/
-│   └── screenshots/              # Screenshot Tampilan Aplikasi (Dashboard, Landing, Kartu Digital, Jadwal)
-├── public/
-│   ├── images/
-│   │   └── logo-mekarjaya.jpg    # Logo Resmi Mitra SSB Mekar Jaya Subang
-│   └── favicon.ico
+│   ├── migrations/               # Skema tabel aplikasi + roles, spp_payments, notifications
+│   └── seeders/                  # DatabaseSeeder (akun admin/coach, KU, siswa, SPP, match)
 ├── resources/
-│   ├── views/
-│   │   ├── admin/                # View Blade Portal Admin (Responsive UI)
-│   │   ├── layouts/              # Layout Blade Admin & Public
-│   │   └── welcome.blade.php     # Public Landing Page & Booking
-│   └── css/app.css               # Styling Tailwind & Design System Custom
+│   ├── css/app.css               # Tailwind v4 + token gaya De Stijl Abstrato + aturan @media print
+│   └── views/                    # Layouts (public, admin), views modul admin & portal orang tua
 ├── routes/
-│   └── web.php                   # Route Aplikasi & Middleware Admin
-└── README.md
+│   ├── web.php                   # Rute publik & grup rute role:admin,coach / role:admin
+│   └── console.php               # Penjadwalan harian command app:send-training-reminders
+└── tests/
+    └── Feature/                  # Feature tests (Auth/Role, Pendaftaran, Presensi, Evaluasi,
+                                  # SPP, Lineup Match, Notifikasi H-1)
 ```
 
 ---
 
-## 🤝 Kontribusi & Lisensi
+## Lisensi
 
-Hak Cipta © 2026 **SSB Mekar Jaya Subang & Mini Soccer**. 
-Dikembangkan untuk pengabdian dan digitalisasi olahraga daerah. Lisensi perangkat lunak ini berada di bawah [MIT License](LICENSE).
-
-<div align="center">
-  <sub>Dibuat dengan ❤️ untuk kemajuan sepak bola usia dini Indonesia.</sub>
-</div>
+Hak Cipta 2026 **SSB Mekar Jaya & Mini Soccer Subang**. Dirilis di bawah lisensi [MIT](LICENSE).

@@ -38,20 +38,20 @@
                         <span class="px-3 py-1 bg-[#181818] text-white font-mono border border-[#525252]">
                             KU {{ $player->age_category_badge }}
                         </span>
-                        @if($player->spp_status == 'Lunas')
+                        @if($player->current_spp_status == 'Lunas')
                             <span class="badge-success text-xs">
-                                <i class="fa-solid fa-check mr-1" aria-hidden="true"></i> SPP Lunas
+                                <i class="fa-solid fa-check mr-1" aria-hidden="true"></i> SPP Bulan Ini Lunas
                             </span>
                         @else
                             <span class="badge-danger text-xs">
-                                <i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i> Menunggak SPP
+                                <i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i> Belum Bayar Bulan Ini
                             </span>
                         @endif
                     </div>
                 </div>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2">
+            <div class="no-print flex flex-wrap items-center gap-2">
                 <a href="{{ route('admin.players.print-rapor', $player->id) }}" target="_blank"
                    class="min-h-[44px] px-4 py-2 bg-[#181818] hover:bg-[#FFFF00] hover:text-[#111111] border-2 border-[#FFFFFF] text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors">
                     <i class="fa-solid fa-print text-xs" aria-hidden="true"></i> Cetak Rapor
@@ -82,8 +82,54 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        <!-- Left Col: Personal Details & Physical Stats (5 Cols) -->
+        <!-- Left Col: Digital Card & QR + Personal Details + Attendance (5 Cols) -->
         <div class="lg:col-span-5 space-y-6">
+
+            <!-- Printable Digital ID Card + QR Verification -->
+            <div id="admin-digital-card" class="bg-[#111111] text-white border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] dark-surface print-card-clean">
+                <div class="grid grid-cols-12 h-2 border-b-2 border-[#FFFFFF]" aria-hidden="true">
+                    <div class="col-span-5 bg-[#FF0000] border-r-2 border-[#111111]"></div>
+                    <div class="col-span-4 bg-[#FFFF00] border-r-2 border-[#111111]"></div>
+                    <div class="col-span-3 bg-[#0000FF]"></div>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div class="flex items-center justify-between gap-2 border-b border-[#333333] pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <img src="{{ asset('images/logo-mekarjaya.jpg') }}" alt="Mekar Jaya Sports Logo" class="h-9 w-9 object-cover border border-[#FFFFFF]">
+                            <div>
+                                <span class="text-xs font-bold text-white block leading-none">KARTU SISWA DIGITAL</span>
+                                <span class="text-[10px] font-mono text-[#FFFF00] uppercase">SSB MEKAR JAYA SUBANG</span>
+                            </div>
+                        </div>
+                        <button type="button" onclick="window.print()" class="no-print min-h-[44px] px-3 py-1.5 bg-white hover:bg-[#FFFF00] text-[#111111] border border-[#FFFFFF] text-[11px] font-bold inline-flex items-center gap-1 cursor-pointer transition-colors">
+                            <i class="fa-solid fa-print" aria-hidden="true"></i> Cetak Kartu
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="w-24 h-24 bg-white p-1.5 border-2 border-[#FFFFFF] qr-code-frame shrink-0" aria-label="QR Code Kartu Digital {{ $player->nis }}">
+                            {!! $player->generatePortalQrSvg(96) !!}
+                        </div>
+                        <div class="min-w-0 space-y-1.5 text-xs">
+                            <p class="font-bold text-white text-sm leading-tight truncate">{{ $player->full_name }}</p>
+                            <span class="inline-block px-2 py-0.5 bg-[#181818] text-[#FFFF00] border border-[#FFFFFF] font-mono font-bold text-xs">
+                                {{ $player->nis }}
+                            </span>
+                            <p class="text-[11px] font-mono text-[#D4D4D4] leading-snug">
+                                KU: {{ $player->age_category_badge }}
+                            </p>
+                            <a href="{{ $player->portal_qr_url }}" target="_blank" class="no-print inline-flex items-center min-h-[44px] gap-1 text-[11px] font-mono text-[#FFFF00] hover:underline">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]" aria-hidden="true"></i> Buka Portal Ortu
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="pt-2.5 border-t border-[#333333] text-[10px] font-mono text-[#D4D4D4] flex justify-between items-center gap-2">
+                        <span>Scan QR untuk verifikasi &amp; rapor siswa</span>
+                        <span class="text-[#FFFF00] font-bold uppercase">{{ $player->status }}</span>
+                    </div>
+                </div>
+            </div>
 
             <div class="editorial-card p-6 space-y-4">
                 <h3 class="font-bold text-[#111111] text-sm border-b-2 border-[#111111] pb-3 flex items-center gap-2">
@@ -225,6 +271,171 @@
                 @endif
             @endif
 
+        </div>
+
+    </div>
+
+    @include('admin.evaluations._history_panel', [
+        'evaluations' => $evaluations,
+        'evaluationTrend' => $evaluationTrend,
+        'chartId' => 'progressEvaluationChart',
+    ])
+
+    <!-- SPP Payment Recording & Ledger Section -->
+    <div id="spp-section" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Form: Record SPP Payment (5 Cols) -->
+        <div class="lg:col-span-5 no-print editorial-card p-6 border-t-[6px] border-t-[#FF0000] space-y-5">
+            <div class="flex items-start justify-between gap-3 border-b-2 border-[#111111] pb-3.5">
+                <div>
+                    <h3 class="font-bold text-[#111111] text-base flex items-center gap-2">
+                        <i class="fa-solid fa-receipt text-[#CC0000]" aria-hidden="true"></i> Catat Pembayaran SPP
+                    </h3>
+                    <p class="text-xs text-[#525252] mt-0.5">
+                        Tarif standar kelompok umur: <strong class="font-mono text-[#111111]">Rp {{ number_format($player->default_monthly_fee, 0, ',', '.') }}</strong>/bulan
+                    </p>
+                </div>
+                @if($player->current_spp_status == 'Lunas')
+                    <span class="badge-success font-mono shrink-0">Lunas</span>
+                @else
+                    <span class="badge-danger font-mono shrink-0">Belum Bayar</span>
+                @endif
+            </div>
+
+            <form action="{{ route('admin.players.spp-payments.store', $player->id) }}" method="POST" class="space-y-4 text-xs">
+                @csrf
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label for="periode_bulan" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Periode Bulan *</label>
+                        <select id="periode_bulan" name="periode_bulan" required class="ds-input text-sm font-semibold">
+                            @foreach(\App\Models\SppPayment::MONTHS_ID as $mNum => $mName)
+                                <option value="{{ $mNum }}" {{ (int) old('periode_bulan', now()->month) === $mNum ? 'selected' : '' }}>
+                                    {{ $mName }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label for="periode_tahun" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Tahun *</label>
+                        <input type="number" id="periode_tahun" name="periode_tahun" min="2020" max="2099" required
+                               value="{{ old('periode_tahun', now()->year) }}"
+                               class="ds-input text-sm font-mono font-bold">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="jumlah" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Nominal (Rp) *</label>
+                        <input type="number" id="jumlah" name="jumlah" min="1000" step="1000" required
+                               value="{{ old('jumlah', $player->default_monthly_fee) }}"
+                               class="ds-input text-sm font-mono font-bold">
+                    </div>
+                    <div>
+                        <label for="tanggal_bayar" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Tanggal Bayar *</label>
+                        <input type="date" id="tanggal_bayar" name="tanggal_bayar" required
+                               value="{{ old('tanggal_bayar', now()->toDateString()) }}"
+                               class="ds-input text-sm font-mono">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="metode" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Metode Pembayaran *</label>
+                    <select id="metode" name="metode" required class="ds-input text-sm font-semibold">
+                        <option value="tunai" {{ old('metode', 'tunai') == 'tunai' ? 'selected' : '' }}>Tunai (Sekretariat / Lapangan)</option>
+                        <option value="transfer" {{ old('metode') == 'transfer' ? 'selected' : '' }}>Transfer Bank / QRIS</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="keterangan" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Keterangan (Opsional)</label>
+                    <input type="text" id="keterangan" name="keterangan" maxlength="255"
+                           value="{{ old('keterangan') }}"
+                           placeholder="Contoh: Diterima via transfer a.n. Orang Tua"
+                           class="ds-input text-sm">
+                </div>
+
+                <button type="submit" class="w-full btn-primary text-xs py-3 font-bold">
+                    <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Simpan Pembayaran SPP
+                </button>
+            </form>
+        </div>
+
+        <!-- Right Table: SPP Payment History Ledger (7 Cols) -->
+        <div class="lg:col-span-7 editorial-card p-6 border-t-[6px] border-t-[#0000FF] space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-[#111111] pb-3.5">
+                <div>
+                    <h3 class="font-bold text-[#111111] text-base flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-[#0000FF]" aria-hidden="true"></i> Riwayat Pembayaran SPP
+                    </h3>
+                    <p class="text-xs text-[#525252] mt-0.5">Catatan historis iuran bulanan siswa per periode.</p>
+                </div>
+                <div class="px-3 py-1.5 bg-[#111111] text-[#FFFF00] font-mono text-xs font-bold border border-[#111111]">
+                    Total: Rp {{ number_format($sppPayments->sum('jumlah'), 0, ',', '.') }}
+                </div>
+            </div>
+
+            @if($sppPayments->count() > 0)
+                <div class="overflow-x-auto border-2 border-[#111111]">
+                    <table class="w-full text-left border-collapse text-xs text-[#111111]">
+                        <thead>
+                            <tr class="bg-[#111111] text-white font-mono font-bold uppercase text-[11px]">
+                                <th class="p-3.5">Periode</th>
+                                <th class="p-3.5">Tanggal Bayar</th>
+                                <th class="p-3.5">Nominal</th>
+                                <th class="p-3.5">Metode</th>
+                                <th class="p-3.5">Catatan</th>
+                                <th class="no-print p-3.5 text-right">Hapus</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y-2 divide-[#111111] bg-white">
+                            @foreach($sppPayments as $payment)
+                                <tr class="hover:bg-[#F4F4F4] transition-colors">
+                                    <td class="p-3.5 font-bold font-mono">
+                                        {{ $payment->period_label }}
+                                        @if($payment->periode_bulan === (int) now()->month && $payment->periode_tahun === (int) now()->year)
+                                            <span class="block text-[10px] text-[#14532D] uppercase mt-0.5">Bulan Berjalan</span>
+                                        @endif
+                                    </td>
+                                    <td class="p-3.5 font-mono text-[#525252]">
+                                        {{ $payment->tanggal_bayar->format('d M Y') }}
+                                    </td>
+                                    <td class="p-3.5 font-mono font-bold text-[#14532D]">
+                                        {{ $payment->formatted_jumlah }}
+                                    </td>
+                                    <td class="p-3.5">
+                                        @if($payment->metode === 'transfer')
+                                            <span class="badge-blue font-mono uppercase text-[10px]">Transfer</span>
+                                        @else
+                                            <span class="badge-secondary font-mono uppercase text-[10px]">Tunai</span>
+                                        @endif
+                                    </td>
+                                    <td class="p-3.5 text-[#525252]">
+                                        {{ $payment->keterangan ?? '-' }}
+                                    </td>
+                                    <td class="no-print p-3.5 text-right">
+                                        <form action="{{ route('admin.players.spp-payments.destroy', [$player->id, $payment->id]) }}" method="POST"
+                                              onsubmit="return confirm('Hapus catatan pembayaran SPP periode {{ $payment->period_label }}?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" aria-label="Hapus pembayaran periode {{ $payment->period_label }}"
+                                                    class="w-11 h-11 bg-white text-[#991B1B] hover:bg-[#FF0000] hover:text-[#000000] border-2 border-[#111111] inline-flex items-center justify-center transition-colors cursor-pointer">
+                                                <i class="fa-solid fa-trash text-xs" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="p-8 text-center border-2 border-dashed border-[#111111] bg-[#F4F4F4] space-y-2">
+                    <i class="fa-solid fa-file-invoice text-2xl text-[#525252]" aria-hidden="true"></i>
+                    <p class="text-xs font-bold text-[#111111]">Belum Ada Riwayat Pembayaran SPP</p>
+                    <p class="text-xs text-[#525252]">Gunakan formulir di sebelah kiri untuk mencatat pembayaran SPP siswa ini.</p>
+                </div>
+            @endif
         </div>
 
     </div>

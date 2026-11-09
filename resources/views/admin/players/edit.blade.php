@@ -87,11 +87,17 @@
             </div>
 
             <div>
-                <label for="spp_status" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Status SPP Bulanan *</label>
-                <select id="spp_status" name="spp_status" required class="ds-input text-sm font-semibold">
-                    <option value="Lunas" {{ old('spp_status', $player->spp_status) == 'Lunas' ? 'selected' : '' }}>Lunas</option>
-                    <option value="Belum Bayar" {{ old('spp_status', $player->spp_status) == 'Belum Bayar' ? 'selected' : '' }}>Belum Bayar</option>
-                </select>
+                <span class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Status SPP Bulan Berjalan</span>
+                <div class="p-2.5 bg-[#F4F4F4] border-2 border-[#111111] flex items-center justify-between gap-2 min-h-[46px]">
+                    @if($player->current_spp_status == 'Lunas')
+                        <span class="badge-success text-xs font-mono">Lunas</span>
+                    @else
+                        <span class="badge-danger text-xs font-mono">Belum Bayar</span>
+                    @endif
+                    <a href="{{ route('admin.players.show', $player->id) }}#spp-section" class="text-[11px] font-mono font-bold text-[#0000FF] hover:underline">
+                        Kelola Riwayat SPP &rarr;
+                    </a>
+                </div>
             </div>
 
             <div class="sm:col-span-2">

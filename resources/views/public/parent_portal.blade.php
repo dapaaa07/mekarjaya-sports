@@ -21,7 +21,7 @@
         </div>
 
         <!-- Search Box Form + Contoh Pencarian Cepat -->
-        <div class="editorial-card p-5 sm:p-6 space-y-4">
+        <div class="no-print editorial-card p-5 sm:p-6 space-y-4">
             <form id="parent-search-form" action="{{ route('parent.portal') }}" method="GET" class="space-y-3">
                 <label for="parent-nis-input" class="block text-xs font-bold uppercase tracking-wider text-[#111111]">
                     NIS / Nama Lengkap Siswa / No. WhatsApp Orang Tua
@@ -71,7 +71,7 @@
                 <div class="space-y-8 destijl-enter">
 
                     <!-- DIGITAL PLAYER CARD (Iconic Mondrian Dark Container) -->
-                    <div class="bg-[#111111] text-white border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] dark-surface print-card-clean">
+                    <div id="digital-player-card" class="bg-[#111111] text-white border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] dark-surface print-card-clean">
 
                         <!-- Top 3-Color Mondrian Ribbon -->
                         <div class="grid grid-cols-12 h-2.5 border-b-2 border-[#FFFFFF]" aria-hidden="true">
@@ -104,11 +104,19 @@
                             <!-- Card Main Asymmetric Split -->
                             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
 
-                                <!-- Left Photo Badge & Copyable NIS (4 Cols) -->
+                                <!-- Left QR Verification + Badge + Copyable NIS (4 Cols) -->
                                 <div class="md:col-span-4 flex flex-col items-center justify-center bg-[#181818] border-2 border-[#333333] p-5 space-y-3">
-                                    <div class="w-24 h-24 bg-[#0000FF] text-white font-bold text-4xl flex items-center justify-center border-2 border-[#FFFFFF] font-mono">
-                                        {{ strtoupper(substr($player->full_name, 0, 1)) }}
+                                    <div class="w-full flex items-center justify-center gap-3">
+                                        <div class="w-16 h-16 bg-[#0000FF] text-white font-bold text-2xl flex items-center justify-center border-2 border-[#FFFFFF] font-mono shrink-0">
+                                            {{ strtoupper(substr($player->full_name, 0, 1)) }}
+                                        </div>
+                                        <div class="w-24 h-24 bg-white p-1.5 border-2 border-[#FFFFFF] qr-code-frame shrink-0" aria-label="QR Code Verifikasi Kartu Digital {{ $player->nis }}">
+                                            {!! $player->generatePortalQrSvg(96) !!}
+                                        </div>
                                     </div>
+                                    <p class="text-[10px] font-mono text-[#D4D4D4] text-center uppercase tracking-wider">
+                                        Scan QR untuk buka Portal Orang Tua
+                                    </p>
                                     <div class="text-center space-y-2 w-full">
                                         <span class="block px-3 py-1.5 bg-[#111111] text-[#FFFF00] text-xs font-mono font-bold border border-[#FFFFFF]">
                                             {{ $player->nis }}
@@ -142,8 +150,8 @@
                                             <span class="font-bold text-white text-sm">{{ $player->position }}</span>
                                         </div>
                                         <div class="border-t border-[#333333] pt-3 pl-1">
-                                            <span class="text-[#D4D4D4] block text-[11px] font-mono uppercase mb-1">Status SPP Bulanan</span>
-                                            @if($player->spp_status == 'Lunas')
+                                            <span class="text-[#D4D4D4] block text-[11px] font-mono uppercase mb-1">Status SPP Bulan Ini</span>
+                                            @if($player->current_spp_status == 'Lunas')
                                                 <span class="badge-success text-xs"><i class="fa-solid fa-check mr-1" aria-hidden="true"></i> Lunas</span>
                                             @else
                                                 <span class="badge-danger text-xs"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i> Belum Bayar</span>

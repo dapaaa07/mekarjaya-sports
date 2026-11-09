@@ -403,8 +403,18 @@ textarea.ds-input:user-valid {
     background: #FF0000;
 }
 
-/* Print optimization for Parent Portal Digital ID Card */
+/* QR Code SVG scaling & crisp print rendering */
+.qr-code-frame svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* Print optimization for Parent Portal & Admin Digital ID Card */
 @media print {
+    aside#admin-sidebar,
     header,
     footer,
     #floating-quick-help,
@@ -414,10 +424,23 @@ textarea.ds-input:user-valid {
     body {
         background-color: #FFFFFF !important;
         color: #111111 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .print-reset-pl {
+        padding-left: 0 !important;
     }
     .print-card-clean {
         break-inside: avoid;
         box-shadow: none !important;
         border: 2px solid #111111 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .qr-code-frame,
+    .qr-code-frame svg {
+        display: block !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 }

@@ -54,9 +54,21 @@ class AdminController extends Controller
         $todayAtt = Attendance::whereDate('date', now()->toDateString())->count();
         $todayHadir = Attendance::whereDate('date', now()->toDateString())->where('status', 'hadir')->count();
 
-        // SPP Summary
-        $sppLunas = Player::where('status', 'aktif')->where('spp_status', 'Lunas')->count();
-        $sppMenunggak = Player::where('status', 'aktif')->where('spp_status', 'Belum Bayar')->count();
+        // SPP Summary (berbasis riwayat pembayaran bulan & tahun berjalan)
+        $currentMonth = (int) now()->month;
+        $currentYear = (int) now()->year;
+        $sppLunas = Player::where('status', 'aktif')
+            ->whereHas('sppPayments', function ($q) use ($currentMonth, $currentYear) {
+                $q->where('periode_bulan', $currentMonth)
+                  ->where('periode_tahun', $currentYear);
+            })
+            ->count();
+        $sppMenunggak = Player::where('status', 'aktif')
+            ->whereDoesntHave('sppPayments', function ($q) use ($currentMonth, $currentYear) {
+                $q->where('periode_bulan', $currentMonth)
+                  ->where('periode_tahun', $currentYear);
+            })
+            ->count();
 
         // Distribution by Birth Year (Core Pain Point Visualizer!)
         $playersByYear = Player::select('birth_year', DB::raw('count(*) as total'))

@@ -46,9 +46,15 @@
                 <p class="text-[11px] font-mono text-[#525252]">Sekretariat: Lapangan Veteran Dangdeur Subang | Telp/WA: 0851-3346-3626</p>
             </div>
         </div>
-        <div class="sm:text-right">
-            <span class="inline-block bg-[#111111] text-[#FFFF00] text-xs font-mono font-bold px-3 py-1.5 border border-[#111111] uppercase tracking-wider">RAPOR PERIODIK</span>
-            <span class="block text-[11px] font-mono text-[#525252] mt-1">Tanggal Cetak: {{ date('d F Y') }}</span>
+        <div class="flex items-center gap-4 sm:text-right">
+            <div>
+                <span class="inline-block bg-[#111111] text-[#FFFF00] text-xs font-mono font-bold px-3 py-1.5 border border-[#111111] uppercase tracking-wider">RAPOR PERIODIK</span>
+                <span class="block text-[11px] font-mono text-[#525252] mt-1">Tanggal Cetak: {{ date('d F Y') }}</span>
+                <span class="block text-[10px] font-mono text-[#525252]">Scan QR &rarr; Portal Ortu</span>
+            </div>
+            <div class="w-20 h-20 bg-white p-1 border-2 border-[#111111] qr-code-frame shrink-0" aria-label="QR Code Portal Orang Tua {{ $player->nis }}">
+                {!! $player->generatePortalQrSvg(80) !!}
+            </div>
         </div>
     </div>
 
@@ -64,7 +70,7 @@
             <div class="flex"><span class="w-36 text-[#525252] font-bold">Posisi Bermain</span>: <span class="ml-1.5 font-bold">{{ $player->position }}</span></div>
             <div class="flex"><span class="w-36 text-[#525252] font-bold">Tinggi / Berat</span>: <span class="ml-1.5 font-mono">{{ $player->height_cm ?? '-' }} cm / {{ $player->weight_kg ?? '-' }} kg</span></div>
             <div class="flex"><span class="w-36 text-[#525252] font-bold">Tingkat Kehadiran</span>: <span class="ml-1.5 font-mono font-bold text-[#0000FF]">{{ $attendanceRate }}% Sesi Latihan</span></div>
-            <div class="flex"><span class="w-36 text-[#525252] font-bold">Status SPP</span>: <span class="ml-1.5 font-bold text-[#14532D]">{{ $player->spp_status }}</span></div>
+            <div class="flex"><span class="w-36 text-[#525252] font-bold">Status SPP</span>: <span class="ml-1.5 font-bold {{ $player->current_spp_status == 'Lunas' ? 'text-[#14532D]' : 'text-[#991B1B]' }}">{{ $player->current_spp_status }}</span></div>
         </div>
     </div>
 

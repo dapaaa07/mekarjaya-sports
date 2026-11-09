@@ -8,8 +8,11 @@ use App\Models\Coach;
 use App\Models\MiniSoccerRate;
 use App\Models\Registration;
 use App\Models\TrainingSchedule;
+use App\Models\User;
+use App\Notifications\NewRegistrationNotification;
 use App\Services\ImageCompressionService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class HomeController extends Controller
 {
@@ -113,12 +116,17 @@ class HomeController extends Controller
         unset($validated['terms_agreement']);
         unset($validated['kk_document']);
 
-        Registration::create(array_merge($validated, [
+        $registration = Registration::create(array_merge($validated, [
             'registration_code' => $regCode,
             'birth_year' => $birthYear,
             'kk_document' => $kkPath,
             'status' => 'pending',
         ]));
+
+        $admins = User::where('role', 'admin')->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new NewRegistrationNotification($registration));
+        }
 
         return redirect()->to(url('/#pendaftaran'))->with('success', "Pendaftaran berhasil dikirim! Kode pendaftaran Anda: {$regCode}. Pengurus SSB akan menghubungi Anda via WhatsApp.");
     }
@@ -129,7 +137,8 @@ class HomeController extends Controller
 
         if ($request->filled('nis')) {
             $keyword = trim($request->nis);
-            $player = Player::where('nis', $keyword)
+            $player = Player::with(['sppPayments', 'latestEvaluation'])
+                ->where('nis', $keyword)
                 ->orWhere('parent_phone', 'like', "%{$keyword}%")
                 ->orWhere('full_name', 'like', "%{$keyword}%")
                 ->first();

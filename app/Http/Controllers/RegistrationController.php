@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Registration;
 use App\Models\Player;
 use App\Models\Evaluation;
+use App\Models\User;
+use App\Notifications\RegistrationStatusUpdatedNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class RegistrationController extends Controller
 {
@@ -37,7 +40,7 @@ class RegistrationController extends Controller
             'parent_phone' => $registration->parent_phone,
             'kk_document' => $registration->kk_document,
             'status' => 'aktif',
-            'spp_status' => 'Lunas',
+            'spp_status' => 'Belum Bayar',
             'joined_year' => (int) date('Y'),
         ]);
 
@@ -55,12 +58,37 @@ class RegistrationController extends Controller
 
         $registration->update(['status' => 'approved']);
 
-        return back()->with('success', "Pendaftaran {$registration->full_name} berhasil disetujui dan telah resmi ditambahkan sebagai pemain (NIS: {$nis})!");
+        $admins = User::where('role', 'admin')->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new RegistrationStatusUpdatedNotification($registration, 'approved', $player));
+        }
+
+        $waPayload = RegistrationStatusUpdatedNotification::buildWaPayload($registration, 'approved', $player);
+
+        return back()
+            ->with('success', "Pendaftaran {$registration->full_name} berhasil disetujui dan telah resmi ditambahkan sebagai pemain (NIS: {$nis})!")
+            ->with('wa_notify', array_merge($waPayload, [
+                'title' => "Pesan Konfirmasi WhatsApp ({$registration->parent_name})",
+                'status' => 'approved',
+            ]));
     }
 
     public function reject(Registration $registration)
     {
         $registration->update(['status' => 'rejected']);
-        return back()->with('success', "Pendaftaran {$registration->full_name} telah ditolak.");
+
+        $admins = User::where('role', 'admin')->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new RegistrationStatusUpdatedNotification($registration, 'rejected'));
+        }
+
+        $waPayload = RegistrationStatusUpdatedNotification::buildWaPayload($registration, 'rejected');
+
+        return back()
+            ->with('success', "Pendaftaran {$registration->full_name} telah ditolak.")
+            ->with('wa_notify', array_merge($waPayload, [
+                'title' => "Pesan Pemberitahuan WhatsApp ({$registration->parent_name})",
+                'status' => 'rejected',
+            ]));
     }
 }
