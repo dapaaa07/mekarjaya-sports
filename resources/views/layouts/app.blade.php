@@ -68,7 +68,7 @@
 
                 <!-- Action CTA & Mobile Toggle -->
                 <div class="flex items-center gap-2.5">
-                    <a href="{{ route('home') }}#pendaftaran" id="nav-cta-pendaftaran" class="hidden sm:inline-flex btn-primary text-xs sm:text-sm py-2.5 px-4">
+                    <a href="{{ route('home') }}#pendaftaran" id="nav-cta-pendaftaran" class="hidden sm:inline-flex btn-yellow text-xs sm:text-sm py-2.5 px-4">
                         <i class="fa-solid fa-user-plus text-xs" aria-hidden="true"></i> Daftar Siswa
                     </a>
 
@@ -93,7 +93,7 @@
                 <i class="fa-solid fa-id-card text-xs mr-2 {{ request()->routeIs('parent.portal') ? 'text-[#FFFF00]' : 'text-[#0000FF]' }}" aria-hidden="true"></i> Portal Orang Tua & Rapor
             </a>
             <div class="pt-2">
-                <a href="{{ route('home') }}#pendaftaran" class="w-full btn-primary text-sm">
+                <a href="{{ route('home') }}#pendaftaran" id="mobile-cta-pendaftaran" class="w-full btn-yellow text-sm">
                     Daftar Siswa Baru
                 </a>
             </div>
@@ -289,9 +289,30 @@
                         }
                     }
                 });
+                const isRegSection = (activeId === 'pendaftaran');
+                const ctaBtn = document.getElementById('nav-cta-pendaftaran');
+                if (ctaBtn) {
+                    if (isRegSection) {
+                        ctaBtn.classList.remove('btn-yellow');
+                        ctaBtn.classList.add('btn-primary');
+                    } else {
+                        ctaBtn.classList.remove('btn-primary');
+                        ctaBtn.classList.add('btn-yellow');
+                    }
+                }
+                const mobileCtaBtn = document.getElementById('mobile-cta-pendaftaran');
+                if (mobileCtaBtn) {
+                    if (isRegSection) {
+                        mobileCtaBtn.classList.remove('btn-yellow');
+                        mobileCtaBtn.classList.add('btn-primary');
+                    } else {
+                        mobileCtaBtn.classList.remove('btn-primary');
+                        mobileCtaBtn.classList.add('btn-yellow');
+                    }
+                }
             }
 
-            document.querySelectorAll('#desktop-navbar a, #mobile-menu a').forEach(link => {
+            document.querySelectorAll('#desktop-navbar a, #mobile-menu a, #nav-cta-pendaftaran, #mobile-cta-pendaftaran').forEach(link => {
                 link.addEventListener('click', function(e) {
                     const href = this.getAttribute('href') || '';
                     if ((href === '{{ route("home") }}' || href.endsWith('#beranda')) && (window.location.pathname === '/' || window.location.pathname === '')) {
