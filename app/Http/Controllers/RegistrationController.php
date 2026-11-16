@@ -24,7 +24,6 @@ class RegistrationController extends Controller
             return back()->with('info', 'Pendaftaran ini sudah disetujui sebelumnya.');
         }
 
-        // Convert registration to active Player!
         $nis = 'SSB-MJ-' . date('y') . rand(1000, 9999);
         $player = Player::create([
             'nis' => $nis,
@@ -34,6 +33,8 @@ class RegistrationController extends Controller
             'birth_date' => $registration->birth_date,
             'birth_year' => $registration->birth_year,
             'position' => $registration->position_preference,
+            'height_cm' => $registration->height_cm,
+            'weight_kg' => $registration->weight_kg,
             'jersey_size' => $registration->jersey_size ?? 'M',
             'school_name' => $registration->school_name,
             'parent_name' => $registration->parent_name,

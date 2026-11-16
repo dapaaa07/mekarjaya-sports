@@ -684,6 +684,20 @@
                                    class="ds-input">
                         </div>
 
+                        <div>
+                            <label for="height_cm" class="block text-xs font-bold text-[#111111] uppercase tracking-wider mb-1.5">Tinggi Badan (cm)</label>
+                            <input type="number" id="height_cm" name="height_cm" value="{{ old('height_cm') }}" min="30" max="250"
+                                   placeholder="Contoh: 145"
+                                   class="ds-input font-mono">
+                        </div>
+
+                        <div>
+                            <label for="weight_kg" class="block text-xs font-bold text-[#111111] uppercase tracking-wider mb-1.5">Berat Badan (kg)</label>
+                            <input type="number" id="weight_kg" name="weight_kg" value="{{ old('weight_kg') }}" min="10" max="200"
+                                   placeholder="Contoh: 38"
+                                   class="ds-input font-mono">
+                        </div>
+
                         <div class="sm:col-span-2">
                             <label for="birth_date" class="block text-xs font-bold text-[#111111] uppercase tracking-wider mb-1.5">Tanggal Lahir *</label>
                             <input type="date" id="birth_date" name="birth_date" required value="{{ old('birth_date') }}"

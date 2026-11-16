@@ -31,6 +31,8 @@ class RegistrationWorkflowTest extends TestCase
             'birth_date' => '2014-06-15',
             'position_preference' => 'Striker',
             'jersey_size' => 'M',
+            'height_cm' => 145,
+            'weight_kg' => 38,
             'parent_name' => 'Budi Pratama',
             'parent_phone' => '081234567800',
             'school_name' => 'SDN 1 Subang',
@@ -46,6 +48,8 @@ class RegistrationWorkflowTest extends TestCase
         $registration = Registration::where('full_name', 'Rizky Pratama Subang')->first();
         $this->assertNotNull($registration);
         $this->assertEquals('pending', $registration->status);
+        $this->assertEquals(145, $registration->height_cm);
+        $this->assertEquals(38, $registration->weight_kg);
         $this->assertNotNull($registration->kk_document);
         Storage::disk('public')->assertExists($registration->kk_document);
 
@@ -64,6 +68,8 @@ class RegistrationWorkflowTest extends TestCase
             'birth_date' => '2015-05-10',
             'birth_year' => 2015,
             'position_preference' => 'Gelandang',
+            'height_cm' => 142,
+            'weight_kg' => 36,
             'jersey_size' => 'M',
             'parent_name' => 'Hendra Santoso',
             'parent_phone' => '081299887766',
@@ -82,6 +88,8 @@ class RegistrationWorkflowTest extends TestCase
         $player = Player::where('full_name', 'Faris Ardiansyah')->first();
         $this->assertNotNull($player);
         $this->assertEquals('aktif', $player->status);
+        $this->assertEquals(142, $player->height_cm);
+        $this->assertEquals(36, $player->weight_kg);
         $this->assertNotNull($player->latestEvaluation);
 
         $notif = $admin->notifications()->where('type', RegistrationStatusUpdatedNotification::class)->first();

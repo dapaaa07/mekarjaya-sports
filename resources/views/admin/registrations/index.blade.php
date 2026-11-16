@@ -50,6 +50,11 @@
                             </td>
                             <td class="p-4 font-bold text-[#111111]">
                                 {{ $reg->position_preference }}
+                                @if($reg->height_cm || $reg->weight_kg)
+                                    <span class="block text-[11px] font-mono text-[#525252] font-normal mt-0.5">
+                                        {{ $reg->height_cm ? $reg->height_cm . ' cm' : '-' }} / {{ $reg->weight_kg ? $reg->weight_kg . ' kg' : '-' }}
+                                    </span>
+                                @endif
                             </td>
                             <td class="p-4">
                                 <span class="block font-bold text-[#111111]">{{ $reg->parent_name }}</span>
