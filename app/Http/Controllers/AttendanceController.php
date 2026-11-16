@@ -12,12 +12,18 @@ class AttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        $selectedSchedule = null;
-        if ($request->filled('schedule_id')) {
-            $selectedSchedule = TrainingSchedule::find($request->schedule_id);
+        if (!$request->filled('schedule_id')) {
+            return redirect()->route('admin.schedules.index')
+                ->with('info', 'Silakan pilih jadwal sesi latihan terlebih dahulu lalu klik tombol "Presensi" pada sesi yang diinginkan.');
         }
 
-        $date = $request->input('date', $selectedSchedule ? $selectedSchedule->schedule_date->toDateString() : now()->toDateString());
+        $selectedSchedule = TrainingSchedule::find($request->schedule_id);
+        if (!$selectedSchedule) {
+            return redirect()->route('admin.schedules.index')
+                ->with('error', 'Sesi jadwal latihan tidak ditemukan. Silakan pilih dari daftar jadwal.');
+        }
+
+        $date = $request->input('date', $selectedSchedule->schedule_date->toDateString());
         
         $query = Player::where('status', 'aktif');
 

@@ -84,7 +84,7 @@
             </div>
             <div class="pt-3 border-t border-[#D4D4D4] flex items-center justify-between gap-2 text-xs text-[#525252]">
                 <span>Dari {{ $todayAtt }} siswa hadir</span>
-                <a href="{{ route('admin.attendances.index') }}" class="font-mono font-bold text-[#0000FF] hover:underline whitespace-nowrap shrink-0">Input Presensi</a>
+                <a href="{{ route('admin.schedules.index') }}" class="font-mono font-bold text-[#0000FF] hover:underline whitespace-nowrap shrink-0">Lihat Jadwal</a>
             </div>
         </div>
 
@@ -115,8 +115,8 @@
             <div class="lg:col-span-5 p-5 sm:p-6 bg-[#F4F4F4] flex flex-wrap items-center justify-between gap-3">
                 <span class="text-xs font-mono font-bold text-[#111111] uppercase">Aksi Cepat Hari Ini</span>
                 <div class="flex flex-wrap items-center gap-2">
-                    <a href="{{ route('admin.attendances.index') }}" class="btn-blue text-xs py-2 px-3.5">
-                        <i class="fa-solid fa-check-double" aria-hidden="true"></i> Presensi Latihan
+                    <a href="{{ route('admin.schedules.index') }}" class="btn-blue text-xs py-2 px-3.5">
+                        <i class="fa-solid fa-calendar-days" aria-hidden="true"></i> Kelola Jadwal
                     </a>
                     <a href="{{ route('admin.schedules.create') }}" class="btn-secondary text-xs py-2 px-3.5">
                         <i class="fa-solid fa-calendar-plus" aria-hidden="true"></i> Jadwal Baru

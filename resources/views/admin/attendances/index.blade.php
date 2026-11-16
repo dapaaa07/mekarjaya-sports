@@ -7,76 +7,69 @@
 
 <div class="space-y-6">
 
-    <!-- Date & Schedule Filter Controls -->
-    <div class="editorial-card p-6">
-        <form action="{{ route('admin.attendances.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end text-xs">
+    <!-- Top Action & Navigation Bar -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <a href="{{ route('admin.schedules.index') }}"
+           class="min-h-[44px] px-4 py-2 bg-white hover:bg-[#FFFF00] text-[#111111] border-2 border-[#111111] text-xs font-mono font-bold inline-flex items-center gap-2 transition-colors">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            <span>Kembali ke Kelola Jadwal Latihan</span>
+        </a>
 
-            <div class="md:col-span-3">
-                <label for="date" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Tanggal Sesi Latihan *</label>
-                <input type="date" id="date" name="date" value="{{ $date }}"
-                       class="ds-input text-sm py-2.5 font-bold">
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-mono text-[#525252]">Total Siswa Aktif Sesi Ini: <strong class="text-[#111111]">{{ $players->count() }}</strong></span>
+        </div>
+    </div>
+
+    <!-- Active Correlated Schedule Banner -->
+    <div class="bg-[#111111] text-white border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+        <div class="grid grid-cols-12 h-2 border-b-2 border-[#FFFFFF]" aria-hidden="true">
+            <div class="col-span-5 bg-[#FF0000] border-r-2 border-[#111111]"></div>
+            <div class="col-span-4 bg-[#0000FF] border-r-2 border-[#111111]"></div>
+            <div class="col-span-3 bg-[#FFFF00]"></div>
+        </div>
+
+        <div class="p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            <div class="space-y-2">
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <span class="px-2.5 py-0.5 bg-[#FFFF00] text-[#111111] font-mono font-bold text-xs border border-[#FFFFFF]">
+                        SESI #{{ $selectedSchedule->id }}
+                    </span>
+                    <h2 class="font-bold text-white text-lg sm:text-xl">{{ $selectedSchedule->title }}</h2>
+                    {!! $selectedSchedule->status_badge !!}
+                </div>
+                <div class="flex flex-wrap items-center gap-y-1 gap-x-3 text-xs text-[#D4D4D4] font-mono">
+                    <span><i class="fa-solid fa-calendar-day text-[#FFFF00] mr-1" aria-hidden="true"></i> {{ date('l, d F Y', strtotime($selectedSchedule->schedule_date)) }}</span>
+                    <span class="text-[#525252]">&bull;</span>
+                    <span><i class="fa-solid fa-clock text-[#FFFF00] mr-1" aria-hidden="true"></i> {{ $selectedSchedule->formatted_time }} WIB</span>
+                    <span class="text-[#525252]">&bull;</span>
+                    <span><i class="fa-solid fa-location-dot text-[#FFFF00] mr-1" aria-hidden="true"></i> {{ $selectedSchedule->location }}</span>
+                    <span class="text-[#525252]">&bull;</span>
+                    <span><i class="fa-solid fa-user-shield text-[#FFFF00] mr-1" aria-hidden="true"></i> Pelatih: {{ $selectedSchedule->coach_in_charge ?? 'Tim Pelatih' }}</span>
+                    <span class="text-[#525252]">&bull;</span>
+                    <span class="text-[#FFFF00] font-bold"><i class="fa-solid fa-users text-[#FFFF00] mr-1" aria-hidden="true"></i> Target KU: {{ $selectedSchedule->target_ku }}</span>
+                </div>
             </div>
 
-            <div class="md:col-span-4">
-                <label for="schedule_id" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Pilih Sesi Jadwal Terdaftar</label>
-                <select id="schedule_id" name="schedule_id" class="ds-input text-sm py-2.5 font-semibold">
-                    <option value="">-- Presensi Bebas Tanpa Sesi --</option>
-                    @foreach($todaySchedules as $ts)
-                        <option value="{{ $ts->id }}" {{ ($selectedSchedule && $selectedSchedule->id == $ts->id) ? 'selected' : '' }}>
-                            {{ $ts->title }} ({{ $ts->formatted_time }}) - {{ $ts->target_ku }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="md:col-span-3">
-                <label for="year" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Filter Tahun Lahir Siswa</label>
-                <select id="year" name="year" class="ds-input text-sm py-2.5 font-medium">
-                    <option value="">-- Semua Tahun Lahir --</option>
+            <!-- Filter Tahun Lahir / KU inside this session -->
+            <form action="{{ route('admin.attendances.index') }}" method="GET" class="flex flex-wrap items-center gap-2 bg-[#181818] p-3 border border-[#333333]">
+                <input type="hidden" name="schedule_id" value="{{ $selectedSchedule->id }}">
+                <input type="hidden" name="date" value="{{ $date }}">
+                <label for="year" class="text-xs font-mono uppercase font-bold text-[#D4D4D4]">Filter Usia:</label>
+                <select id="year" name="year" onchange="this.form.submit()" class="ds-input text-xs py-1.5 px-3 bg-white text-[#111111]">
+                    <option value="">-- Semua Siswa Sesi --</option>
                     @foreach($availableYears as $yr)
                         <option value="{{ $yr }}" {{ request('year') == $yr ? 'selected' : '' }}>
                             Kelahiran {{ $yr }} (Usia {{ date('Y') - $yr }} Thn)
                         </option>
                     @endforeach
                 </select>
-            </div>
-
-            <div class="md:col-span-2 flex gap-1.5">
-                <button type="submit" class="w-full btn-primary text-xs py-2.5 px-4">
-                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Tampilkan
-                </button>
-            </div>
-
-        </form>
-    </div>
-
-    <!-- Active Correlated Schedule Banner -->
-    @if($selectedSchedule)
-        <div class="bg-[#111111] text-white p-5 border-2 border-[#111111] dark-surface flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
-            <div class="space-y-1.5">
-                <div class="flex flex-wrap items-center gap-2">
-                    <span class="px-2.5 py-0.5 bg-[#FFFF00] text-[#111111] font-mono font-bold text-[11px] border border-[#FFFFFF]">
-                        SESI JADWAL #{{ $selectedSchedule->id }}
-                    </span>
-                    <h3 class="font-bold text-white text-sm sm:text-base">{{ $selectedSchedule->title }}</h3>
-                </div>
-                <p class="text-[#D4D4D4] font-mono text-xs">
-                    <i class="fa-solid fa-clock text-[#FFFF00] mr-1" aria-hidden="true"></i> {{ date('l, d M Y', strtotime($selectedSchedule->schedule_date)) }} ({{ $selectedSchedule->formatted_time }})
-                    <span class="mx-1.5 text-[#525252]">|</span>
-                    <i class="fa-solid fa-location-dot text-[#FFFF00] mr-1" aria-hidden="true"></i> {{ $selectedSchedule->location }}
-                    <span class="mx-1.5 text-[#525252]">|</span>
-                    <i class="fa-solid fa-user-shield text-[#FFFF00] mr-1" aria-hidden="true"></i> Pelatih: {{ $selectedSchedule->coach_in_charge ?? 'Tim Pelatih' }}
-                </p>
-            </div>
-
-            <div class="flex items-center gap-2 shrink-0">
-                {!! $selectedSchedule->status_badge !!}
-                <a href="{{ route('admin.schedules.index') }}" class="min-h-[40px] px-3 py-1.5 bg-[#181818] hover:bg-[#FFFF00] hover:text-[#111111] text-white border-2 border-[#FFFFFF] text-xs font-bold inline-flex items-center transition-colors">
-                    &larr; Lihat Semua Jadwal
-                </a>
-            </div>
+                @if(request('year'))
+                    <a href="{{ route('admin.attendances.index', ['schedule_id' => $selectedSchedule->id, 'date' => $date]) }}"
+                       class="text-xs text-[#FFFF00] hover:underline font-mono ml-1">Reset</a>
+                @endif
+            </form>
         </div>
-    @endif
+    </div>
 
     <!-- Attendance Form -->
     <form action="{{ route('admin.attendances.store') }}" method="POST">

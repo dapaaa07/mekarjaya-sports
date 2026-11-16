@@ -56,4 +56,47 @@ class AttendanceWorkflowTest extends TestCase
         $this->assertEquals(2, Attendance::count());
         $this->assertEquals('completed', $schedule->fresh()->status);
     }
+
+    public function test_accessing_attendances_without_schedule_redirects_to_schedules_index_with_info(): void
+    {
+        $admin = $this->createAdmin();
+
+        $response = $this->actingAs($admin)->get('/admin/attendances');
+        $response->assertRedirect(route('admin.schedules.index'));
+        $response->assertSessionHas('info');
+
+        $invalidResponse = $this->actingAs($admin)->get('/admin/attendances?schedule_id=999999');
+        $invalidResponse->assertRedirect(route('admin.schedules.index'));
+        $invalidResponse->assertSessionHas('error');
+    }
+
+    public function test_accessing_attendances_with_schedule_renders_session_checklist(): void
+    {
+        $admin = $this->createAdmin();
+        $player = $this->createPlayer(['full_name' => 'Bintang Pratama']);
+
+        $schedule = TrainingSchedule::create([
+            'title' => 'Latihan Taktikal & Simulasi',
+            'schedule_date' => '2026-11-20',
+            'start_time' => '15:30:00',
+            'end_time' => '17:30:00',
+            'location' => 'Stadion Mini Subang',
+            'target_ku' => 'Semua KU',
+            'coach_in_charge' => 'Coach Hendra',
+            'status' => 'scheduled',
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin.attendances.index', [
+            'schedule_id' => $schedule->id,
+            'date' => '2026-11-20',
+        ]));
+
+        $response->assertStatus(200);
+        $response->assertSee('Latihan Taktikal &amp; Simulasi', false);
+        $response->assertSee('Stadion Mini Subang');
+        $response->assertSee('Bintang Pratama');
+        $response->assertSee('Kembali ke Kelola Jadwal Latihan');
+        $response->assertDontSee('-- Presensi Bebas Tanpa Sesi --');
+    }
 }
+

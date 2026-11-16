@@ -59,13 +59,26 @@ class AuthenticationAndRoleTest extends TestCase
         $dashboard->assertSee('PORTAL PELATIH');
         $dashboard->assertSee('Data Pemain Per Tahun');
         $dashboard->assertDontSee('Inventaris Peralatan');
+        $dashboard->assertDontSee('Presensi Latihan');
+
+        $schedule = \App\Models\TrainingSchedule::create([
+            'title' => 'Latihan Taktikal',
+            'schedule_date' => '2026-11-16',
+            'start_time' => '15:30:00',
+            'end_time' => '17:30:00',
+            'location' => 'Lapangan Dangdeur',
+            'target_ku' => 'Semua KU',
+            'coach_in_charge' => 'Coach Hendra',
+            'status' => 'scheduled',
+        ]);
 
         $this->actingAs($coach)->get('/admin/players')->assertStatus(200);
         $this->actingAs($coach)->get("/admin/players/{$player->id}")->assertStatus(200);
         $this->actingAs($coach)->get('/admin/players/print-roster')->assertStatus(200);
         $this->actingAs($coach)->get("/admin/players/{$player->id}/print-rapor")->assertStatus(200);
         $this->actingAs($coach)->get('/admin/schedules')->assertStatus(200);
-        $this->actingAs($coach)->get('/admin/attendances')->assertStatus(200);
+        $this->actingAs($coach)->get('/admin/attendances')->assertRedirect('/admin/schedules');
+        $this->actingAs($coach)->get("/admin/attendances?schedule_id={$schedule->id}")->assertStatus(200);
         $this->actingAs($coach)->get('/admin/evaluations')->assertStatus(200);
         $this->actingAs($coach)->get("/admin/players/{$player->id}/evaluations/edit")->assertStatus(200);
         $this->actingAs($coach)->get('/admin/matches')->assertStatus(200);

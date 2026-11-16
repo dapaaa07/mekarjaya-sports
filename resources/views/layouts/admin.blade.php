@@ -105,11 +105,6 @@
                 <i class="fa-solid fa-calendar-days w-4 text-center" aria-hidden="true"></i> Kelola Jadwal Latihan
             </a>
 
-            <a href="{{ route('admin.attendances.index') }}"
-               class="flex items-center gap-3 min-h-[44px] px-3.5 py-2 border-2 transition-colors {{ request()->routeIs('admin.attendances.*') ? 'bg-[#FF0000] text-[#000000] border-[#FFFFFF] font-bold' : 'text-[#D4D4D4] border-transparent hover:bg-[#262626] hover:text-white font-medium' }}">
-                <i class="fa-solid fa-calendar-check w-4 text-center" aria-hidden="true"></i> Presensi Latihan
-            </a>
-
             <a href="{{ route('admin.evaluations.index') }}"
                class="flex items-center gap-3 min-h-[44px] px-3.5 py-2 border-2 transition-colors {{ request()->routeIs('admin.evaluations.*') ? 'bg-[#FF0000] text-[#000000] border-[#FFFFFF] font-bold' : 'text-[#D4D4D4] border-transparent hover:bg-[#262626] hover:text-white font-medium' }}">
                 <i class="fa-solid fa-sliders w-4 text-center" aria-hidden="true"></i> Evaluasi Pemain
@@ -292,8 +287,8 @@
                         <i class="fa-solid fa-user-plus text-xs" aria-hidden="true"></i> <span>Tambah Pemain</span>
                     </a>
                 @else
-                    <a href="{{ route('admin.attendances.index') }}" class="btn-blue text-xs py-2 px-4">
-                        <i class="fa-solid fa-calendar-check text-xs" aria-hidden="true"></i> <span>Presensi Hari Ini</span>
+                    <a href="{{ route('admin.schedules.index') }}" class="btn-blue text-xs py-2 px-4">
+                        <i class="fa-solid fa-calendar-days text-xs" aria-hidden="true"></i> <span>Jadwal Latihan</span>
                     </a>
                     <a href="{{ route('admin.evaluations.index') }}" class="btn-primary text-xs py-2 px-4">
                         <i class="fa-solid fa-sliders text-xs" aria-hidden="true"></i> <span>Evaluasi Siswa</span>
