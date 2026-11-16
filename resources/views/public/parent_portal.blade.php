@@ -212,6 +212,236 @@
                         @endif
                     </div>
 
+                    <!-- RIWAYAT PERTANDINGAN & STATISTIK PER LAGA -->
+                    @php $matchHistory = $player->match_history; @endphp
+                    <div id="parent-match-history" class="editorial-card p-6 sm:p-8 space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-[#111111] pb-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 bg-[#FF0000] text-white border-2 border-[#111111] flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-trophy text-sm" aria-hidden="true"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-[#111111] text-base sm:text-lg flex items-center gap-2 flex-wrap">
+                                        Riwayat Pertandingan &amp; Statistik Per Laga
+                                        <span class="bg-[#111111] text-[#FFFF00] text-[10px] font-mono font-bold px-2 py-0.5 border border-[#111111]">
+                                            {{ $matchHistory->count() }} Laga Dimainkan
+                                        </span>
+                                    </h3>
+                                    <p class="text-xs text-[#525252] mt-0.5">
+                                        Daftar seluruh pertandingan resmi dan uji coba yang dimainkan siswa beserta rincian nilai performa di tiap laga.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if($matchHistory->isNotEmpty())
+                            @php
+                                $evaluatedMatches = $matchHistory->where('has_evaluation', true);
+                                $avgAllMatches = $evaluatedMatches->isNotEmpty() ? round($evaluatedMatches->avg('average_score'), 1) : null;
+                                $startersCount = $matchHistory->where('role', 'starter')->count();
+                                $subsCount = $matchHistory->where('role', 'substitute')->count();
+                                $motmCount = $matchHistory->where('is_motm', true)->count();
+                            @endphp
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#F4F4F4] p-4 border-2 border-[#111111]">
+                                <div class="space-y-0.5">
+                                    <span class="text-[10px] uppercase font-mono font-bold text-[#525252] block">Total Laga</span>
+                                    <span class="text-xl sm:text-2xl font-mono font-bold text-[#111111]">
+                                        {{ $matchHistory->count() }} <span class="text-xs font-normal text-[#525252]">Laga</span>
+                                    </span>
+                                </div>
+                                <div class="space-y-0.5">
+                                    <span class="text-[10px] uppercase font-mono font-bold text-[#525252] block">Status Skuad</span>
+                                    <span class="text-xs sm:text-sm font-mono font-bold text-[#111111] block mt-1">
+                                        <span class="text-[#0000FF]">{{ $startersCount }}</span> Starter / <span class="text-[#525252]">{{ $subsCount }}</span> Cadangan
+                                    </span>
+                                </div>
+                                <div class="space-y-0.5">
+                                    <span class="text-[10px] uppercase font-mono font-bold text-[#525252] block">Rata-Rata Nilai</span>
+                                    <span class="text-xl sm:text-2xl font-mono font-bold text-[#CC0000]">
+                                        {{ $avgAllMatches ?? '-' }} <span class="text-xs font-normal text-[#525252]">/ 100</span>
+                                    </span>
+                                </div>
+                                <div class="space-y-0.5">
+                                    <span class="text-[10px] uppercase font-mono font-bold text-[#525252] block">Man of the Match</span>
+                                    <span class="text-xl sm:text-2xl font-mono font-bold text-[#111111]">
+                                        {{ $motmCount }} <span class="text-xs font-normal text-[#525252]">Kali</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-5">
+                                @foreach($matchHistory as $mItem)
+                                    <div class="border-2 border-[#111111] bg-white shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
+                                        <div class="p-4 sm:p-5 border-b-2 border-[#111111] bg-[#FAFAFA] flex flex-col md:flex-row md:items-center justify-between gap-3">
+                                            <div class="space-y-1.5">
+                                                <div class="flex flex-wrap items-center gap-2">
+                                                    <span class="font-mono text-xs font-bold text-[#525252]">
+                                                        <i class="fa-regular fa-calendar mr-1" aria-hidden="true"></i>
+                                                        {{ $mItem->match_date ? $mItem->match_date->format('d M Y') : '-' }}
+                                                    </span>
+                                                    @if($mItem->match?->match_type)
+                                                        <span class="px-2 py-0.5 bg-[#111111] text-white text-[10px] font-mono font-bold uppercase">
+                                                            {{ $mItem->match->match_type }}
+                                                        </span>
+                                                    @endif
+                                                    @if($mItem->match?->target_ku)
+                                                        <span class="px-2 py-0.5 bg-[#FFFFFF] border border-[#111111] text-[10px] font-mono font-bold">
+                                                            {{ $mItem->match->target_ku }}
+                                                        </span>
+                                                    @endif
+                                                    @if($mItem->role === 'starter')
+                                                        <span class="badge-blue text-[10px] font-mono uppercase">
+                                                            <i class="fa-solid fa-shirt mr-1" aria-hidden="true"></i> Starter
+                                                        </span>
+                                                    @else
+                                                        <span class="badge-secondary text-[10px] font-mono uppercase">
+                                                            <i class="fa-solid fa-arrows-rotate mr-1" aria-hidden="true"></i> Cadangan
+                                                        </span>
+                                                    @endif
+                                                    <span class="px-2 py-0.5 bg-white text-[#111111] border border-[#111111] text-[10px] font-mono font-bold">
+                                                        Posisi: {{ $mItem->position }}
+                                                    </span>
+                                                    @if($mItem->is_motm)
+                                                        <span class="bg-[#FFFF00] text-[#111111] border border-[#111111] px-2 py-0.5 text-[10px] font-mono font-bold uppercase">
+                                                            <i class="fa-solid fa-star text-[#CC0000] mr-1" aria-hidden="true"></i> MOTM
+                                                        </span>
+                                                    @endif
+                                                </div>
+
+                                                <h4 class="font-bold text-base sm:text-lg text-[#111111] tracking-tight">
+                                                    {{ $mItem->match?->match_title ?? 'Pertandingan Mekar Jaya' }}
+                                                </h4>
+
+                                                @if($mItem->match?->opponent_name)
+                                                    <p class="text-xs text-[#525252]">
+                                                        Lawan: <strong class="text-[#111111]">{{ $mItem->match->opponent_name }}</strong>
+                                                        @if($mItem->match?->formation)
+                                                            <span class="mx-1.5">•</span> Formasi Tim: <span class="font-mono font-bold text-[#111111]">{{ $mItem->match->formation }}</span>
+                                                        @endif
+                                                    </p>
+                                                @endif
+                                            </div>
+
+                                            <div class="flex items-center gap-3 self-start md:self-center shrink-0">
+                                                <div class="text-right">
+                                                    <span class="block text-[10px] uppercase font-mono font-bold text-[#525252]">Hasil Skor</span>
+                                                    <span class="inline-block px-3 py-1 bg-[#111111] text-[#FFFF00] font-mono font-bold text-base sm:text-lg border border-[#111111]">
+                                                        {{ $mItem->match?->score_result ?: 'VS' }}
+                                                    </span>
+                                                </div>
+                                                @if($mItem->has_evaluation)
+                                                    <div class="text-right pl-3 border-l-2 border-[#111111]">
+                                                        <span class="block text-[10px] uppercase font-mono font-bold text-[#525252]">Nilai Laga</span>
+                                                        <span class="inline-block px-2.5 py-1 bg-[#0000FF] text-white font-mono font-bold text-base sm:text-lg border border-[#111111]">
+                                                            {{ $mItem->average_score }}
+                                                        </span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="p-4 sm:p-5 space-y-4">
+                                            @if($mItem->has_evaluation)
+                                                <div>
+                                                    <span class="text-xs font-mono font-bold text-[#111111] uppercase tracking-wider block mb-3">
+                                                        <i class="fa-solid fa-chart-column text-[#0000FF] mr-1" aria-hidden="true"></i> Rincian 6 Parameter Nilai Pertandingan Ini
+                                                    </span>
+
+                                                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+                                                        <div class="bg-[#F4F4F4] border-2 border-[#111111] p-2.5 space-y-1">
+                                                            <div class="flex justify-between items-center text-xs">
+                                                                <span class="font-bold text-[#111111]">Passing</span>
+                                                                <span class="font-mono font-bold text-[#0000FF]">{{ $mItem->passing_score }}</span>
+                                                            </div>
+                                                            <div class="w-full bg-[#E5E5E5] h-1.5 border border-[#111111]">
+                                                                <div class="bg-[#0000FF] h-full" style="width: {{ min(100, max(0, (int) $mItem->passing_score)) }}%;"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="bg-[#F4F4F4] border-2 border-[#111111] p-2.5 space-y-1">
+                                                            <div class="flex justify-between items-center text-xs">
+                                                                <span class="font-bold text-[#111111]">Dribbling</span>
+                                                                <span class="font-mono font-bold text-[#CC0000]">{{ $mItem->dribbling_score }}</span>
+                                                            </div>
+                                                            <div class="w-full bg-[#E5E5E5] h-1.5 border border-[#111111]">
+                                                                <div class="bg-[#CC0000] h-full" style="width: {{ min(100, max(0, (int) $mItem->dribbling_score)) }}%;"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="bg-[#F4F4F4] border-2 border-[#111111] p-2.5 space-y-1">
+                                                            <div class="flex justify-between items-center text-xs">
+                                                                <span class="font-bold text-[#111111]">Shooting</span>
+                                                                <span class="font-mono font-bold text-[#111111]">{{ $mItem->shooting_score }}</span>
+                                                            </div>
+                                                            <div class="w-full bg-[#E5E5E5] h-1.5 border border-[#111111]">
+                                                                <div class="bg-[#111111] h-full" style="width: {{ min(100, max(0, (int) $mItem->shooting_score)) }}%;"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="bg-[#F4F4F4] border-2 border-[#111111] p-2.5 space-y-1">
+                                                            <div class="flex justify-between items-center text-xs">
+                                                                <span class="font-bold text-[#111111]">Fisik</span>
+                                                                <span class="font-mono font-bold text-[#166534]">{{ $mItem->physical_score }}</span>
+                                                            </div>
+                                                            <div class="w-full bg-[#E5E5E5] h-1.5 border border-[#111111]">
+                                                                <div class="bg-[#166534] h-full" style="width: {{ min(100, max(0, (int) $mItem->physical_score)) }}%;"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="bg-[#F4F4F4] border-2 border-[#111111] p-2.5 space-y-1">
+                                                            <div class="flex justify-between items-center text-xs">
+                                                                <span class="font-bold text-[#111111]">Disiplin</span>
+                                                                <span class="font-mono font-bold text-[#B45309]">{{ $mItem->discipline_score }}</span>
+                                                            </div>
+                                                            <div class="w-full bg-[#E5E5E5] h-1.5 border border-[#111111]">
+                                                                <div class="bg-[#B45309] h-full" style="width: {{ min(100, max(0, (int) $mItem->discipline_score)) }}%;"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="bg-[#F4F4F4] border-2 border-[#111111] p-2.5 space-y-1">
+                                                            <div class="flex justify-between items-center text-xs">
+                                                                <span class="font-bold text-[#111111]">Taktik</span>
+                                                                <span class="font-mono font-bold text-[#4B5563]">{{ $mItem->tactical_score }}</span>
+                                                            </div>
+                                                            <div class="w-full bg-[#E5E5E5] h-1.5 border border-[#111111]">
+                                                                <div class="bg-[#4B5563] h-full" style="width: {{ min(100, max(0, (int) $mItem->tactical_score)) }}%;"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @if($mItem->coach_notes)
+                                                    <div class="bg-[#F9FAFB] border-l-4 border-l-[#0000FF] border border-[#E5E5E5] p-3.5 text-xs text-[#111111] space-y-1">
+                                                        <span class="font-mono font-bold uppercase text-[10px] text-[#525252] block">
+                                                            <i class="fa-solid fa-comment-dots text-[#0000FF] mr-1" aria-hidden="true"></i> Catatan Evaluasi Pelatih Laga Ini
+                                                        </span>
+                                                        <p class="text-[#111111] leading-relaxed">"{{ $mItem->coach_notes }}"</p>
+                                                    </div>
+                                                @endif
+                                            @else
+                                                <div class="p-3.5 bg-[#F4F4F4] border border-[#D4D4D4] text-xs text-[#525252] flex items-center gap-2">
+                                                    <i class="fa-solid fa-clock text-[#B45309]" aria-hidden="true"></i>
+                                                    <span>Siswa tercatat dalam skuad pertandingan ini. Penilaian statistik individu sedang dalam proses oleh tim pelatih.</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="p-8 text-center border-2 border-dashed border-[#111111] bg-[#F4F4F4] space-y-2">
+                                <div class="w-12 h-12 bg-white border-2 border-[#111111] flex items-center justify-center mx-auto text-[#525252]">
+                                    <i class="fa-solid fa-futbol text-lg" aria-hidden="true"></i>
+                                </div>
+                                <h4 class="font-bold text-[#111111] text-sm">Belum Ada Riwayat Pertandingan</h4>
+                                <p class="text-xs text-[#525252] max-w-md mx-auto">
+                                    Siswa ini belum tercatat bermain dalam pertandingan resmi atau uji tanding. Nilai statistik per laga akan otomatis muncul setelah pelatih mencatat penilaian pertandingan.
+                                </p>
+                            </div>
+                        @endif
+                    </div>
+
                 </div>
 
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

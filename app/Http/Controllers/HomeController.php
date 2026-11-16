@@ -145,10 +145,12 @@ class HomeController extends Controller
 
         if ($request->filled('nis')) {
             $keyword = trim($request->nis);
-            $player = Player::with(['sppPayments', 'latestEvaluation'])
-                ->where('nis', $keyword)
-                ->orWhere('parent_phone', 'like', "%{$keyword}%")
-                ->orWhere('full_name', 'like', "%{$keyword}%")
+            $player = Player::with(['sppPayments', 'latestEvaluation', 'evaluations.match'])
+                ->where(function ($q) use ($keyword) {
+                    $q->where('nis', $keyword)
+                      ->orWhere('parent_phone', 'like', "%{$keyword}%")
+                      ->orWhere('full_name', 'like', "%{$keyword}%");
+                })
                 ->first();
         }
 

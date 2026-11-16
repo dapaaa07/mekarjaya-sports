@@ -163,10 +163,17 @@ class MatchPlayerEvaluationTest extends TestCase
         $this->assertEquals(90, $accumulated->discipline_score);
         $this->assertEquals(78, $accumulated->tactical_score);
 
-        // Portal Ortu renders accumulated radar data
+        // Portal Ortu renders accumulated radar data and match history with per-match statistics
         $portal = $this->get('/portal-ortu?nis=' . urlencode($player->nis));
         $portal->assertStatus(200);
         $portal->assertSee('Akumulasi 2 Laga');
+        $portal->assertSee('Riwayat Pertandingan &amp; Statistik Per Laga', false);
+        $portal->assertSee('2 Laga Dimainkan');
+        $portal->assertSee('Laga 1 vs Putra Panembong');
+        $portal->assertSee('Laga 2 vs Persikas Subang');
+        $portal->assertSee('Catatan laga 1.');
+        $portal->assertSee('Catatan laga 2.');
+        $portal->assertSee('Rincian 6 Parameter Nilai Pertandingan Ini');
 
         // Evaluation detail view displays accumulated values and per-match rows
         $evalDetail = $this->actingAs($coach)->get("/admin/players/{$player->id}/evaluations/edit");
@@ -174,5 +181,15 @@ class MatchPlayerEvaluationTest extends TestCase
         $evalDetail->assertSee('2 Laga Dinilai');
         $evalDetail->assertSee('Laga 1 vs Putra Panembong');
         $evalDetail->assertSee('Laga 2 vs Persikas Subang');
+    }
+
+    public function test_portal_ortu_displays_empty_state_when_player_has_no_matches(): void
+    {
+        $player = $this->createPlayer(['nis' => 'SSB-MJ-NOMATCH']);
+
+        $response = $this->get('/portal-ortu?nis=' . urlencode($player->nis));
+        $response->assertStatus(200);
+        $response->assertSee('Belum Ada Riwayat Pertandingan');
+        $response->assertSee('0 Laga Dimainkan');
     }
 }

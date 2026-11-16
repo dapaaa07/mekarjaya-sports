@@ -85,6 +85,101 @@ class Player extends Model
         return $this->accumulated_stats;
     }
 
+    public function getMatchHistoryAttribute(): \Illuminate\Support\Collection
+    {
+        $matchEvaluations = $this->evaluations()
+            ->whereNotNull('match_id')
+            ->with('match')
+            ->orderBy('evaluation_date', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $evaluatedMatchIds = $matchEvaluations->pluck('match_id')->filter()->all();
+
+        $allMatchesWithLineup = MatchModel::orderBy('match_date', 'desc')
+            ->orderBy('id', 'desc')
+            ->get()
+            ->filter(function (MatchModel $match) {
+                $lineup = is_array($match->lineup_json) ? $match->lineup_json : [];
+                return collect($lineup)->contains(fn ($slot) => is_array($slot) && (int) ($slot['player_id'] ?? 0) === (int) $this->id);
+            });
+
+        $matchesById = $allMatchesWithLineup->keyBy('id');
+        $result = collect();
+
+        foreach ($matchEvaluations as $ev) {
+            $match = $ev->match ?? $matchesById->get($ev->match_id);
+            $lineupSlot = null;
+            if ($match && is_array($match->lineup_json)) {
+                $lineupSlot = collect($match->lineup_json)->first(
+                    fn ($s) => is_array($s) && (int) ($s['player_id'] ?? 0) === (int) $this->id
+                );
+            }
+
+            $isMotm = false;
+            if ($match && !empty($match->man_of_the_match)) {
+                $isMotm = (trim(strtolower($match->man_of_the_match)) === trim(strtolower($this->full_name)))
+                    || (str_contains(strtolower($match->man_of_the_match), strtolower($this->full_name)));
+            }
+
+            $result->push((object) [
+                'match' => $match,
+                'evaluation' => $ev,
+                'match_date' => $ev->evaluation_date ?? $match?->match_date,
+                'has_evaluation' => true,
+                'lineup' => $lineupSlot,
+                'role' => $lineupSlot['role'] ?? 'starter',
+                'position' => $lineupSlot['position'] ?? $this->position,
+                'is_motm' => $isMotm,
+                'passing_score' => $ev->passing_score,
+                'dribbling_score' => $ev->dribbling_score,
+                'shooting_score' => $ev->shooting_score,
+                'physical_score' => $ev->physical_score,
+                'discipline_score' => $ev->discipline_score,
+                'tactical_score' => $ev->tactical_score,
+                'average_score' => $ev->average_score,
+                'coach_notes' => $ev->coach_notes,
+            ]);
+        }
+
+        foreach ($allMatchesWithLineup as $match) {
+            if (in_array($match->id, $evaluatedMatchIds, true)) {
+                continue;
+            }
+
+            $lineupSlot = collect($match->lineup_json)->first(
+                fn ($s) => is_array($s) && (int) ($s['player_id'] ?? 0) === (int) $this->id
+            );
+
+            $isMotm = false;
+            if (!empty($match->man_of_the_match)) {
+                $isMotm = (trim(strtolower($match->man_of_the_match)) === trim(strtolower($this->full_name)))
+                    || (str_contains(strtolower($match->man_of_the_match), strtolower($this->full_name)));
+            }
+
+            $result->push((object) [
+                'match' => $match,
+                'evaluation' => null,
+                'match_date' => $match->match_date,
+                'has_evaluation' => false,
+                'lineup' => $lineupSlot,
+                'role' => $lineupSlot['role'] ?? 'starter',
+                'position' => $lineupSlot['position'] ?? $this->position,
+                'is_motm' => $isMotm,
+                'passing_score' => null,
+                'dribbling_score' => null,
+                'shooting_score' => null,
+                'physical_score' => null,
+                'discipline_score' => null,
+                'tactical_score' => null,
+                'average_score' => null,
+                'coach_notes' => null,
+            ]);
+        }
+
+        return $result->sortByDesc(fn ($item) => $item->match_date ? $item->match_date->timestamp : 0)->values();
+    }
+
     public function sppPayments()
     {
         return $this->hasMany(SppPayment::class)
