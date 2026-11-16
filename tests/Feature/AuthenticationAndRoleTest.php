@@ -54,21 +54,27 @@ class AuthenticationAndRoleTest extends TestCase
         $response->assertRedirect('/admin');
         $this->assertAuthenticatedAs($coach);
 
-        // Allowed routes for coach
         $dashboard = $this->actingAs($coach)->get('/admin');
         $dashboard->assertStatus(200);
         $dashboard->assertSee('PORTAL PELATIH');
-        $dashboard->assertDontSee('Data Pemain Per Tahun');
+        $dashboard->assertSee('Data Pemain Per Tahun');
         $dashboard->assertDontSee('Inventaris Peralatan');
 
+        $this->actingAs($coach)->get('/admin/players')->assertStatus(200);
+        $this->actingAs($coach)->get("/admin/players/{$player->id}")->assertStatus(200);
+        $this->actingAs($coach)->get('/admin/players/print-roster')->assertStatus(200);
+        $this->actingAs($coach)->get("/admin/players/{$player->id}/print-rapor")->assertStatus(200);
         $this->actingAs($coach)->get('/admin/schedules')->assertStatus(200);
         $this->actingAs($coach)->get('/admin/attendances')->assertStatus(200);
         $this->actingAs($coach)->get('/admin/evaluations')->assertStatus(200);
         $this->actingAs($coach)->get("/admin/players/{$player->id}/evaluations/edit")->assertStatus(200);
         $this->actingAs($coach)->get('/admin/matches')->assertStatus(200);
 
-        // Forbidden admin-only routes
-        $this->actingAs($coach)->get('/admin/players')->assertStatus(403);
+        $this->actingAs($coach)->get('/admin/players/create')->assertStatus(403);
+        $this->actingAs($coach)->post('/admin/players', [])->assertStatus(403);
+        $this->actingAs($coach)->get("/admin/players/{$player->id}/edit")->assertStatus(403);
+        $this->actingAs($coach)->put("/admin/players/{$player->id}", [])->assertStatus(403);
+        $this->actingAs($coach)->delete("/admin/players/{$player->id}")->assertStatus(403);
         $this->actingAs($coach)->get('/admin/registrations')->assertStatus(403);
         $this->actingAs($coach)->get('/admin/inventories')->assertStatus(403);
         $this->actingAs($coach)->post("/admin/players/{$player->id}/spp-payments", [])->assertStatus(403);

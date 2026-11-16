@@ -78,16 +78,16 @@
                 <i class="fa-solid fa-chart-pie w-4 text-center" aria-hidden="true"></i> Dashboard Utama
             </a>
 
-            @if(Auth::user()?->isAdmin())
-                <!-- Core Solution Feature -->
-                <a href="{{ route('admin.players.index') }}"
-                   class="flex items-center justify-between min-h-[44px] px-3.5 py-2 border-2 transition-colors {{ request()->routeIs('admin.players.*') ? 'bg-[#FF0000] text-[#000000] border-[#FFFFFF] font-bold' : 'text-[#D4D4D4] border-transparent hover:bg-[#262626] hover:text-white font-medium' }}">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-users w-4 text-center" aria-hidden="true"></i> Data Pemain Per Tahun
-                    </div>
-                    <span class="bg-[#FFFF00] text-[#111111] text-[10px] font-mono px-1.5 py-0.5 uppercase font-bold border border-[#111111]">Utama</span>
-                </a>
+            <!-- Core Solution Feature: Data Pemain -->
+            <a href="{{ route('admin.players.index') }}"
+               class="flex items-center justify-between min-h-[44px] px-3.5 py-2 border-2 transition-colors {{ request()->routeIs('admin.players.*') ? 'bg-[#FF0000] text-[#000000] border-[#FFFFFF] font-bold' : 'text-[#D4D4D4] border-transparent hover:bg-[#262626] hover:text-white font-medium' }}">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-users w-4 text-center" aria-hidden="true"></i> Data Pemain Per Tahun
+                </div>
+                <span class="bg-[#FFFF00] text-[#111111] text-[10px] font-mono px-1.5 py-0.5 uppercase font-bold border border-[#111111]">Utama</span>
+            </a>
 
+            @if(Auth::user()?->isAdmin())
                 <a href="{{ route('admin.registrations.index') }}"
                    class="flex items-center justify-between min-h-[44px] px-3.5 py-2 border-2 transition-colors {{ request()->routeIs('admin.registrations.*') ? 'bg-[#FF0000] text-[#000000] border-[#FFFFFF] font-bold' : 'text-[#D4D4D4] border-transparent hover:bg-[#262626] hover:text-white font-medium' }}">
                     <div class="flex items-center gap-3">

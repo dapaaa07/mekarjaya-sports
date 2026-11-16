@@ -72,9 +72,11 @@
                 <a href="{{ route('admin.evaluations.edit', $player->id) }}" class="btn-primary text-xs py-2 px-4 border-[#FFFFFF]">
                     <i class="fa-solid fa-sliders text-xs" aria-hidden="true"></i> Score Rapor
                 </a>
+                @if(Auth::user()?->isAdmin())
                 <a href="{{ route('admin.players.edit', $player->id) }}" class="btn-blue text-xs py-2 px-4 border-[#FFFFFF]">
                     <i class="fa-solid fa-pen-to-square text-xs" aria-hidden="true"></i> Edit
                 </a>
+                @endif
             </div>
 
         </div>
@@ -295,6 +297,7 @@
     <!-- SPP Payment Recording & Ledger Section -->
     <div id="spp-section" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
+        @if(Auth::user()?->isAdmin())
         <!-- Left Form: Record SPP Payment (5 Cols) -->
         <div class="lg:col-span-5 no-print editorial-card p-6 border-t-[6px] border-t-[#FF0000] space-y-5">
             <div class="flex items-start justify-between gap-3 border-b-2 border-[#111111] pb-3.5">
@@ -371,9 +374,10 @@
                 </button>
             </form>
         </div>
+        @endif
 
-        <!-- Right Table: SPP Payment History Ledger (7 Cols) -->
-        <div class="lg:col-span-7 editorial-card p-6 border-t-[6px] border-t-[#0000FF] space-y-5">
+        <!-- Right Table: SPP Payment History Ledger (7 or 12 Cols) -->
+        <div class="{{ Auth::user()?->isAdmin() ? 'lg:col-span-7' : 'lg:col-span-12' }} editorial-card p-6 border-t-[6px] border-t-[#0000FF] space-y-5">
             <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-[#111111] pb-3.5">
                 <div>
                     <h3 class="font-bold text-[#111111] text-base flex items-center gap-2">
@@ -396,7 +400,9 @@
                                 <th class="p-3.5">Nominal</th>
                                 <th class="p-3.5">Metode</th>
                                 <th class="p-3.5">Catatan</th>
+                                @if(Auth::user()?->isAdmin())
                                 <th class="no-print p-3.5 text-right">Hapus</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-[#111111] bg-white">
@@ -424,6 +430,7 @@
                                     <td class="p-3.5 text-[#525252]">
                                         {{ $payment->keterangan ?? '-' }}
                                     </td>
+                                    @if(Auth::user()?->isAdmin())
                                     <td class="no-print p-3.5 text-right">
                                         <form action="{{ route('admin.players.spp-payments.destroy', [$player->id, $payment->id]) }}" method="POST"
                                               onsubmit="return confirm('Hapus catatan pembayaran SPP periode {{ $payment->period_label }}?')">
@@ -435,6 +442,7 @@
                                             </button>
                                         </form>
                                     </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
@@ -444,7 +452,7 @@
                 <div class="p-8 text-center border-2 border-dashed border-[#111111] bg-[#F4F4F4] space-y-2">
                     <i class="fa-solid fa-file-invoice text-2xl text-[#525252]" aria-hidden="true"></i>
                     <p class="text-xs font-bold text-[#111111]">Belum Ada Riwayat Pembayaran SPP</p>
-                    <p class="text-xs text-[#525252]">Gunakan formulir di sebelah kiri untuk mencatat pembayaran SPP siswa ini.</p>
+                    <p class="text-xs text-[#525252]">{{ Auth::user()?->isAdmin() ? 'Gunakan formulir di sebelah kiri untuk mencatat pembayaran SPP siswa ini.' : 'Belum ada data pembayaran yang tercatat oleh administrasi.' }}</p>
                 </div>
             @endif
         </div>

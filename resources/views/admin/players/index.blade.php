@@ -21,10 +21,12 @@
                class="btn-secondary text-xs py-2.5 px-4">
                 <i class="fa-solid fa-print" aria-hidden="true"></i> Cetak Roster Filter Ini
             </a>
+            @if(Auth::user()?->isAdmin())
             <a href="{{ route('admin.players.create') }}"
                class="btn-primary text-xs py-2.5 px-4">
                 <i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Tambah Pemain Baru
             </a>
+            @endif
         </div>
     </div>
 
@@ -193,10 +195,18 @@
                                         <span class="badge-danger text-xs font-mono">
                                             <i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i> Belum Bayar
                                         </span>
-                                        <a href="{{ route('admin.players.show', $player->id) }}#spp-section"
-                                           class="min-h-[40px] px-2.5 py-1 bg-[#FFFF00] hover:bg-[#E6E600] text-[#111111] border-2 border-[#111111] text-[11px] font-bold inline-flex items-center gap-1 transition-colors">
-                                            <i class="fa-solid fa-receipt text-[10px]" aria-hidden="true"></i> Bayar SPP
-                                        </a>
+                                        @if(Auth::user()?->isAdmin())
+                                            <a href="{{ route('admin.players.show', $player->id) }}#spp-section"
+                                               class="min-h-[40px] px-2.5 py-1 bg-[#FFFF00] hover:bg-[#E6E600] text-[#111111] border-2 border-[#111111] text-[11px] font-bold inline-flex items-center gap-1 transition-colors">
+                                                <i class="fa-solid fa-receipt text-[10px]" aria-hidden="true"></i> Bayar SPP
+                                            </a>
+                                        @else
+                                            <a href="{{ route('admin.players.show', $player->id) }}#spp-section"
+                                               title="Lihat Riwayat SPP {{ $player->full_name }}"
+                                               class="min-h-[40px] px-2.5 py-1 bg-white hover:bg-[#FFFF00] text-[#111111] border border-[#111111] text-[11px] font-mono font-bold inline-flex items-center transition-colors">
+                                                Riwayat
+                                            </a>
+                                        @endif
                                     @endif
                                 </div>
                             </td>
@@ -210,6 +220,7 @@
                                        class="w-10 h-10 bg-white text-[#111111] hover:bg-[#0000FF] hover:text-white border-2 border-[#111111] flex items-center justify-center transition-colors">
                                         <i class="fa-solid fa-eye text-xs" aria-hidden="true"></i>
                                     </a>
+                                    @if(Auth::user()?->isAdmin())
                                     <a href="{{ route('admin.players.edit', $player->id) }}"
                                        title="Edit Data"
                                        aria-label="Edit data {{ $player->full_name }}"
@@ -226,6 +237,7 @@
                                             <i class="fa-solid fa-trash text-xs" aria-hidden="true"></i>
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                             </td>
 

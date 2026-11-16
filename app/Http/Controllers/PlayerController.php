@@ -75,11 +75,18 @@ class PlayerController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->isAdmin()) {
+            abort(403, 'Akses terbatas untuk Administrator.');
+        }
+
         return view('admin.players.create');
     }
 
     public function store(Request $request)
     {
+        if (!auth()->user()->isAdmin()) {
+            abort(403, 'Akses terbatas untuk Administrator.');
+        }
         $validated = $request->validate([
             'full_name' => 'required|string|max:255',
             'nickname' => 'nullable|string|max:100',
@@ -158,12 +165,20 @@ class PlayerController extends Controller
 
     public function edit(Player $player)
     {
+        if (!auth()->user()->isAdmin()) {
+            abort(403, 'Akses terbatas untuk Administrator.');
+        }
+
         $player->load('sppPayments');
         return view('admin.players.edit', compact('player'));
     }
 
     public function update(Request $request, Player $player)
     {
+        if (!auth()->user()->isAdmin()) {
+            abort(403, 'Akses terbatas untuk Administrator.');
+        }
+
         $validated = $request->validate([
             'full_name' => 'required|string|max:255',
             'nickname' => 'nullable|string|max:100',
@@ -192,6 +207,10 @@ class PlayerController extends Controller
 
     public function destroy(Player $player)
     {
+        if (!auth()->user()->isAdmin()) {
+            abort(403, 'Akses terbatas untuk Administrator.');
+        }
+
         $name = $player->full_name;
         $player->delete();
         return redirect()->route('admin.players.index')->with('success', "Data pemain {$name} telah dihapus.");

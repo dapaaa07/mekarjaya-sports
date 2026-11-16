@@ -44,6 +44,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
         Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 
+        // Master Data Pemain, Filter KU & Cetak Rapor (Admin & Coach)
+        Route::get('/players/print-roster', [PlayerController::class, 'exportPrintable'])->name('players.print');
+        Route::get('/players/{player}/print-rapor', [PlayerController::class, 'printRapor'])->name('players.print-rapor');
+        Route::resource('players', PlayerController::class);
+
         // Manage Training Schedules (Kelola Jadwal Latihan)
         Route::resource('schedules', ScheduleController::class);
 
@@ -63,12 +68,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     });
 
     Route::middleware('role:admin')->group(function () {
-        // Player Management & Birth Year Export & SPP Payment Ledger & Print Rapor
-        Route::get('/players/print-roster', [PlayerController::class, 'exportPrintable'])->name('players.print');
-        Route::get('/players/{player}/print-rapor', [PlayerController::class, 'printRapor'])->name('players.print-rapor');
+        // SPP Payment Ledger
         Route::post('/players/{player}/spp-payments', [PlayerController::class, 'storeSppPayment'])->name('players.spp-payments.store');
         Route::delete('/players/{player}/spp-payments/{sppPayment}', [PlayerController::class, 'destroySppPayment'])->name('players.spp-payments.destroy');
-        Route::resource('players', PlayerController::class);
 
         // Online Registrations
         Route::get('/registrations', [RegistrationController::class, 'index'])->name('registrations.index');
