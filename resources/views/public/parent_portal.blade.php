@@ -20,8 +20,8 @@
             </p>
         </div>
 
-        <!-- Search Box Form + Contoh Pencarian Cepat -->
-        <div class="no-print editorial-card p-5 sm:p-6 space-y-4">
+        <!-- Search Box Form -->
+        <div class="no-print editorial-card p-5 sm:p-6">
             <form id="parent-search-form" action="{{ route('parent.portal') }}" method="GET" class="space-y-3">
                 <label for="parent-nis-input" class="block text-xs font-bold uppercase tracking-wider text-[#111111]">
                     NIS / Nama Lengkap Siswa / No. WhatsApp Orang Tua
@@ -41,28 +41,6 @@
                     </button>
                 </div>
             </form>
-
-            <!-- Quick Example Chips (UX Enhancement) -->
-            @php
-                $samplePlayers = \App\Models\Player::where('status', 'aktif')
-                    ->orderByRaw("CASE WHEN nis = 'SSB-MJ-1701' THEN 0 ELSE 1 END")
-                    ->orderBy('birth_date', 'desc')
-                    ->take(3)
-                    ->get(['nis', 'full_name', 'birth_date']);
-            @endphp
-            @if($samplePlayers->count() > 0)
-                <div class="pt-3 border-t border-[#D4D4D4] flex flex-wrap items-center gap-2">
-                    <span class="text-xs font-mono font-bold text-[#525252] uppercase">Contoh Pencarian Cepat:</span>
-                    @foreach($samplePlayers as $sample)
-                        <a href="{{ route('parent.portal', ['nis' => $sample->nis]) }}"
-                           class="min-h-[44px] px-3 py-2 bg-[#F4F4F4] hover:bg-[#FFFF00] text-[#111111] border-2 border-[#111111] text-xs font-mono font-bold inline-flex items-center gap-1.5 transition-colors">
-                            <i class="fa-solid fa-bolt text-[#CC0000]" aria-hidden="true"></i>
-                            <span>{{ $sample->nis }}</span>
-                            <span class="font-sans font-normal text-[#525252] hidden sm:inline">({{ $sample->full_name }})</span>
-                        </a>
-                    @endforeach
-                </div>
-            @endif
         </div>
 
         <!-- Result Area -->
