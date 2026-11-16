@@ -61,15 +61,24 @@
 }
 
 /* Native <dialog> modal handling per Modern Web Guidance */
-dialog#privacy-modal:modal {
+dialog:modal,
+dialog#privacy-modal:modal,
+dialog#jersey-size-modal:modal,
+dialog#reject-registration-modal:modal {
     overscroll-behavior: contain;
 }
-dialog#privacy-modal::backdrop {
+dialog::backdrop,
+dialog#privacy-modal::backdrop,
+dialog#jersey-size-modal::backdrop,
+dialog#reject-registration-modal::backdrop {
     background-color: rgba(17, 17, 17, 0.72);
     overflow: hidden;
     overscroll-behavior: contain;
 }
-dialog#privacy-modal[open] {
+dialog[open],
+dialog#privacy-modal[open],
+dialog#jersey-size-modal[open],
+dialog#reject-registration-modal[open] {
     display: flex;
 }
 

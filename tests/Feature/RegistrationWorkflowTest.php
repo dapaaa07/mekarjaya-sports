@@ -143,4 +143,80 @@ class RegistrationWorkflowTest extends TestCase
         $indexResponse->assertSee('Foto dokumen KK buram dan tidak terbaca jelas.');
         $indexResponse->assertSee('WA Alasan');
     }
+
+    public function test_landing_and_admin_players_render_jersey_size_guide_modal_and_trigger(): void
+    {
+        $admin = $this->createAdmin();
+        $player = $this->createPlayer();
+
+        $landingRes = $this->get('/');
+        $landingRes->assertStatus(200);
+        $landingRes->assertSee('openJerseyModal()');
+        $landingRes->assertSee('id="jersey-size-modal"', false);
+        $landingRes->assertSee('Panduan Pemilihan Ukuran Jersey Siswa');
+        $landingRes->assertDontSee('</div>' . "\n\n" . '    function closeJerseyModal()', false);
+
+        $createRes = $this->actingAs($admin)->get('/admin/players/create');
+        $createRes->assertStatus(200);
+        $createRes->assertSee('openJerseyModal()');
+        $createRes->assertSee('id="jersey-size-modal"', false);
+
+        $editRes = $this->actingAs($admin)->get("/admin/players/{$player->id}/edit");
+        $editRes->assertStatus(200);
+        $editRes->assertSee('openJerseyModal()');
+        $editRes->assertSee('id="jersey-size-modal"', false);
+    }
+
+    public function test_admin_can_view_registration_detail_with_comprehensive_medical_notes(): void
+    {
+        Storage::fake('public');
+        $admin = $this->createAdmin();
+
+        $registration = Registration::create([
+            'registration_code' => 'REG-MJ-2026777',
+            'full_name' => 'Aditya Pratama Subang',
+            'birth_place' => 'Subang',
+            'birth_date' => '2014-04-18',
+            'birth_year' => 2014,
+            'position_preference' => 'Gelandang',
+            'jersey_size' => 'S',
+            'height_cm' => 142,
+            'weight_kg' => 36,
+            'parent_name' => 'Hendra Pratama',
+            'parent_phone' => '081299887766',
+            'school_name' => 'SD Negeri Subang Jaya',
+            'address' => 'Jl. Dangdeur No. 12, Subang',
+            'health_notes' => 'Memiliki riwayat asma ringan saat cuaca dingin dan alergi seafood.',
+            'status' => 'pending',
+        ]);
+
+        $indexRes = $this->actingAs($admin)->get('/admin/registrations');
+        $indexRes->assertStatus(200);
+        $indexRes->assertSee('Aditya Pratama Subang');
+        $indexRes->assertSee(route('admin.registrations.show', $registration->id));
+        $indexRes->assertSee('Medis');
+        $indexRes->assertSee('Detail');
+
+        $showRes = $this->actingAs($admin)->get("/admin/registrations/{$registration->id}");
+        $showRes->assertStatus(200);
+        $showRes->assertSee('Aditya Pratama Subang');
+        $showRes->assertSee('REG-MJ-2026777');
+        $showRes->assertSee('Catatan Riwayat Kesehatan &amp; Penyakit', false);
+        $showRes->assertSee('Memiliki riwayat asma ringan saat cuaca dingin dan alergi seafood.');
+        $showRes->assertSee('Perlu Perhatian');
+        $showRes->assertSee('142 cm');
+        $showRes->assertSee('36 kg');
+        $showRes->assertSee('Size S');
+        $showRes->assertSee('Hendra Pratama');
+        $showRes->assertSee('081299887766');
+        $showRes->assertSee('Chat WhatsApp Orang Tua');
+        $showRes->assertSee('Setujui Pendaftaran');
+        $showRes->assertSee('Tolak Pendaftaran');
+
+        auth()->logout();
+        $guestRes = $this->get("/admin/registrations/{$registration->id}");
+        $guestRes->assertRedirect('/login');
+    }
 }
+
+

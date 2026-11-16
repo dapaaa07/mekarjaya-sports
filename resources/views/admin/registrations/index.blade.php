@@ -38,8 +38,21 @@
                     @forelse($registrations as $reg)
                         <tr class="hover:bg-[#F4F4F4] transition-colors">
                             <td class="p-4">
-                                <span class="font-bold text-[#111111] text-sm block leading-tight">{{ $reg->full_name }}</span>
-                                <span class="text-xs text-[#CC0000] font-mono font-bold">{{ $reg->registration_code }}</span>
+                                <a href="{{ route('admin.registrations.show', $reg->id) }}"
+                                   class="font-bold text-[#111111] text-sm block leading-tight hover:text-[#0000FF] hover:underline"
+                                   title="Buka detail pendaftaran {{ $reg->full_name }}">
+                                    {{ $reg->full_name }}
+                                </a>
+                                <div class="flex items-center gap-1.5 mt-0.5">
+                                    <span class="text-xs text-[#CC0000] font-mono font-bold">{{ $reg->registration_code }}</span>
+                                    @if($reg->health_notes && strtolower(trim($reg->health_notes)) !== 'sehat' && strtolower(trim($reg->health_notes)) !== 'tidak ada')
+                                        <a href="{{ route('admin.registrations.show', $reg->id) }}"
+                                           class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-[#FEF2F2] border border-[#FCA5A5] text-[#991B1B] text-[9px] font-mono font-bold uppercase hover:bg-[#FEE2E2]"
+                                           title="Ada riwayat medis: {{ Str::limit($reg->health_notes, 60) }}">
+                                            <i class="fa-solid fa-notes-medical text-[8px]" aria-hidden="true"></i> Medis
+                                        </a>
+                                    @endif
+                                </div>
                             </td>
                             <td class="p-4">
                                 <span class="px-2.5 py-1 bg-[#111111] text-[#FFFF00] font-mono font-bold text-xs inline-block">
@@ -91,52 +104,54 @@
                                 @endif
                             </td>
                             <td class="p-4 text-right">
-                                @if($reg->status == 'pending')
-                                    <div class="flex items-center justify-end gap-2">
-                                        <form action="{{ route('admin.registrations.approve', $reg->id) }}" method="POST">
+                                <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                    <a href="{{ route('admin.registrations.show', $reg->id) }}"
+                                       class="min-h-[38px] px-2.5 py-1.5 bg-[#FFFF00] hover:bg-[#E6E600] text-[#111111] border-2 border-[#111111] text-xs font-bold inline-flex items-center gap-1 transition-colors"
+                                       title="Lihat Detail Lengkap Pendaftaran">
+                                        <i class="fa-solid fa-eye text-xs" aria-hidden="true"></i>
+                                        <span>Detail</span>
+                                    </a>
+
+                                    @if($reg->status == 'pending')
+                                        <form action="{{ route('admin.registrations.approve', $reg->id) }}" method="POST" class="inline">
                                             @csrf
-                                            <button type="submit" class="btn-primary text-xs py-2 px-3 min-h-[40px]">
+                                            <button type="submit" class="btn-primary text-xs py-1.5 px-2.5 min-h-[38px]" title="Setujui pendaftaran">
                                                 <i class="fa-solid fa-check text-xs" aria-hidden="true"></i> Setujui
                                             </button>
                                         </form>
                                         <button type="button"
                                                 onclick="openRejectModal({{ $reg->id }}, '{{ addslashes($reg->full_name) }}', '{{ $reg->registration_code }}')"
-                                                class="btn-secondary text-xs py-2 px-3 min-h-[40px] text-[#991B1B] border-[#991B1B] hover:bg-[#FEE2E2] cursor-pointer">
+                                                class="btn-secondary text-xs py-1.5 px-2.5 min-h-[38px] text-[#991B1B] border-[#991B1B] hover:bg-[#FEE2E2] cursor-pointer"
+                                                title="Tolak pendaftaran">
                                             <i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i> Tolak
                                         </button>
-                                    </div>
-                                @elseif($reg->status == 'rejected')
-                                    @php
-                                        $waReject = \App\Notifications\RegistrationStatusUpdatedNotification::buildWaPayload($reg, 'rejected');
-                                    @endphp
-                                    <div class="flex items-center justify-end gap-2">
+                                    @elseif($reg->status == 'rejected')
+                                        @php
+                                            $waReject = \App\Notifications\RegistrationStatusUpdatedNotification::buildWaPayload($reg, 'rejected');
+                                        @endphp
                                         @if(!empty($waReject['url']))
                                             <a href="{{ $waReject['url'] }}" target="_blank" rel="noopener noreferrer"
-                                               class="min-h-[38px] px-3 py-1.5 bg-[#166534] hover:bg-[#14532D] text-white border-2 border-[#111111] text-xs font-bold inline-flex items-center gap-1.5 transition-colors"
+                                               class="min-h-[38px] px-2.5 py-1.5 bg-[#166534] hover:bg-[#14532D] text-white border-2 border-[#111111] text-xs font-bold inline-flex items-center gap-1 transition-colors"
                                                title="Kirim pesan penolakan &amp; catatan ke WA orang tua">
                                                 <i class="fa-brands fa-whatsapp text-xs" aria-hidden="true"></i>
                                                 <span>WA Alasan</span>
                                             </a>
                                         @endif
-                                    </div>
-                                @else
-                                    @php
-                                        $matchedPlayer = \App\Models\Player::where('full_name', $reg->full_name)->first();
-                                        $waApprove = \App\Notifications\RegistrationStatusUpdatedNotification::buildWaPayload($reg, 'approved', $matchedPlayer);
-                                    @endphp
-                                    <div class="flex items-center justify-end gap-2">
+                                    @else
+                                        @php
+                                            $matchedPlayer = \App\Models\Player::where('full_name', $reg->full_name)->first();
+                                            $waApprove = \App\Notifications\RegistrationStatusUpdatedNotification::buildWaPayload($reg, 'approved', $matchedPlayer);
+                                        @endphp
                                         @if(!empty($waApprove['url']))
                                             <a href="{{ $waApprove['url'] }}" target="_blank" rel="noopener noreferrer"
-                                               class="min-h-[38px] px-3 py-1.5 bg-[#166534] hover:bg-[#14532D] text-white border-2 border-[#111111] text-xs font-bold inline-flex items-center gap-1.5 transition-colors"
+                                               class="min-h-[38px] px-2.5 py-1.5 bg-[#166534] hover:bg-[#14532D] text-white border-2 border-[#111111] text-xs font-bold inline-flex items-center gap-1 transition-colors"
                                                title="Kirim konfirmasi kelulusan siswa ke WA orang tua">
                                                 <i class="fa-brands fa-whatsapp text-xs" aria-hidden="true"></i>
                                                 <span>WA Ortu</span>
                                             </a>
-                                        @else
-                                            <span class="text-xs font-mono text-[#166534] font-bold">Disetujui</span>
                                         @endif
-                                    </div>
-                                @endif
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty

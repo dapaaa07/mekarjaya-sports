@@ -20,7 +20,7 @@
         </button>
     </div>
 
-    <div class="p-5 sm:p-6 overflow-y-auto text-sm text-[#111111] space-y-6 leading-relaxed bg-white">
+    <div class="p-5 sm:p-6 overflow-y-auto flex-1 min-h-0 text-sm text-[#111111] space-y-6 leading-relaxed bg-white">
 
         <div class="p-4 bg-[#F4F4F4] border-2 border-[#111111] border-l-[6px] border-l-[#0000FF] flex items-start gap-3.5">
             <div class="w-10 h-10 bg-[#0000FF] text-white border-2 border-[#111111] flex items-center justify-center shrink-0">
@@ -193,8 +193,8 @@
 
         const hInput = document.getElementById('height_cm');
         const wInput = document.getElementById('weight_kg');
-        const hVal = hInput ? parseInt(hInput.value, 10) : null;
-        const wVal = wInput ? parseInt(wInput.value, 10) : null;
+        const hVal = (hInput && hInput.value.trim() !== '' && !isNaN(hInput.value)) ? parseInt(hInput.value, 10) : null;
+        const wVal = (wInput && wInput.value.trim() !== '' && !isNaN(wInput.value)) ? parseInt(wInput.value, 10) : null;
 
         ['S', 'M', 'L', 'XL', 'XXL'].forEach((sz) => {
             const row = document.getElementById('jersey-row-' + sz);
@@ -216,7 +216,7 @@
         } else {
             modal.setAttribute('open', '');
         }
-    </div>
+    }
 
     function closeJerseyModal() {
         const modal = document.getElementById('jersey-size-modal');
@@ -238,9 +238,9 @@
     }
 
     function calculateRecommendedJersey(height, weight) {
-        if (!height && !weight) return null;
+        if ((!height || isNaN(height)) && (!weight || isNaN(weight))) return null;
 
-        if (height) {
+        if (height && !isNaN(height)) {
             if (height <= 135) return 'S';
             if (height <= 150) return 'M';
             if (height <= 162) return 'L';
@@ -248,7 +248,7 @@
             return 'XXL';
         }
 
-        if (weight) {
+        if (weight && !isNaN(weight)) {
             if (weight <= 35) return 'S';
             if (weight <= 45) return 'M';
             if (weight <= 55) return 'L';
@@ -258,6 +258,11 @@
 
         return null;
     }
+
+    window.openJerseyModal = openJerseyModal;
+    window.closeJerseyModal = closeJerseyModal;
+    window.selectJerseySize = selectJerseySize;
+    window.calculateRecommendedJersey = calculateRecommendedJersey;
 
     (function() {
         const modal = document.getElementById('jersey-size-modal');
@@ -280,7 +285,7 @@
         });
     })();
 
-    document.addEventListener('DOMContentLoaded', function() {
+    function initJerseySuggestion() {
         const hInput = document.getElementById('height_cm');
         const wInput = document.getElementById('weight_kg');
         const helperBox = document.getElementById('jersey-size-suggestion');
@@ -288,8 +293,8 @@
         if (!helperBox || (!hInput && !wInput)) return;
 
         function updateJerseySuggestion() {
-            const hVal = hInput ? parseInt(hInput.value, 10) : null;
-            const wVal = wInput ? parseInt(wInput.value, 10) : null;
+            const hVal = (hInput && hInput.value.trim() !== '' && !isNaN(hInput.value)) ? parseInt(hInput.value, 10) : null;
+            const wVal = (wInput && wInput.value.trim() !== '' && !isNaN(wInput.value)) ? parseInt(wInput.value, 10) : null;
             const rec = calculateRecommendedJersey(hVal, wVal);
 
             if (rec) {
@@ -311,5 +316,11 @@
         if (hInput) hInput.addEventListener('input', updateJerseySuggestion);
         if (wInput) wInput.addEventListener('input', updateJerseySuggestion);
         updateJerseySuggestion();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initJerseySuggestion);
+    } else {
+        initJerseySuggestion();
+    }
 </script>

@@ -18,6 +18,19 @@ class RegistrationController extends Controller
         return view('admin.registrations.index', compact('registrations'));
     }
 
+    public function show(Registration $registration)
+    {
+        $matchedPlayer = $registration->matched_player;
+        $waPayload = null;
+        if ($registration->status === 'approved') {
+            $waPayload = RegistrationStatusUpdatedNotification::buildWaPayload($registration, 'approved', $matchedPlayer);
+        } elseif ($registration->status === 'rejected') {
+            $waPayload = RegistrationStatusUpdatedNotification::buildWaPayload($registration, 'rejected');
+        }
+
+        return view('admin.registrations.show', compact('registration', 'matchedPlayer', 'waPayload'));
+    }
+
     public function approve(Registration $registration)
     {
         if ($registration->status === 'approved') {

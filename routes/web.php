@@ -74,6 +74,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
         // Online Registrations
         Route::get('/registrations', [RegistrationController::class, 'index'])->name('registrations.index');
+        Route::get('/registrations/{registration}', [RegistrationController::class, 'show'])->name('registrations.show');
         Route::post('/registrations/{registration}/approve', [RegistrationController::class, 'approve'])->name('registrations.approve');
         Route::post('/registrations/{registration}/reject', [RegistrationController::class, 'reject'])->name('registrations.reject');
 
