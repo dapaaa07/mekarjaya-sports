@@ -121,16 +121,16 @@
     <div class="editorial-card p-0 overflow-hidden">
 
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs text-[#111111]">
+            <table class="w-full min-w-[960px] text-left text-xs text-[#111111]">
                 <thead class="bg-[#111111] text-white font-mono font-bold uppercase text-[11px]">
                     <tr>
-                        <th class="p-4">NIS & Pemain</th>
-                        <th class="p-4">Tahun Lahir & Usia</th>
-                        <th class="p-4">Kelompok Umur</th>
-                        <th class="p-4">Posisi</th>
-                        <th class="p-4">Orang Tua / WA</th>
-                        <th class="p-4">Status SPP</th>
-                        <th class="p-4 text-right">Aksi</th>
+                        <th class="p-4 whitespace-nowrap">NIS &amp; Pemain</th>
+                        <th class="p-4 whitespace-nowrap">Tahun Lahir &amp; Usia</th>
+                        <th class="p-4 whitespace-nowrap">Kelompok Umur</th>
+                        <th class="p-4 whitespace-nowrap">Posisi</th>
+                        <th class="p-4 whitespace-nowrap">Orang Tua / WA</th>
+                        <th class="p-4 whitespace-nowrap">Status SPP</th>
+                        <th class="p-4 text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y-2 divide-[#111111] bg-white">
@@ -138,7 +138,7 @@
                         <tr class="hover:bg-[#F4F4F4] transition-colors">
 
                             <!-- NIS & Player Name -->
-                            <td class="p-4">
+                            <td class="p-4 whitespace-nowrap">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-[#0000FF] text-white border-2 border-[#111111] font-mono font-bold flex items-center justify-center text-sm flex-shrink-0">
                                         {{ strtoupper(substr($player->full_name, 0, 1)) }}
@@ -153,8 +153,8 @@
                             </td>
 
                             <!-- Birth Year & Age -->
-                            <td class="p-4">
-                                <span class="px-2.5 py-1 bg-[#111111] text-[#FFFF00] font-mono font-bold text-xs inline-block">
+                            <td class="p-4 whitespace-nowrap">
+                                <span class="px-2.5 py-1 bg-[#111111] text-[#FFFF00] font-mono font-bold text-xs inline-block whitespace-nowrap">
                                     {{ $player->birth_year }}
                                 </span>
                                 <span class="text-xs font-bold text-[#111111] ml-1">({{ $player->age }} Thn)</span>
@@ -162,25 +162,25 @@
                             </td>
 
                             <!-- Kelompok Umur Badge -->
-                            <td class="p-4">
-                                <span class="badge-secondary font-mono">{{ $player->age_category_badge }}</span>
+                            <td class="p-4 whitespace-nowrap">
+                                <span class="badge-secondary font-mono whitespace-nowrap inline-block">{{ $player->age_category_badge }}</span>
                             </td>
 
                             <!-- Position -->
-                            <td class="p-4">
-                                <span class="px-2.5 py-1 border border-[#111111] bg-white text-[#111111] text-xs font-semibold">
+                            <td class="p-4 whitespace-nowrap">
+                                <span class="inline-block whitespace-nowrap px-2.5 py-1 border border-[#111111] bg-white text-[#111111] text-xs font-semibold">
                                     {{ $player->position }}
                                 </span>
                             </td>
 
                             <!-- Parent Info -->
-                            <td class="p-4">
+                            <td class="p-4 whitespace-nowrap">
                                 <span class="block font-bold text-[#111111]">{{ $player->parent_name }}</span>
-                                <span class="text-xs font-mono text-[#525252]"><i class="fa-brands fa-whatsapp text-[#166534] mr-1" aria-hidden="true"></i> {{ $player->parent_phone }}</span>
+                                <span class="text-xs font-mono text-[#525252] block whitespace-nowrap"><i class="fa-brands fa-whatsapp text-[#166534] mr-1" aria-hidden="true"></i> {{ $player->parent_phone }}</span>
                             </td>
 
                             <!-- SPP Status (Derived from Current Month SppPayment Ledger) -->
-                            <td class="p-4">
+                            <td class="p-4 whitespace-nowrap">
                                 <div class="flex flex-wrap items-center gap-2">
                                     @php
                                         $curPaid = $player->getTotalSppPaidForMonth();
@@ -256,7 +256,7 @@
                             </td>
 
                             <!-- Action Buttons -->
-                            <td class="p-4 text-right">
+                            <td class="p-4 text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-1.5">
                                     <a href="{{ route('admin.players.show', $player->id) }}"
                                        title="Lihat Rapor Radar"

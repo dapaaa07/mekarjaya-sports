@@ -259,6 +259,7 @@ textarea.ds-input:user-valid {
         font-size: 0.75rem;
         font-weight: 700;
         display: inline-block;
+        white-space: nowrap;
     }
 
     .badge-blue {
@@ -270,6 +271,7 @@ textarea.ds-input:user-valid {
         font-size: 0.75rem;
         font-weight: 700;
         display: inline-block;
+        white-space: nowrap;
     }
 
     .badge-red {
@@ -281,6 +283,7 @@ textarea.ds-input:user-valid {
         font-size: 0.75rem;
         font-weight: 700;
         display: inline-block;
+        white-space: nowrap;
     }
 
     .badge-secondary {
@@ -292,6 +295,7 @@ textarea.ds-input:user-valid {
         font-size: 0.75rem;
         font-weight: 600;
         display: inline-block;
+        white-space: nowrap;
     }
 
     .badge-success {
@@ -303,6 +307,7 @@ textarea.ds-input:user-valid {
         font-size: 0.75rem;
         font-weight: 700;
         display: inline-block;
+        white-space: nowrap;
     }
 
     .badge-danger {
@@ -314,6 +319,7 @@ textarea.ds-input:user-valid {
         font-size: 0.75rem;
         font-weight: 700;
         display: inline-block;
+        white-space: nowrap;
     }
 }
 
