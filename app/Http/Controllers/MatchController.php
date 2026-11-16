@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Evaluation;
 use App\Models\MatchModel;
 use App\Models\Player;
 use Illuminate\Http\Request;
@@ -51,6 +52,91 @@ class MatchController extends Controller
     {
         $match->delete();
         return redirect()->route('admin.matches.index')->with('success', 'Data pertandingan berhasil dihapus.');
+    }
+
+    public function evaluations(MatchModel $match)
+    {
+        $match->load('evaluations');
+        $existingEvaluations = $match->evaluations->keyBy('player_id');
+
+        $squad = $match->squad_players;
+
+        if (empty($squad)) {
+            $squad = Player::where('status', 'aktif')
+                ->orderBy('birth_year', 'desc')
+                ->orderBy('full_name', 'asc')
+                ->get()
+                ->map(fn ($p, $idx) => [
+                    'slot' => $idx + 1,
+                    'role' => 'starter',
+                    'player_id' => $p->id,
+                    'nis' => $p->nis,
+                    'player_name' => $p->full_name,
+                    'position' => $p->position,
+                ])
+                ->all();
+        }
+
+        $playerIds = collect($squad)->pluck('player_id')->filter()->unique()->all();
+        $playersById = Player::whereIn('id', $playerIds)->get()->keyBy('id');
+
+        return view('admin.matches.evaluations', compact('match', 'squad', 'existingEvaluations', 'playersById'));
+    }
+
+    public function storeEvaluations(Request $request, MatchModel $match)
+    {
+        $rawEvaluations = $request->input('evaluations', []);
+        if (!is_array($rawEvaluations) || empty($rawEvaluations)) {
+            return back()->with('error', 'Tidak ada data penilaian pemain yang dikirim.');
+        }
+
+        $savedCount = 0;
+        foreach ($rawEvaluations as $playerId => $scores) {
+            if (!is_array($scores)) {
+                continue;
+            }
+
+            $include = !empty($scores['include']);
+            if (!$include) {
+                Evaluation::where('match_id', $match->id)
+                    ->where('player_id', (int) $playerId)
+                    ->delete();
+                continue;
+            }
+
+            $validated = Validator::make($scores, [
+                'passing_score' => 'required|integer|min:0|max:100',
+                'dribbling_score' => 'required|integer|min:0|max:100',
+                'shooting_score' => 'required|integer|min:0|max:100',
+                'physical_score' => 'required|integer|min:0|max:100',
+                'discipline_score' => 'required|integer|min:0|max:100',
+                'tactical_score' => 'required|integer|min:0|max:100',
+                'coach_notes' => 'nullable|string|max:1000',
+            ])->validate();
+
+            Evaluation::updateOrCreate(
+                [
+                    'match_id' => $match->id,
+                    'player_id' => (int) $playerId,
+                ],
+                [
+                    'evaluation_date' => $match->match_date,
+                    'passing_score' => (int) $validated['passing_score'],
+                    'dribbling_score' => (int) $validated['dribbling_score'],
+                    'shooting_score' => (int) $validated['shooting_score'],
+                    'physical_score' => (int) $validated['physical_score'],
+                    'discipline_score' => (int) $validated['discipline_score'],
+                    'tactical_score' => (int) $validated['tactical_score'],
+                    'coach_notes' => $validated['coach_notes'] ?? null,
+                ]
+            );
+
+            $savedCount++;
+        }
+
+        return redirect()
+            ->route('admin.matches.index')
+            ->with('success', "Statistik performa untuk {$savedCount} pemain pada laga \"{$match->match_title}\" berhasil disimpan dan diakumulasikan!");
     }
 
     /**

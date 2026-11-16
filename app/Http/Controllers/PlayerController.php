@@ -136,8 +136,9 @@ class PlayerController extends Controller
 
     public function show(Player $player)
     {
-        $evaluation = $player->latestEvaluation;
+        $evaluation = $player->accumulated_stats;
         $evaluations = $player->evaluations()
+            ->with('match')
             ->orderBy('evaluation_date', 'desc')
             ->orderBy('id', 'desc')
             ->get();
@@ -221,7 +222,7 @@ class PlayerController extends Controller
     public function printRapor(Player $player)
     {
         $player->load('sppPayments');
-        $evaluation = $player->latestEvaluation;
+        $evaluation = $player->accumulated_stats;
         $attendanceCount = $player->attendances()->where('status', 'hadir')->count();
         $totalSessions = $player->attendances()->count();
         $attendanceRate = $totalSessions > 0 ? round(($attendanceCount / $totalSessions) * 100) : 100;

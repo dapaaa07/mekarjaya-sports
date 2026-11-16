@@ -219,13 +219,24 @@
 
             <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-[#111111] pb-4">
                 <div>
-                    <h3 class="font-bold text-[#111111] text-base sm:text-lg flex items-center gap-2">
+                    <h3 class="font-bold text-[#111111] text-base sm:text-lg flex items-center gap-2 flex-wrap">
                         <i class="fa-solid fa-chart-pie text-[#0000FF]" aria-hidden="true"></i> Diagram Radar Rapor Performa Pemain
+                        @if($evaluation && ($evaluation->is_accumulated ?? false))
+                            <span class="bg-[#0000FF] text-white text-[11px] font-mono font-bold px-2 py-0.5 border border-[#111111]">
+                                Akumulasi {{ $evaluation->matches_count }} Laga
+                            </span>
+                        @endif
                     </h3>
-                    <p class="text-xs text-[#525252]">Spesifikasi evaluasi teknik dan fisik dari SSB Mekar Jaya.</p>
+                    <p class="text-xs text-[#525252]">
+                        @if($evaluation && ($evaluation->is_accumulated ?? false))
+                            Rata-rata akumulasi dari {{ $evaluation->matches_count }} laga resmi SSB Mekar Jaya.
+                        @else
+                            Spesifikasi evaluasi teknik dan fisik dari SSB Mekar Jaya.
+                        @endif
+                    </p>
                 </div>
                 <a href="{{ route('admin.evaluations.edit', $player->id) }}" class="btn-primary text-xs py-2 px-4">
-                    Update Nilai
+                    Rincian &amp; Riwayat Laga
                 </a>
             </div>
 

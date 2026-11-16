@@ -18,6 +18,20 @@
         <span class="badge-blue font-mono self-start sm:self-center">{{ $players->total() }} Siswa Aktif</span>
     </div>
 
+    <!-- Info Banner: Evaluated Per Match -->
+    <div class="bg-[#FFFF00] border-2 border-[#111111] p-4 text-xs text-[#111111] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="flex items-start gap-2.5">
+            <i class="fa-solid fa-circle-info text-base mt-0.5 text-[#111111]" aria-hidden="true"></i>
+            <div>
+                <p class="font-bold">Statistik Pemain Terakumulasi Dari Pertandingan</p>
+                <p class="text-[11px] text-[#262626] mt-0.5">Nilai statistik pemain tidak diubah langsung di halaman ini, melainkan dihitung otomatis dari akumulasi penilaian performa di setiap pertandingan resmi (Match Center).</p>
+            </div>
+        </div>
+        <a href="{{ route('admin.matches.index') }}" class="btn-primary text-xs py-2 px-3.5 whitespace-nowrap shrink-0">
+            <i class="fa-solid fa-trophy mr-1 text-xs" aria-hidden="true"></i> Buka Match Center
+        </a>
+    </div>
+
     <!-- Filter Bar -->
     <div class="editorial-card p-6">
         <form action="{{ route('admin.evaluations.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 items-end text-xs">
@@ -71,7 +85,7 @@
                         <th class="p-4">Siswa &amp; NIS</th>
                         <th class="p-4">Kelompok Umur</th>
                         <th class="p-4">Posisi</th>
-                        <th class="p-4">Evaluasi Terakhir</th>
+                        <th class="p-4">Pertandingan Dinilai</th>
                         <th class="p-4 text-center">Rata-rata Skor</th>
                         <th class="p-4 text-right">Aksi</th>
                     </tr>
@@ -79,8 +93,8 @@
                 <tbody class="divide-y-2 divide-[#111111] bg-white">
                     @forelse($players as $player)
                         @php
-                            $latest = $player->latestEvaluation;
-                            $avg = $latest ? round(($latest->passing_score + $latest->dribbling_score + $latest->shooting_score + $latest->physical_score + $latest->discipline_score + $latest->tactical_score) / 6, 1) : null;
+                            $accumulated = $player->accumulated_stats;
+                            $avg = $accumulated->average_score;
                         @endphp
                         <tr class="hover:bg-[#F4F4F4] transition-colors">
                             <td class="p-4">
@@ -93,7 +107,14 @@
                             </td>
                             <td class="p-4 font-semibold">{{ $player->position }}</td>
                             <td class="p-4 font-mono text-xs text-[#525252]">
-                                {{ $latest && $latest->evaluation_date ? $latest->evaluation_date->format('d M Y') : 'Belum ada' }}
+                                @if(($accumulated->matches_count ?? 0) > 0)
+                                    <span class="font-bold text-xs text-[#111111] block">
+                                        {{ $accumulated->matches_count }} Laga Dinilai
+                                    </span>
+                                    <span class="text-[10px] text-[#525252]">Laga Terakhir: {{ $accumulated->evaluation_date ? $accumulated->evaluation_date->format('d M Y') : '-' }}</span>
+                                @else
+                                    <span class="text-[11px] text-[#525252] italic">Belum Ada Laga</span>
+                                @endif
                             </td>
                             <td class="p-4 text-center">
                                 @if($avg !== null)
@@ -108,11 +129,11 @@
                                 <div class="flex items-center justify-end gap-2">
                                     @if(Auth::user()->isAdmin())
                                         <a href="{{ route('admin.players.show', $player->id) }}" class="btn-secondary text-xs py-2 px-3 min-h-[44px]">
-                                            Detail &amp; Riwayat
+                                            Profil &amp; Rapor
                                         </a>
                                     @endif
                                     <a href="{{ route('admin.evaluations.edit', $player->id) }}" class="btn-primary text-xs py-2 px-3.5 min-h-[44px]">
-                                        <i class="fa-solid fa-sliders text-xs" aria-hidden="true"></i> Input Nilai
+                                        <i class="fa-solid fa-chart-pie text-xs" aria-hidden="true"></i> Rincian &amp; Riwayat Laga
                                     </a>
                                 </div>
                             </td>

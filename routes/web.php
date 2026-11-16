@@ -56,7 +56,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/players/{player}/evaluations/edit', [EvaluationController::class, 'edit'])->name('evaluations.edit');
         Route::post('/players/{player}/evaluations', [EvaluationController::class, 'update'])->name('evaluations.update');
 
-        // Match Center Pertandingan
+        // Match Center Pertandingan & Penilaian Skuad
+        Route::get('/matches/{match}/evaluations', [MatchController::class, 'evaluations'])->name('matches.evaluations');
+        Route::post('/matches/{match}/evaluations', [MatchController::class, 'storeEvaluations'])->name('matches.evaluations.store');
         Route::resource('matches', MatchController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
     });
 

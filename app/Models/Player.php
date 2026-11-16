@@ -23,9 +23,66 @@ class Player extends Model
         return $this->hasMany(Evaluation::class);
     }
 
+    public function matchEvaluations()
+    {
+        return $this->hasMany(Evaluation::class)->whereNotNull('match_id')->with('match');
+    }
+
     public function latestEvaluation()
     {
         return $this->hasOne(Evaluation::class)->latestOfMany(['evaluation_date', 'id']);
+    }
+
+    public function getAccumulatedStatsAttribute(): Evaluation
+    {
+        $matchEvals = $this->evaluations()->whereNotNull('match_id')->get();
+        if ($matchEvals->isNotEmpty()) {
+            $count = $matchEvals->count();
+            $eval = new Evaluation([
+                'player_id' => $this->id,
+                'evaluation_date' => $matchEvals->max('evaluation_date'),
+                'passing_score' => (int) round($matchEvals->avg('passing_score')),
+                'dribbling_score' => (int) round($matchEvals->avg('dribbling_score')),
+                'shooting_score' => (int) round($matchEvals->avg('shooting_score')),
+                'physical_score' => (int) round($matchEvals->avg('physical_score')),
+                'discipline_score' => (int) round($matchEvals->avg('discipline_score')),
+                'tactical_score' => (int) round($matchEvals->avg('tactical_score')),
+                'coach_notes' => $matchEvals->sortByDesc('evaluation_date')->first()?->coach_notes,
+            ]);
+            $eval->matches_count = $count;
+            $eval->is_accumulated = true;
+
+            return $eval;
+        }
+
+        $latest = $this->latestEvaluation;
+        if ($latest) {
+            $latest->matches_count = 0;
+            $latest->is_accumulated = false;
+
+            return $latest;
+        }
+
+        $default = new Evaluation([
+            'player_id' => $this->id,
+            'evaluation_date' => now()->toDateString(),
+            'passing_score' => 75,
+            'dribbling_score' => 75,
+            'shooting_score' => 75,
+            'physical_score' => 75,
+            'discipline_score' => 80,
+            'tactical_score' => 70,
+            'coach_notes' => 'Belum ada penilaian pertandingan.',
+        ]);
+        $default->matches_count = 0;
+        $default->is_accumulated = false;
+
+        return $default;
+    }
+
+    public function getAccumulatedEvaluationAttribute(): Evaluation
+    {
+        return $this->accumulated_stats;
     }
 
     public function sppPayments()

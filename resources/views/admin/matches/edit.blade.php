@@ -12,9 +12,14 @@
             <h2 class="font-bold text-[#111111] text-lg">Edit Laga: {{ $match->match_title }}</h2>
             <p class="text-xs text-[#525252]">Perbarui hasil laga, formasi, susunan 11 pemain inti (Starting XI), dan daftar pemain cadangan.</p>
         </div>
-        <a href="{{ route('admin.matches.index') }}" class="text-xs font-mono font-bold text-[#0000FF] hover:underline inline-flex items-center gap-1 min-h-[44px]">
-            &larr; Kembali Ke Match Center
-        </a>
+        <div class="flex items-center gap-2 flex-wrap">
+            <a href="{{ route('admin.matches.evaluations', $match->id) }}" class="btn-primary text-xs py-2 px-3.5 min-h-[44px]">
+                <i class="fa-solid fa-chart-simple mr-1" aria-hidden="true"></i> Nilai Skuad ({{ $match->evaluations->count() }})
+            </a>
+            <a href="{{ route('admin.matches.index') }}" class="text-xs font-mono font-bold text-[#0000FF] hover:underline inline-flex items-center gap-1 min-h-[44px]">
+                &larr; Kembali Ke Match Center
+            </a>
+        </div>
     </div>
 
     <form action="{{ route('admin.matches.update', $match->id) }}" method="POST" class="space-y-5 text-xs">

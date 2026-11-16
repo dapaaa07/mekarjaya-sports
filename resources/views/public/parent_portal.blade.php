@@ -172,6 +172,7 @@
                     </div>
 
                     <!-- RADAR CHART PERFORMA PERKEMBANGAN -->
+                    @php $accEval = $player->accumulated_stats; @endphp
                     <div class="editorial-card p-6 sm:p-8 space-y-6">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-[#111111] pb-4">
                             <div class="flex items-start gap-3">
@@ -179,10 +180,21 @@
                                     <i class="fa-solid fa-chart-pie text-sm" aria-hidden="true"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold text-[#111111] text-base sm:text-lg">
-                                        Rapor Evaluasi Performa Teknik & Fisik
+                                    <h3 class="font-bold text-[#111111] text-base sm:text-lg flex items-center gap-2 flex-wrap">
+                                        Rapor Evaluasi Performa Teknik &amp; Fisik
+                                        @if($accEval->is_accumulated ?? false)
+                                            <span class="bg-[#0000FF] text-white text-[10px] font-mono font-bold px-2 py-0.5 border border-[#111111]">
+                                                Akumulasi {{ $accEval->matches_count }} Laga
+                                            </span>
+                                        @endif
                                     </h3>
-                                    <p class="text-xs text-[#525252] mt-0.5">Penilaian periodik dari Tim Pelatih SSB Mekar Jaya Subang.</p>
+                                    <p class="text-xs text-[#525252] mt-0.5">
+                                        @if($accEval->is_accumulated ?? false)
+                                            Akumulasi penilaian performa resmi dari {{ $accEval->matches_count }} pertandingan siswa.
+                                        @else
+                                            Penilaian evaluasi dasar dari Tim Pelatih SSB Mekar Jaya Subang.
+                                        @endif
+                                    </p>
                                 </div>
                             </div>
                             <span class="badge-primary font-mono self-start sm:self-center">Skala 0 - 100</span>
@@ -192,10 +204,10 @@
                             <canvas id="parentRadarChart"></canvas>
                         </div>
 
-                        @if($player->latestEvaluation && $player->latestEvaluation->coach_notes)
+                        @if($accEval->coach_notes)
                             <div class="bg-[#F4F4F4] border-2 border-[#111111] border-l-[6px] border-l-[#0000FF] p-4 text-sm text-[#111111] space-y-1">
                                 <span class="font-mono font-bold block text-[#111111] uppercase tracking-wider text-xs">Catatan Evaluasi Pelatih</span>
-                                <p class="text-[#525252] leading-relaxed">"{{ $player->latestEvaluation->coach_notes }}"</p>
+                                <p class="text-[#525252] leading-relaxed">"{{ $accEval->coach_notes }}"</p>
                             </div>
                         @endif
                     </div>
@@ -243,12 +255,12 @@
                                 datasets: [{
                                     label: 'Nilai Evaluasi',
                                     data: [
-                                        {{ $player->latestEvaluation->passing_score ?? 75 }},
-                                        {{ $player->latestEvaluation->dribbling_score ?? 75 }},
-                                        {{ $player->latestEvaluation->shooting_score ?? 75 }},
-                                        {{ $player->latestEvaluation->physical_score ?? 75 }},
-                                        {{ $player->latestEvaluation->discipline_score ?? 80 }},
-                                        {{ $player->latestEvaluation->tactical_score ?? 70 }}
+                                        {{ $accEval->passing_score ?? 75 }},
+                                        {{ $accEval->dribbling_score ?? 75 }},
+                                        {{ $accEval->shooting_score ?? 75 }},
+                                        {{ $accEval->physical_score ?? 75 }},
+                                        {{ $accEval->discipline_score ?? 80 }},
+                                        {{ $accEval->tactical_score ?? 70 }}
                                     ],
                                     backgroundColor: 'rgba(0, 0, 255, 0.14)',
                                     borderColor: '#0000FF',

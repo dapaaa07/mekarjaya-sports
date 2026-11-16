@@ -43,24 +43,25 @@ class EvaluationController extends Controller
 
     public function edit(Player $player)
     {
-        $evaluation = $player->latestEvaluation ?? new Evaluation([
-            'evaluation_date' => now()->toDateString(),
-            'passing_score' => 75,
-            'dribbling_score' => 75,
-            'shooting_score' => 75,
-            'physical_score' => 75,
-            'discipline_score' => 80,
-            'tactical_score' => 70,
-        ]);
-
+        $accumulated = $player->accumulated_stats;
         $evaluations = $player->evaluations()
+            ->with('match')
             ->orderBy('evaluation_date', 'desc')
             ->orderBy('id', 'desc')
             ->get();
 
+        $matchEvaluations = $evaluations->whereNotNull('match_id')->values();
         $evaluationTrend = $evaluations->reverse()->values();
+        $evaluation = $accumulated;
 
-        return view('admin.evaluations.edit', compact('player', 'evaluation', 'evaluations', 'evaluationTrend'));
+        return view('admin.evaluations.edit', compact(
+            'player',
+            'accumulated',
+            'evaluation',
+            'evaluations',
+            'matchEvaluations',
+            'evaluationTrend'
+        ));
     }
 
     public function update(Request $request, Player $player)

@@ -74,4 +74,19 @@ class MatchModel extends Model
             fn ($item) => is_array($item) && ($item['role'] ?? '') === 'substitute'
         ));
     }
+
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'match_id');
+    }
+
+    /**
+     * Get combined squad list (starters + substitutes) from lineup.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function getSquadPlayersAttribute(): array
+    {
+        return array_merge($this->starters, $this->substitutes);
+    }
 }

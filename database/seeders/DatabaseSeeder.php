@@ -529,7 +529,32 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($sampleMatches as $m) {
-            \App\Models\MatchModel::updateOrCreate(['match_title' => $m['match_title']], $m);
+            $createdMatch = \App\Models\MatchModel::updateOrCreate(['match_title' => $m['match_title']], $m);
+
+            if (Evaluation::where('match_id', $createdMatch->id)->doesntExist()) {
+                foreach ($createdMatch->squad_players as $slot) {
+                    $pid = (int) ($slot['player_id'] ?? 0);
+                    if ($pid <= 0) {
+                        continue;
+                    }
+
+                    $pRole = $slot['role'] ?? 'starter';
+                    $baseBonus = $pRole === 'starter' ? rand(75, 88) : rand(70, 82);
+
+                    Evaluation::create([
+                        'player_id' => $pid,
+                        'match_id' => $createdMatch->id,
+                        'evaluation_date' => $createdMatch->match_date,
+                        'passing_score' => min(98, max(50, $baseBonus + rand(-5, 6))),
+                        'dribbling_score' => min(98, max(50, $baseBonus + rand(-6, 6))),
+                        'shooting_score' => min(98, max(50, $baseBonus + rand(-5, 5))),
+                        'physical_score' => min(98, max(50, $baseBonus + rand(-4, 7))),
+                        'discipline_score' => min(99, max(60, $baseBonus + rand(0, 10))),
+                        'tactical_score' => min(96, max(50, $baseBonus + rand(-5, 5))),
+                        'coach_notes' => "Performa {$pRole} pada laga {$createdMatch->match_title}.",
+                    ]);
+                }
+            }
         }
     }
 }

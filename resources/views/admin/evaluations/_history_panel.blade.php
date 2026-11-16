@@ -59,7 +59,11 @@
                             <tr class="hover:bg-[#F4F4F4] transition-colors">
                                 <td class="p-3.5 font-mono font-bold whitespace-nowrap">
                                     {{ $ev->evaluation_date ? $ev->evaluation_date->format('d M Y') : '-' }}
-                                    @if($idx === 0)
+                                    @if($ev->match)
+                                        <a href="{{ route('admin.matches.evaluations', $ev->match_id) }}" class="text-[10px] text-[#0000FF] font-sans font-bold block mt-1 hover:underline truncate max-w-[160px]" title="{{ $ev->match->match_title }}">
+                                            <i class="fa-solid fa-trophy text-[9px] mr-1"></i>{{ $ev->match->match_title }}
+                                        </a>
+                                    @elseif($idx === 0)
                                         <span class="block mt-1"><span class="badge-primary text-[10px] uppercase">Terbaru</span></span>
                                     @endif
                                 </td>

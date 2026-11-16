@@ -48,6 +48,11 @@
                                 <span class="bg-[#FFFF00] text-[#111111] text-[10px] font-mono font-bold px-2 py-0.5 uppercase mt-1 ml-1 inline-block border border-[#111111]">
                                     Formasi {{ $m->formation ?? '4-3-3' }}
                                 </span>
+                                @if($m->evaluations->count() > 0)
+                                    <span class="bg-[#166534] text-white text-[10px] font-mono font-bold px-2 py-0.5 uppercase mt-1 ml-1 inline-block border border-[#111111]">
+                                        {{ $m->evaluations->count() }} Dinilai
+                                    </span>
+                                @endif
                             </td>
                             <td class="py-3.5 px-4 font-bold text-[#111111]">
                                 {{ $m->match_title }}
@@ -127,7 +132,14 @@
                                 @endif
                             </td>
                             <td class="py-3.5 px-4 text-right">
-                                <div class="flex items-center justify-end gap-1.5">
+                                <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                    <a href="{{ route('admin.matches.evaluations', $m->id) }}"
+                                       title="Nilai Statistik Skuad Pertandingan"
+                                       aria-label="Nilai statistik skuad pertandingan {{ $m->match_title }}"
+                                       class="h-11 px-3 bg-[#FFFF00] text-[#111111] hover:bg-[#111111] hover:text-[#FFFF00] border-2 border-[#111111] inline-flex items-center gap-1.5 font-bold font-mono text-xs transition-colors">
+                                        <i class="fa-solid fa-chart-simple text-xs" aria-hidden="true"></i>
+                                        <span>Nilai Skuad ({{ $m->evaluations->count() }})</span>
+                                    </a>
                                     <a href="{{ route('admin.matches.edit', $m->id) }}"
                                        title="Edit Pertandingan &amp; Lineup"
                                        aria-label="Edit pertandingan {{ $m->match_title }}"

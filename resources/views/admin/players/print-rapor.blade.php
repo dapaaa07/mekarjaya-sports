@@ -86,8 +86,11 @@
 
         <!-- Scores Table -->
         <div class="border-2 border-[#111111] overflow-hidden flex flex-col justify-between bg-white">
-            <div class="bg-[#111111] text-[#FFFF00] px-4 py-3 text-xs font-mono font-bold uppercase tracking-wider">
-                Nilai Evaluasi Performa Teknis
+            <div class="bg-[#111111] text-[#FFFF00] px-4 py-3 text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-between">
+                <span>Nilai Evaluasi Performa Teknis</span>
+                @if($evaluation && ($evaluation->is_accumulated ?? false))
+                    <span class="text-[10px] text-white">Akumulasi {{ $evaluation->matches_count }} Laga</span>
+                @endif
             </div>
             <table class="w-full text-left text-xs border-collapse">
                 <tbody class="divide-y-2 divide-[#111111]">
