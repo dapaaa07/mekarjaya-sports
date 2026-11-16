@@ -101,7 +101,7 @@
             @endif
 
             <a href="{{ route('admin.schedules.index') }}"
-               class="flex items-center gap-3 min-h-[44px] px-3.5 py-2 border-2 transition-colors {{ request()->routeIs('admin.schedules.*') ? 'bg-[#FF0000] text-[#000000] border-[#FFFFFF] font-bold' : 'text-[#D4D4D4] border-transparent hover:bg-[#262626] hover:text-white font-medium' }}">
+               class="flex items-center gap-3 min-h-[44px] px-3.5 py-2 border-2 transition-colors {{ (request()->routeIs('admin.schedules.*') || request()->routeIs('admin.attendances.*')) ? 'bg-[#FF0000] text-[#000000] border-[#FFFFFF] font-bold' : 'text-[#D4D4D4] border-transparent hover:bg-[#262626] hover:text-white font-medium' }}">
                 <i class="fa-solid fa-calendar-days w-4 text-center" aria-hidden="true"></i> Kelola Jadwal Latihan
             </a>
 

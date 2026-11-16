@@ -54,23 +54,23 @@
                 </a>
 
                 <!-- Desktop Navigation Links -->
-                <nav aria-label="Navigasi Utama" class="hidden lg:flex items-center gap-6 text-sm font-medium text-[#111111]">
-                    <a href="{{ route('home') }}" class="py-2 px-1 border-b-2 {{ request()->routeIs('home') ? 'border-[#FF0000] font-bold text-[#111111]' : 'border-transparent hover:border-[#111111]' }} transition-colors">Beranda</a>
-                    <a href="{{ route('home') }}#roster" class="py-2 px-1 border-b-2 border-transparent hover:border-[#0000FF] transition-colors flex items-center gap-1.5">
+                <nav aria-label="Navigasi Utama" id="desktop-navbar" class="hidden lg:flex items-center gap-6 text-sm font-medium text-[#111111]">
+                    <a href="{{ route('home') }}" data-nav="beranda" class="nav-link py-2 px-1 border-b-2 transition-colors {{ request()->routeIs('home') ? 'border-[#FF0000] font-bold text-[#111111]' : 'border-transparent font-medium text-[#111111] hover:border-[#111111]' }}">Beranda</a>
+                    <a href="{{ route('home') }}#roster" data-nav="roster" class="nav-link py-2 px-1 border-b-2 border-transparent font-medium text-[#111111] hover:border-[#0000FF] transition-colors flex items-center gap-1.5">
                         <i class="fa-solid fa-calendar-days text-xs text-[#0000FF]" aria-hidden="true"></i> Roster Per Tahun
                     </a>
-                    <a href="{{ route('parent.portal') }}" class="py-2 px-1 border-b-2 {{ request()->routeIs('parent.portal') ? 'border-[#0000FF] font-bold text-[#0000FF]' : 'border-transparent hover:border-[#0000FF]' }} transition-colors flex items-center gap-1.5">
+                    <a href="{{ route('parent.portal') }}" data-nav="portal" class="nav-link py-2 px-1 border-b-2 {{ request()->routeIs('parent.portal') ? 'border-[#0000FF] font-bold text-[#0000FF]' : 'border-transparent font-medium text-[#111111] hover:border-[#0000FF]' }} transition-colors flex items-center gap-1.5">
                         <i class="fa-solid fa-id-card text-xs text-[#0000FF]" aria-hidden="true"></i> Portal Orang Tua
                     </a>
-                    <a href="{{ route('home') }}#program" class="py-2 px-1 border-b-2 border-transparent hover:border-[#111111] transition-colors">Program KU</a>
-                    <a href="{{ route('home') }}#pelatih" class="py-2 px-1 border-b-2 border-transparent hover:border-[#111111] transition-colors">Tim Pelatih</a>
-                    <a href="{{ route('home') }}#mini-soccer" class="py-2 px-1 border-b-2 border-transparent hover:border-[#111111] transition-colors">Mini Soccer</a>
-                    <a href="{{ route('home') }}#faq" class="py-2 px-1 border-b-2 border-transparent hover:border-[#111111] transition-colors">FAQ</a>
+                    <a href="{{ route('home') }}#program" data-nav="program" class="nav-link py-2 px-1 border-b-2 border-transparent font-medium text-[#111111] hover:border-[#111111] transition-colors">Program KU</a>
+                    <a href="{{ route('home') }}#mini-soccer" data-nav="mini-soccer" class="nav-link py-2 px-1 border-b-2 border-transparent font-medium text-[#111111] hover:border-[#111111] transition-colors">Mini Soccer</a>
+                    <a href="{{ route('home') }}#pelatih" data-nav="pelatih" class="nav-link py-2 px-1 border-b-2 border-transparent font-medium text-[#111111] hover:border-[#111111] transition-colors">Tim Pelatih</a>
+                    <a href="{{ route('home') }}#faq" data-nav="faq" class="nav-link py-2 px-1 border-b-2 border-transparent font-medium text-[#111111] hover:border-[#111111] transition-colors">FAQ</a>
                 </nav>
 
                 <!-- Action CTA & Mobile Toggle -->
                 <div class="flex items-center gap-2.5">
-                    <a href="{{ route('home') }}#pendaftaran" class="hidden sm:inline-flex btn-primary text-xs sm:text-sm py-2.5 px-4">
+                    <a href="{{ route('home') }}#pendaftaran" id="nav-cta-pendaftaran" class="hidden sm:inline-flex btn-primary text-xs sm:text-sm py-2.5 px-4">
                         <i class="fa-solid fa-user-plus text-xs" aria-hidden="true"></i> Daftar Siswa
                     </a>
 
@@ -85,14 +85,14 @@
 
         <!-- Mobile Drawer Menu -->
         <nav id="mobile-menu" aria-label="Menu Mobile" class="hidden lg:hidden border-t-2 border-[#111111] bg-white px-4 pt-3 pb-6 space-y-2">
-            <a href="{{ route('home') }}" class="flex items-center min-h-[44px] px-3 py-2 border-2 border-[#111111] bg-[#F4F4F4] font-bold text-sm text-[#111111]">Beranda</a>
-            <a href="{{ route('home') }}#roster" class="flex items-center min-h-[44px] px-3 py-2 border-2 border-[#111111] bg-[#FFFF00] text-[#111111] font-bold text-sm">Roster Pemain Per Tahun</a>
-            <a href="{{ route('parent.portal') }}" class="flex items-center min-h-[44px] px-3 py-2 border-2 border-[#111111] bg-[#0000FF] text-white font-bold text-sm">Portal Orang Tua & Rapor</a>
-            <a href="{{ route('home') }}#program" class="flex items-center min-h-[44px] px-3 py-2 border border-[#111111] font-medium text-sm text-[#111111] hover:bg-[#F4F4F4]">Program Kelompok Umur</a>
-            <a href="{{ route('home') }}#pelatih" class="flex items-center min-h-[44px] px-3 py-2 border border-[#111111] font-medium text-sm text-[#111111] hover:bg-[#F4F4F4]">Tim Pelatih</a>
-            <a href="{{ route('home') }}#mini-soccer" class="flex items-center min-h-[44px] px-3 py-2 border border-[#111111] font-medium text-sm text-[#111111] hover:bg-[#F4F4F4]">Tarif Mini Soccer</a>
-            <a href="{{ route('home') }}#pendaftaran" class="flex items-center min-h-[44px] px-3 py-2 border border-[#111111] font-medium text-sm text-[#111111] hover:bg-[#F4F4F4]">Pendaftaran Online</a>
-            <a href="{{ route('home') }}#faq" class="flex items-center min-h-[44px] px-3 py-2 border border-[#111111] font-medium text-sm text-[#111111] hover:bg-[#F4F4F4]">FAQ (Tanya Jawab)</a>
+            <a href="{{ route('home') }}" data-nav="beranda" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 {{ request()->routeIs('home') ? 'border-2 border-[#111111] bg-[#111111] text-[#FFFF00] font-bold' : 'border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium' }} text-sm transition-colors">Beranda</a>
+            <a href="{{ route('home') }}#roster" data-nav="roster" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">Roster Pemain Per Tahun</a>
+            <a href="{{ route('parent.portal') }}" data-nav="portal" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 {{ request()->routeIs('parent.portal') ? 'border-2 border-[#111111] bg-[#0000FF] text-white font-bold' : 'border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium' }} text-sm transition-colors">Portal Orang Tua & Rapor</a>
+            <a href="{{ route('home') }}#program" data-nav="program" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">Program Kelompok Umur</a>
+            <a href="{{ route('home') }}#mini-soccer" data-nav="mini-soccer" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">Tarif Mini Soccer</a>
+            <a href="{{ route('home') }}#pelatih" data-nav="pelatih" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">Tim Pelatih</a>
+            <a href="{{ route('home') }}#pendaftaran" data-nav="pendaftaran" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">Pendaftaran Online</a>
+            <a href="{{ route('home') }}#faq" data-nav="faq" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">FAQ (Tanya Jawab)</a>
             <div class="pt-2">
                 <a href="{{ route('home') }}#pendaftaran" class="w-full btn-primary text-sm">
                     Daftar Siswa Baru
@@ -230,7 +230,6 @@
 
     <!-- Core UI Interactions, Validation ARIA Sync & Preserved Secret Admin Access -->
     <script>
-        // Mobile Drawer Toggle
         (function() {
             const btn = document.getElementById('mobile-menu-btn');
             const menu = document.getElementById('mobile-menu');
@@ -239,6 +238,130 @@
                     const isHidden = menu.classList.toggle('hidden');
                     btn.setAttribute('aria-expanded', isHidden ? 'false' : 'true');
                 });
+
+                menu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menu.classList.add('hidden');
+                        btn.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+
+            function setActiveNav(activeId) {
+                document.querySelectorAll('#desktop-navbar [data-nav]').forEach(link => {
+                    const navId = link.getAttribute('data-nav');
+                    if (navId === activeId) {
+                        link.classList.remove('border-transparent', 'font-medium');
+                        if (navId === 'portal') {
+                            link.classList.add('border-[#0000FF]', 'font-bold', 'text-[#0000FF]');
+                        } else {
+                            link.classList.add('border-[#FF0000]', 'font-bold');
+                        }
+                        link.setAttribute('aria-current', 'page');
+                    } else {
+                        link.classList.remove('border-[#FF0000]', 'border-[#0000FF]', 'font-bold', 'text-[#0000FF]');
+                        link.classList.add('border-transparent', 'font-medium');
+                        link.removeAttribute('aria-current');
+                    }
+                });
+
+                document.querySelectorAll('#mobile-menu [data-nav]').forEach(link => {
+                    const navId = link.getAttribute('data-nav');
+                    if (navId === activeId) {
+                        if (navId === 'portal') {
+                            link.className = 'mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border-2 border-[#111111] bg-[#0000FF] text-white font-bold text-sm transition-colors';
+                        } else {
+                            link.className = 'mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border-2 border-[#111111] bg-[#111111] text-[#FFFF00] font-bold text-sm transition-colors';
+                        }
+                        link.setAttribute('aria-current', 'page');
+                    } else {
+                        link.className = 'mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors';
+                        link.removeAttribute('aria-current');
+                    }
+                });
+            }
+
+            document.querySelectorAll('#desktop-navbar a, #mobile-menu a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href') || '';
+                    if ((href === '{{ route("home") }}' || href.endsWith('#beranda')) && (window.location.pathname === '/' || window.location.pathname === '')) {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        if (window.location.hash) {
+                            history.pushState(null, '', '{{ route("home") }}');
+                        }
+                        setActiveNav('beranda');
+                        return;
+                    }
+                    if (href.includes('#')) {
+                        const hash = href.split('#')[1];
+                        if (hash && document.getElementById(hash)) {
+                            setActiveNav(hash);
+                        }
+                    }
+                });
+            });
+
+            const sectionIds = ['beranda', 'roster', 'program', 'mini-soccer', 'pelatih', 'pendaftaran', 'faq'];
+            const trackedSections = sectionIds
+                .map(id => ({ id, el: document.getElementById(id) }))
+                .filter(item => item.el !== null);
+
+            if (trackedSections.length > 0) {
+                const updateActiveSection = () => {
+                    const scrollBottom = window.innerHeight + window.scrollY;
+                    const docHeight = document.documentElement.scrollHeight;
+                    if (scrollBottom >= docHeight - 80) {
+                        setActiveNav('faq');
+                        return;
+                    }
+
+                    if (window.scrollY < 120) {
+                        setActiveNav('beranda');
+                        return;
+                    }
+
+                    const scrollPosition = window.scrollY + 160;
+                    let active = 'beranda';
+                    for (let i = 0; i < trackedSections.length; i++) {
+                        const section = trackedSections[i];
+                        if (scrollPosition >= section.el.offsetTop) {
+                            active = section.id;
+                        }
+                    }
+                    setActiveNav(active);
+                };
+
+                let ticking = false;
+                window.addEventListener('scroll', () => {
+                    if (!ticking) {
+                        window.requestAnimationFrame(() => {
+                            updateActiveSection();
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+
+                window.addEventListener('hashchange', () => {
+                    const hash = window.location.hash.replace('#', '');
+                    if (hash && document.getElementById(hash)) {
+                        setActiveNav(hash);
+                    } else {
+                        updateActiveSection();
+                    }
+                });
+
+                if (window.location.hash) {
+                    const initialHash = window.location.hash.replace('#', '');
+                    if (document.getElementById(initialHash)) {
+                        setActiveNav(initialHash);
+                    } else {
+                        updateActiveSection();
+                    }
+                } else {
+                    updateActiveSection();
+                }
             }
         })();
 

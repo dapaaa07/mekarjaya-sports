@@ -14,7 +14,7 @@
 @endphp
 
 <!-- HERO SECTION (De Stijl Abstrato Asymmetric Mondrian Composition) -->
-<section class="relative bg-[#FFFFFF] py-12 sm:py-16 lg:py-20 border-b-2 border-[#111111]">
+<section id="beranda" class="relative bg-[#FFFFFF] py-12 sm:py-16 lg:py-20 border-b-2 border-[#111111]">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-6">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
 
