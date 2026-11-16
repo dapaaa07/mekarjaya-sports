@@ -37,11 +37,11 @@
                 <!-- Asymmetric Mondrian KPI Grid (5 / 3 / 4 split - NO 3 equal columns) -->
                 <div class="grid grid-cols-12 border-2 border-[#111111] bg-[#111111] gap-[2px] max-w-xl">
                     <div class="col-span-6 sm:col-span-5 bg-[#FFFF00] text-[#111111] p-4 sm:p-5">
-                        <span class="block text-3xl sm:text-4xl font-bold font-mono leading-none">{{ $totalPlayers }}</span>
+                        <span class="block text-3xl sm:text-4xl font-bold font-mono leading-none" data-counter="{{ $totalPlayers }}">{{ $totalPlayers }}</span>
                         <span class="text-xs text-[#111111] font-bold uppercase tracking-wider mt-2 block">Siswa Terdaftar</span>
                     </div>
                     <div class="col-span-6 sm:col-span-3 bg-[#FFFFFF] text-[#111111] p-4 sm:p-5">
-                        <span class="block text-3xl sm:text-4xl font-bold font-mono leading-none">{{ $yearsCovered }}</span>
+                        <span class="block text-3xl sm:text-4xl font-bold font-mono leading-none" data-counter="{{ $yearsCovered }}">{{ $yearsCovered }}</span>
                         <span class="text-xs text-[#525252] font-bold uppercase tracking-wider mt-2 block">Tahun Lahir</span>
                     </div>
                     <div class="col-span-12 sm:col-span-4 bg-[#0000FF] text-[#FFFFFF] p-4 sm:p-5">
@@ -85,7 +85,7 @@
                                 <span class="font-bold uppercase tracking-wider text-xs text-[#111111] flex items-center gap-2">
                                     <i class="fa-solid fa-calendar-days text-[#0000FF]" aria-hidden="true"></i> Sesi Latihan Terdekat
                                 </span>
-                                <span class="text-xs font-mono font-bold bg-[#111111] text-white px-2.5 py-0.5">JADWAL</span>
+                                <span class="text-xs font-mono font-bold bg-[#111111] text-white px-2.5 py-0.5 inline-flex items-center gap-1.5"><span class="destijl-pulse-dot" aria-hidden="true"></span> JADWAL</span>
                             </div>
 
                             @if(isset($upcomingSchedules) && $upcomingSchedules->count() > 0)
@@ -129,7 +129,7 @@
 <section id="program" class="relative py-14 sm:py-16 lg:py-20 bg-[#FFFFFF] border-b-2 border-[#111111]">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-6">
 
-        <div class="max-w-3xl mb-10">
+        <div class="max-w-3xl mb-10 reveal-on-scroll">
             <span class="text-xs font-mono font-bold text-[#CC0000] uppercase tracking-wider block">Kurikulum Pembinaan</span>
             <h2 class="text-2xl sm:text-4xl font-bold text-[#111111] tracking-tight mt-1">
                 Program Kelompok Umur (KU)
@@ -157,7 +157,7 @@
                         default => 'bg-[#FF0000] text-[#000000]',
                     };
                 @endphp
-                <div class="{{ $colClass }} bg-[#FFFFFF] border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex flex-col justify-between">
+                <div class="{{ $colClass }} bg-[#FFFFFF] border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex flex-col justify-between destijl-hover-card reveal-on-scroll stagger-{{ ($idx % 5) + 1 }}">
                     <div>
                         <div class="{{ $accentHeader }} border-b-2 border-[#111111] px-5 py-3 flex justify-between items-center gap-3">
                             <span class="font-mono font-bold text-sm uppercase tracking-wider">
@@ -210,7 +210,7 @@
 <section id="mini-soccer" class="relative py-14 sm:py-16 lg:py-20 bg-[#111111] text-[#FFFFFF] border-b-2 border-[#111111] dark-surface">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-6">
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end pb-8 border-b-2 border-[#333333] mb-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end pb-8 border-b-2 border-[#333333] mb-10 reveal-on-scroll">
             <div class="lg:col-span-8">
                 <span class="text-xs font-mono font-bold text-[#FFFF00] uppercase tracking-wider block">Fasilitas Mini Soccer</span>
                 <h2 class="text-2xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mt-1">
@@ -237,7 +237,7 @@
                         default => 'bg-[#FFFF00] text-[#111111]',
                     };
                 @endphp
-                <div class="bg-[#1A1A1A] border-2 border-[#FFFFFF] flex flex-col justify-between">
+                <div class="bg-[#1A1A1A] border-2 border-[#FFFFFF] flex flex-col justify-between destijl-hover-card-dark reveal-on-scroll stagger-{{ ($loop->index % 3) + 1 }}">
                     <div>
                         <div class="{{ $barBg }} border-b-2 border-[#FFFFFF] px-5 py-2.5 flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider">
                             <span>{{ $rate->day_type }}</span>
@@ -277,7 +277,7 @@
 <section id="pelatih" class="relative py-14 sm:py-16 lg:py-20 bg-[#FFFFFF] border-b-2 border-[#111111]">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-6">
 
-        <div class="max-w-3xl mb-10">
+        <div class="max-w-3xl mb-10 reveal-on-scroll">
             <span class="text-xs font-mono font-bold text-[#0000FF] uppercase tracking-wider block">Tim Profesional</span>
             <h2 class="text-2xl sm:text-4xl font-bold text-[#111111] tracking-tight mt-1">
                 Staf Pelatih Berlisensi PSSI & AFC
@@ -291,7 +291,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             @foreach($coaches as $coach)
                 @if($loop->first)
-                    <div class="lg:col-span-6 lg:row-span-2 bg-[#FFFFFF] border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex flex-col justify-between">
+                    <div class="lg:col-span-6 lg:row-span-2 bg-[#FFFFFF] border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex flex-col justify-between destijl-hover-card reveal-on-scroll stagger-1">
                         <div>
                             <div class="bg-[#FF0000] text-[#000000] border-b-2 border-[#111111] px-5 py-3 flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider">
                                 <span><i class="fa-solid fa-certificate mr-1.5" aria-hidden="true"></i> {{ $coach->license }}</span>
@@ -333,7 +333,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="lg:col-span-6 bg-[#FFFFFF] border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex flex-col sm:flex-row items-stretch">
+                    <div class="lg:col-span-6 bg-[#FFFFFF] border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex flex-col sm:flex-row items-stretch destijl-hover-card reveal-on-scroll stagger-{{ ($loop->iteration % 3) + 1 }}">
                         <div class="sm:w-40 h-48 sm:h-auto shrink-0 border-b-2 sm:border-b-0 sm:border-r-2 border-[#111111] bg-[#F4F4F4] overflow-hidden">
                             @if($coach->photo && file_exists(public_path($coach->photo)))
                                 <img src="{{ asset($coach->photo) }}" alt="{{ $coach->name }}" class="w-full h-full object-cover object-top">
@@ -380,7 +380,7 @@
 <section id="pendaftaran" class="relative py-14 sm:py-16 lg:py-20 bg-[#FFFFFF]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
 
-        <div class="mb-8 border-b-2 border-[#111111] pb-6">
+        <div class="mb-8 border-b-2 border-[#111111] pb-6 reveal-on-scroll">
             <span class="text-xs font-mono font-bold text-[#CC0000] uppercase tracking-wider block">Formulir Pendaftaran</span>
             <h2 class="text-2xl sm:text-4xl font-bold text-[#111111] tracking-tight mt-1">
                 Pendaftaran Siswa Baru SSB
@@ -420,7 +420,7 @@
             </x-alert>
         @endif
 
-        <div class="bg-[#FFFFFF] p-6 sm:p-10 border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+        <div class="bg-[#FFFFFF] p-6 sm:p-10 border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] reveal-on-scroll">
             <form id="registration-form" action="{{ route('public.register') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                 @csrf
 
@@ -622,7 +622,7 @@
 <section id="faq" class="py-14 sm:py-16 lg:py-20 bg-[#F4F4F4] border-t-2 border-[#111111]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
 
-        <div class="mb-10">
+        <div class="mb-10 reveal-on-scroll">
             <span class="text-xs font-mono font-bold text-[#0000FF] uppercase tracking-wider block">Tanya Jawab Umum</span>
             <h2 class="text-2xl sm:text-4xl font-bold text-[#111111] tracking-tight mt-1">
                 Pertanyaan yang Sering Diajukan
@@ -636,7 +636,7 @@
         <div class="space-y-3" id="faq-accordion">
 
             <!-- FAQ 1 -->
-            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden">
+            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden destijl-hover-card reveal-on-scroll stagger-1">
                 <button type="button" onclick="toggleFaq(this)" aria-expanded="false"
                         class="w-full min-h-[54px] p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-[#FFFF00]/30 transition-colors cursor-pointer">
                     <span class="font-bold text-sm text-[#111111]">
@@ -650,7 +650,7 @@
             </div>
 
             <!-- FAQ 2 -->
-            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden">
+            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden destijl-hover-card reveal-on-scroll stagger-2">
                 <button type="button" onclick="toggleFaq(this)" aria-expanded="false"
                         class="w-full min-h-[54px] p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-[#FFFF00]/30 transition-colors cursor-pointer">
                     <span class="font-bold text-sm text-[#111111]">
@@ -664,7 +664,7 @@
             </div>
 
             <!-- FAQ 3 -->
-            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden">
+            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden destijl-hover-card reveal-on-scroll stagger-3">
                 <button type="button" onclick="toggleFaq(this)" aria-expanded="false"
                         class="w-full min-h-[54px] p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-[#FFFF00]/30 transition-colors cursor-pointer">
                     <span class="font-bold text-sm text-[#111111]">
@@ -678,7 +678,7 @@
             </div>
 
             <!-- FAQ 4 -->
-            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden">
+            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden destijl-hover-card reveal-on-scroll stagger-4">
                 <button type="button" onclick="toggleFaq(this)" aria-expanded="false"
                         class="w-full min-h-[54px] p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-[#FFFF00]/30 transition-colors cursor-pointer">
                     <span class="font-bold text-sm text-[#111111]">
@@ -692,7 +692,7 @@
             </div>
 
             <!-- FAQ 5 -->
-            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden">
+            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden destijl-hover-card reveal-on-scroll stagger-1">
                 <button type="button" onclick="toggleFaq(this)" aria-expanded="false"
                         class="w-full min-h-[54px] p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-[#FFFF00]/30 transition-colors cursor-pointer">
                     <span class="font-bold text-sm text-[#111111]">
@@ -706,7 +706,7 @@
             </div>
 
             <!-- FAQ 6 -->
-            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden">
+            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden destijl-hover-card reveal-on-scroll stagger-2">
                 <button type="button" onclick="toggleFaq(this)" aria-expanded="false"
                         class="w-full min-h-[54px] p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-[#FFFF00]/30 transition-colors cursor-pointer">
                     <span class="font-bold text-sm text-[#111111]">
@@ -720,7 +720,7 @@
             </div>
 
             <!-- FAQ 7 -->
-            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden">
+            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden destijl-hover-card reveal-on-scroll stagger-3">
                 <button type="button" onclick="toggleFaq(this)" aria-expanded="false"
                         class="w-full min-h-[54px] p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-[#FFFF00]/30 transition-colors cursor-pointer">
                     <span class="font-bold text-sm text-[#111111]">
@@ -734,7 +734,7 @@
             </div>
 
             <!-- FAQ 8 -->
-            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden">
+            <div class="faq-item bg-[#FFFFFF] border-2 border-[#111111] overflow-hidden destijl-hover-card reveal-on-scroll stagger-4">
                 <button type="button" onclick="toggleFaq(this)" aria-expanded="false"
                         class="w-full min-h-[54px] p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-[#FFFF00]/30 transition-colors cursor-pointer">
                     <span class="font-bold text-sm text-[#111111]">
@@ -750,7 +750,7 @@
         </div>
 
         <!-- Help Banner (Asymmetric Mondrian Strip) -->
-        <div class="mt-10 bg-[#FFFFFF] border-2 border-[#111111] grid grid-cols-1 sm:grid-cols-12">
+        <div class="mt-10 bg-[#FFFFFF] border-2 border-[#111111] grid grid-cols-1 sm:grid-cols-12 reveal-on-scroll">
             <div class="sm:col-span-8 p-6 border-b-2 sm:border-b-0 sm:border-r-2 border-[#111111]">
                 <h4 class="font-bold text-base text-[#111111]">Masih Memiliki Pertanyaan Lain?</h4>
                 <p class="text-xs sm:text-sm text-[#525252] mt-1">Pengurus SSB Mekar Jaya Subang siap membantu melalui layanan pesan WhatsApp resmi.</p>
@@ -942,6 +942,66 @@
             icon.classList.add('rotate-180');
         }
     }
+
+    // 6. Number CountUp for Hero KPIs
+    (function() {
+        const counters = document.querySelectorAll('[data-counter]');
+        if (!counters.length) return;
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) return;
+
+        const animateCounter = (el) => {
+            const target = parseInt(el.getAttribute('data-counter'), 10);
+            if (isNaN(target)) return;
+
+            const duration = 1200;
+            const startTime = performance.now();
+
+            const update = (now) => {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(easeOut * target);
+                el.textContent = current;
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    el.textContent = target;
+                }
+            };
+            requestAnimationFrame(update);
+        };
+
+        counters.forEach(animateCounter);
+    })();
+
+    // 7. Scroll Reveal via IntersectionObserver
+    (function() {
+        const elements = document.querySelectorAll('.reveal-on-scroll');
+        if (!elements.length) return;
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+            elements.forEach(el => el.classList.add('is-revealed'));
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-revealed');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        elements.forEach(el => observer.observe(el));
+    })();
 </script>
 
 @endsection
