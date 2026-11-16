@@ -40,7 +40,12 @@ class RegistrationStatusUpdatedNotification extends Notification
             $portalUrl = route('parent.portal', ['nis' => $nis]);
             $waMessage = "Halo Bapak/Ibu {$registration->parent_name}, selamat! Pendaftaran {$registration->full_name} (Kode {$registration->registration_code}) di SSB Mekar Jaya Subang telah DISETUJUI. NIS Pemain: {$nis}. Cek Kartu Siswa Digital dan jadwal latihan di Portal Orang Tua: {$portalUrl}";
         } else {
-            $waMessage = "Halo Bapak/Ibu {$registration->parent_name}, mohon maaf permohonan pendaftaran {$registration->full_name} (Kode {$registration->registration_code}) di SSB Mekar Jaya Subang belum dapat disetujui saat ini. Silakan hubungi pengurus SSB untuk informasi lebih lanjut.";
+            $reason = trim((string) ($registration->rejection_notes ?? ''));
+            if ($reason !== '') {
+                $waMessage = "Halo Bapak/Ibu {$registration->parent_name}, mohon maaf permohonan pendaftaran {$registration->full_name} (Kode {$registration->registration_code}) di SSB Mekar Jaya Subang belum dapat disetujui.\n\nAlasan/Catatan: \"{$reason}\"\n\nSilakan hubungi pengurus SSB jika ingin melengkapi atau memperbaiki data berkas pendaftaran. Terima kasih.";
+            } else {
+                $waMessage = "Halo Bapak/Ibu {$registration->parent_name}, mohon maaf permohonan pendaftaran {$registration->full_name} (Kode {$registration->registration_code}) di SSB Mekar Jaya Subang belum dapat disetujui saat ini. Silakan hubungi pengurus SSB untuk informasi lebih lanjut. Terima kasih.";
+            }
         }
 
         return [
@@ -66,7 +71,8 @@ class RegistrationStatusUpdatedNotification extends Notification
             $badge = 'DISETUJUI';
         } else {
             $title = "Pendaftaran Ditolak: {$this->registration->full_name}";
-            $message = "Pendaftaran kode {$this->registration->registration_code} ditolak. Kirim info lanjutan ke {$this->registration->parent_name}.";
+            $reason = $this->registration->rejection_notes ? " (Alasan: {$this->registration->rejection_notes})" : '';
+            $message = "Pendaftaran kode {$this->registration->registration_code} ditolak{$reason}. Kirim info lanjutan ke {$this->registration->parent_name}.";
             $badge = 'DITOLAK';
         }
 

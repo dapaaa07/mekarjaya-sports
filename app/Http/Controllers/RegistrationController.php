@@ -74,9 +74,16 @@ class RegistrationController extends Controller
             ]));
     }
 
-    public function reject(Registration $registration)
+    public function reject(Request $request, Registration $registration)
     {
-        $registration->update(['status' => 'rejected']);
+        $validated = $request->validate([
+            'rejection_notes' => 'nullable|string|max:500',
+        ]);
+
+        $registration->update([
+            'status' => 'rejected',
+            'rejection_notes' => $validated['rejection_notes'] ?? null,
+        ]);
 
         $admins = User::where('role', 'admin')->get();
         if ($admins->isNotEmpty()) {
@@ -88,7 +95,7 @@ class RegistrationController extends Controller
         return back()
             ->with('success', "Pendaftaran {$registration->full_name} telah ditolak.")
             ->with('wa_notify', array_merge($waPayload, [
-                'title' => "Pesan Pemberitahuan WhatsApp ({$registration->parent_name})",
+                'title' => "Pesan Pemberitahuan Penolakan WhatsApp ({$registration->parent_name})",
                 'status' => 'rejected',
             ]));
     }

@@ -121,14 +121,26 @@ class RegistrationWorkflowTest extends TestCase
             'status' => 'pending',
         ]);
 
-        $response = $this->actingAs($admin)->post("/admin/registrations/{$registration->id}/reject");
+        $response = $this->actingAs($admin)->post("/admin/registrations/{$registration->id}/reject", [
+            'rejection_notes' => 'Foto dokumen KK buram dan tidak terbaca jelas.',
+        ]);
 
         $response->assertRedirect();
         $response->assertSessionHas('wa_notify');
-        $this->assertEquals('rejected', $registration->fresh()->status);
+
+        $fresh = $registration->fresh();
+        $this->assertEquals('rejected', $fresh->status);
+        $this->assertEquals('Foto dokumen KK buram dan tidak terbaca jelas.', $fresh->rejection_notes);
 
         $notif = $admin->notifications()->where('type', RegistrationStatusUpdatedNotification::class)->first();
         $this->assertNotNull($notif);
         $this->assertEquals('rejected', $notif->data['status']);
+        $this->assertStringContainsString('Foto dokumen KK buram dan tidak terbaca jelas.', $notif->data['wa_message']);
+        $this->assertStringContainsString(rawurlencode('Foto dokumen KK buram dan tidak terbaca jelas.'), $notif->data['wa_url']);
+
+        $indexResponse = $this->actingAs($admin)->get('/admin/registrations');
+        $indexResponse->assertStatus(200);
+        $indexResponse->assertSee('Foto dokumen KK buram dan tidak terbaca jelas.');
+        $indexResponse->assertSee('WA Alasan');
     }
 }
