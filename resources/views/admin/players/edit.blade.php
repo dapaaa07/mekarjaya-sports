@@ -57,12 +57,19 @@
             </div>
 
             <div>
-                <label for="jersey_size" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Ukuran Jersey *</label>
+                <div class="flex items-center justify-between mb-1.5">
+                    <label for="jersey_size" class="block font-bold text-[#111111] uppercase tracking-wider text-xs">Ukuran Jersey *</label>
+                    <button type="button" onclick="openJerseyModal()"
+                            class="text-xs text-[#0000FF] hover:underline font-mono font-bold inline-flex items-center gap-1 cursor-pointer">
+                        <i class="fa-solid fa-ruler-combined text-[11px]" aria-hidden="true"></i> Panduan Ukuran
+                    </button>
+                </div>
                 <select id="jersey_size" name="jersey_size" required class="ds-input text-sm font-semibold">
                     @foreach(['S', 'M', 'L', 'XL', 'XXL'] as $sz)
                         <option value="{{ $sz }}" {{ old('jersey_size', $player->jersey_size ?? 'M') == $sz ? 'selected' : '' }}>{{ $sz }}</option>
                     @endforeach
                 </select>
+                <div id="jersey-size-suggestion" class="hidden"></div>
             </div>
 
             <div>

@@ -668,7 +668,13 @@
                         </div>
 
                         <div>
-                            <label for="jersey_size" class="block text-xs font-bold text-[#111111] uppercase tracking-wider mb-1.5">Ukuran Jersey Tim *</label>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label for="jersey_size" class="block text-xs font-bold text-[#111111] uppercase tracking-wider">Ukuran Jersey Tim *</label>
+                                <button type="button" onclick="openJerseyModal()"
+                                        class="text-xs text-[#0000FF] hover:underline font-mono font-bold inline-flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-solid fa-ruler-combined text-[11px]" aria-hidden="true"></i> Panduan Ukuran
+                                </button>
+                            </div>
                             <select id="jersey_size" name="jersey_size" required class="ds-input">
                                 <option value="S" {{ old('jersey_size') == 'S' ? 'selected' : '' }}>S (Ukuran Anak / Kecil)</option>
                                 <option value="M" {{ old('jersey_size', 'M') == 'M' ? 'selected' : '' }}>M (Ukuran Sedang)</option>
@@ -676,6 +682,7 @@
                                 <option value="XL" {{ old('jersey_size') == 'XL' ? 'selected' : '' }}>XL (Ukuran Extra Large)</option>
                                 <option value="XXL" {{ old('jersey_size') == 'XXL' ? 'selected' : '' }}>XXL</option>
                             </select>
+                            <div id="jersey-size-suggestion" class="hidden"></div>
                         </div>
 
                         <div>

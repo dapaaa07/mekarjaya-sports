@@ -472,5 +472,6 @@
         });
     </script>
 
+    @include('components.jersey-size-modal')
 </body>
 </html>

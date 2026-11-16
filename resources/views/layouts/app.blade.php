@@ -226,6 +226,7 @@
     </div>
 
     @include('components.privacy-modal')
+    @include('components.jersey-size-modal')
 
     <!-- Core UI Interactions, Validation ARIA Sync & Preserved Secret Admin Access -->
     <script>
