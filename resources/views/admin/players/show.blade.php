@@ -303,6 +303,9 @@
             @php
                 $curPaid = $player->getTotalSppPaidForMonth();
                 $curShortage = $player->getSppShortageForMonth();
+                $arrearsCount = $player->spp_arrears_count;
+                $totalArrears = $player->total_spp_arrears;
+                $unpaidPeriods = $player->unpaid_spp_periods;
             @endphp
             <div class="flex items-start justify-between gap-3 border-b-2 border-[#111111] pb-3.5">
                 <div>
@@ -313,7 +316,12 @@
                         Tarif standar kelompok umur {{ $player->age_category?->code ?? $player->age_category_badge }}: <strong class="font-mono text-[#111111]">Rp {{ number_format($player->default_monthly_fee, 0, ',', '.') }}</strong>/bulan
                     </p>
                 </div>
-                @if($player->hasPaidSppForMonth())
+                @if($arrearsCount > 1)
+                    <div class="text-right shrink-0">
+                        <span class="badge-danger font-mono text-[11px] block bg-[#DC2626] text-white">Menunggak {{ $arrearsCount }} Bln</span>
+                        <span class="text-[10px] font-mono text-[#B91C1C] font-bold block mt-0.5">Total: Rp {{ number_format($totalArrears, 0, ',', '.') }}</span>
+                    </div>
+                @elseif($player->hasPaidSppForMonth())
                     <span class="badge-success font-mono shrink-0">Lunas</span>
                 @elseif($curPaid > 0)
                     <div class="text-right shrink-0">
@@ -324,6 +332,18 @@
                     <span class="badge-danger font-mono shrink-0">Belum Bayar</span>
                 @endif
             </div>
+
+            @if($arrearsCount > 1)
+                <div class="p-3.5 bg-[#FEF2F2] border-2 border-[#DC2626] text-xs text-[#991B1B] font-mono space-y-1">
+                    <div class="flex items-center gap-2 font-bold text-xs text-[#991B1B]">
+                        <i class="fa-solid fa-triangle-exclamation text-sm" aria-hidden="true"></i>
+                        <span>Pemain Menunggak {{ $arrearsCount }} Bulan (Total: Rp {{ number_format($totalArrears, 0, ',', '.') }})</span>
+                    </div>
+                    <p class="text-[11px] text-[#7F1D1D] leading-tight">
+                        Periode yang belum lunas: <strong>{{ $unpaidPeriods->pluck('period_label')->join(', ') }}</strong>.
+                    </p>
+                </div>
+            @endif
 
             <form action="{{ route('admin.players.spp-payments.store', $player->id) }}" method="POST" class="space-y-4 text-xs">
                 @csrf

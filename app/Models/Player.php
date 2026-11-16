@@ -247,6 +247,117 @@ class Player extends Model
         }
     }
 
+    public function getBillingStartDate(): \Carbon\Carbon
+    {
+        $now = now()->startOfMonth();
+        $date = $this->created_at ? $this->created_at->copy()->startOfMonth() : $now->copy();
+
+        $earliestPayment = $this->relationLoaded('sppPayments')
+            ? $this->sppPayments->sortBy(fn ($p) => ($p->periode_tahun * 100) + $p->periode_bulan)->first()
+            : $this->sppPayments()->orderBy('periode_tahun', 'asc')->orderBy('periode_bulan', 'asc')->first();
+
+        if ($earliestPayment) {
+            $paymentDate = \Carbon\Carbon::createFromDate($earliestPayment->periode_tahun, $earliestPayment->periode_bulan, 1)->startOfMonth();
+            if ($paymentDate->lt($date)) {
+                $date = $paymentDate;
+            }
+        }
+
+        $maxLookback = $now->copy()->subMonths(11);
+        if ($date->lt($maxLookback)) {
+            $date = $maxLookback;
+        }
+
+        if ($date->gt($now)) {
+            $date = $now->copy();
+        }
+
+        return $date;
+    }
+
+    public function getUnpaidSppPeriodsAttribute(): \Illuminate\Support\Collection
+    {
+        $unpaid = collect();
+        $start = $this->getBillingStartDate();
+        $current = now()->startOfMonth();
+
+        $cursor = $start->copy();
+        while ($cursor->lte($current)) {
+            $m = (int) $cursor->month;
+            $y = (int) $cursor->year;
+            $required = $this->default_monthly_fee;
+            $paid = $this->getTotalSppPaidForMonth($m, $y);
+
+            if ($paid < $required) {
+                $unpaid->push((object) [
+                    'periode_bulan' => $m,
+                    'periode_tahun' => $y,
+                    'month_name' => SppPayment::MONTHS_ID[$m] ?? (string) $m,
+                    'period_label' => (SppPayment::MONTHS_ID[$m] ?? $m) . ' ' . $y,
+                    'required' => $required,
+                    'paid' => $paid,
+                    'shortage' => $required - $paid,
+                    'is_current_month' => ($m === (int) now()->month && $y === (int) now()->year),
+                    'status' => $paid > 0 ? 'Belum Lunas' : 'Belum Bayar',
+                ]);
+            }
+
+            $cursor->addMonth();
+        }
+
+        return $unpaid;
+    }
+
+    public function getSppArrearsCountAttribute(): int
+    {
+        return $this->unpaid_spp_periods->count();
+    }
+
+    public function getTotalSppArrearsAttribute(): int
+    {
+        return (int) $this->unpaid_spp_periods->sum('shortage');
+    }
+
+    public function getRecentSppBillingSummary(int $limit = 6): \Illuminate\Support\Collection
+    {
+        $list = collect();
+        $start = $this->getBillingStartDate();
+        $current = now()->startOfMonth();
+        $from = $start->copy();
+
+        $cursor = $current->copy();
+        $count = 0;
+        while ($cursor->gte($from) && $count < $limit) {
+            $m = (int) $cursor->month;
+            $y = (int) $cursor->year;
+            $required = $this->default_monthly_fee;
+            $paid = $this->getTotalSppPaidForMonth($m, $y);
+            $shortage = max(0, $required - $paid);
+
+            $payments = $this->relationLoaded('sppPayments')
+                ? $this->sppPayments->filter(fn ($p) => (int) $p->periode_bulan === $m && (int) $p->periode_tahun === $y)->values()
+                : $this->sppPayments()->where('periode_bulan', $m)->where('periode_tahun', $y)->get();
+
+            $list->push((object) [
+                'periode_bulan' => $m,
+                'periode_tahun' => $y,
+                'month_name' => SppPayment::MONTHS_ID[$m] ?? (string) $m,
+                'period_label' => (SppPayment::MONTHS_ID[$m] ?? $m) . ' ' . $y,
+                'required' => $required,
+                'paid' => $paid,
+                'shortage' => $shortage,
+                'is_lunas' => $paid >= $required,
+                'is_current_month' => ($m === (int) now()->month && $y === (int) now()->year),
+                'payments' => $payments,
+            ]);
+
+            $cursor->subMonth();
+            $count++;
+        }
+
+        return $list;
+    }
+
     public function getAgeAttribute(): int
     {
         return $this->birth_date ? $this->birth_date->age : (now()->year - $this->birth_year);

@@ -211,4 +211,68 @@ class SppPaymentTest extends TestCase
         $indexUnpaid->assertSee($pPartial->full_name);
         $indexUnpaid->assertSee($pUnpaid->full_name);
     }
+
+    public function test_player_with_multi_month_spp_arrears_displays_accurate_information_on_portal_and_admin(): void
+    {
+        $admin = $this->createAdmin();
+
+        $registeredDate = Carbon::now()->subMonths(3)->startOfMonth();
+        $player = $this->createPlayer([
+            'birth_year' => 2014,
+            'created_at' => $registeredDate,
+            'spp_status' => 'Belum Bayar',
+        ]);
+
+        $m3Ago = Carbon::now()->subMonths(3);
+        $m2Ago = Carbon::now()->subMonths(2);
+        $m1Ago = Carbon::now()->subMonths(1);
+        $mNow = Carbon::now();
+
+        // Month -3: Paid in full (150.000)
+        SppPayment::create([
+            'player_id' => $player->id,
+            'periode_bulan' => (int) $m3Ago->month,
+            'periode_tahun' => (int) $m3Ago->year,
+            'jumlah' => 150000,
+            'tanggal_bayar' => $m3Ago->toDateString(),
+            'metode' => 'transfer',
+        ]);
+
+        // Month -2: Paid partial 50.000 (shortage 100.000)
+        SppPayment::create([
+            'player_id' => $player->id,
+            'periode_bulan' => (int) $m2Ago->month,
+            'periode_tahun' => (int) $m2Ago->year,
+            'jumlah' => 50000,
+            'tanggal_bayar' => $m2Ago->toDateString(),
+            'metode' => 'tunai',
+        ]);
+
+        // Month -1: Unpaid (shortage 150.000)
+        // Current Month: Unpaid (shortage 150.000)
+
+        $unpaid = $player->fresh()->unpaid_spp_periods;
+        $this->assertCount(3, $unpaid);
+        $this->assertEquals(3, $player->fresh()->spp_arrears_count);
+        $this->assertEquals(400000, $player->fresh()->total_spp_arrears);
+
+        // Check Parent Portal response
+        $portal = $this->get(route('parent.portal', ['nis' => $player->nis]));
+        $portal->assertOk();
+        $portal->assertSee('Menunggak 3 Bulan');
+        $portal->assertSee('Rp 400.000');
+        $portal->assertSee('parent-spp-section');
+        $portal->assertSee('Rekening Pembayaran Resmi SSB');
+
+        // Check Admin Players Index displays multi-month badge
+        $adminIndex = $this->actingAs($admin)->get(route('admin.players.index'));
+        $adminIndex->assertOk();
+        $adminIndex->assertSee('Menunggak 3 Bln');
+
+        // Check Admin Player Show displays multi-month alert
+        $adminShow = $this->actingAs($admin)->get(route('admin.players.show', $player->id));
+        $adminShow->assertOk();
+        $adminShow->assertSee('Pemain Menunggak 3 Bulan');
+        $adminShow->assertSee('Rp 400.000');
+    }
 }

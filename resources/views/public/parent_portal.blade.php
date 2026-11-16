@@ -150,18 +150,30 @@
                                             <span class="font-bold text-white text-sm">{{ $player->position }}</span>
                                         </div>
                                         <div class="border-t border-[#333333] pt-3 pl-1">
-                                            <span class="text-[#D4D4D4] block text-[11px] font-mono uppercase mb-1">Status SPP Bulan Ini</span>
+                                            <span class="text-[#D4D4D4] block text-[11px] font-mono uppercase mb-1">Status Iuran SPP</span>
                                             @php
-                                                $curPaid = $player->getTotalSppPaidForMonth();
-                                                $curShortage = $player->getSppShortageForMonth();
+                                                $unpaidPeriods = $player->unpaid_spp_periods;
+                                                $arrearsCount = $unpaidPeriods->count();
+                                                $totalArrears = $player->total_spp_arrears;
                                             @endphp
-                                            @if($player->hasPaidSppForMonth())
-                                                <span class="badge-success text-xs"><i class="fa-solid fa-check mr-1" aria-hidden="true"></i> Lunas</span>
-                                            @elseif($curPaid > 0)
-                                                <span class="badge-secondary text-xs"><i class="fa-solid fa-clock mr-1" aria-hidden="true"></i> Belum Lunas</span>
-                                                <span class="block text-[10px] font-mono text-[#FCA5A5] mt-0.5">Kurang Rp {{ number_format($curShortage, 0, ',', '.') }}</span>
+                                            @if($arrearsCount === 0)
+                                                <span class="badge-success text-xs font-mono"><i class="fa-solid fa-check mr-1" aria-hidden="true"></i> Lunas (Bebas Tunggakan)</span>
+                                            @elseif($arrearsCount === 1)
+                                                @php $singleP = $unpaidPeriods->first(); @endphp
+                                                @if($singleP->paid > 0)
+                                                    <span class="badge-secondary text-xs font-mono"><i class="fa-solid fa-clock mr-1" aria-hidden="true"></i> Belum Lunas</span>
+                                                    <span class="block text-[10px] font-mono text-[#FCA5A5] mt-0.5">Kurang Rp {{ number_format($singleP->shortage, 0, ',', '.') }} ({{ $singleP->period_label }})</span>
+                                                @else
+                                                    <span class="badge-danger text-xs font-mono"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i> Belum Bayar</span>
+                                                    <span class="block text-[10px] font-mono text-[#FCA5A5] mt-0.5">Tagihan: Rp {{ number_format($singleP->shortage, 0, ',', '.') }} ({{ $singleP->period_label }})</span>
+                                                @endif
                                             @else
-                                                <span class="badge-danger text-xs"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i> Belum Bayar</span>
+                                                <span class="badge-danger text-xs font-mono bg-[#DC2626] text-white border border-white">
+                                                    <i class="fa-solid fa-triangle-exclamation mr-1" aria-hidden="true"></i> Menunggak {{ $arrearsCount }} Bulan
+                                                </span>
+                                                <span class="block text-[11px] font-mono font-bold text-[#FCA5A5] mt-0.5">
+                                                    Total: Rp {{ number_format($totalArrears, 0, ',', '.') }}
+                                                </span>
                                             @endif
                                         </div>
                                     </div>
@@ -447,6 +459,210 @@
                                 </p>
                             </div>
                         @endif
+                    </div>
+
+                    <!-- INFORMASI & STATUS PEMBAYARAN IURAN SPP -->
+                    <div id="parent-spp-section" class="editorial-card p-6 sm:p-8 space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-[#111111] pb-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 bg-[#FFFF00] text-[#111111] border-2 border-[#111111] flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-receipt text-sm" aria-hidden="true"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-[#111111] text-base sm:text-lg flex items-center gap-2 flex-wrap">
+                                        Status &amp; Riwayat Iuran SPP Siswa
+                                        @if($arrearsCount > 1)
+                                            <span class="bg-[#DC2626] text-white text-[10px] font-mono font-bold px-2 py-0.5 border border-[#111111]">
+                                                Menunggak {{ $arrearsCount }} Bulan
+                                            </span>
+                                        @elseif($arrearsCount === 1)
+                                            <span class="bg-[#FEF08A] text-[#854D0E] text-[10px] font-mono font-bold px-2 py-0.5 border border-[#111111]">
+                                                1 Bulan Belum Lunas
+                                            </span>
+                                        @else
+                                            <span class="bg-[#DCFCE7] text-[#166534] text-[10px] font-mono font-bold px-2 py-0.5 border border-[#111111]">
+                                                Bebas Tunggakan
+                                            </span>
+                                        @endif
+                                    </h3>
+                                    <p class="text-xs text-[#525252] mt-0.5">
+                                        Informasi transparan kewajiban dan catatan pembayaran SPP bulanan siswa di SSB Mekar Jaya Subang.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="font-mono text-xs font-bold text-[#111111] px-3 py-1.5 bg-[#F4F4F4] border-2 border-[#111111] self-start sm:self-center">
+                                Tarif KU: Rp {{ number_format($player->default_monthly_fee, 0, ',', '.') }} / bln
+                            </div>
+                        </div>
+
+                        <!-- 3 Stat Metrics Cards -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="p-4 bg-[#F4F4F4] border-2 border-[#111111] space-y-1">
+                                <span class="text-[10px] uppercase font-mono font-bold text-[#525252] block">Kelompok Umur &amp; Tarif</span>
+                                <span class="text-lg font-mono font-bold text-[#111111] block">
+                                    {{ $player->age_category?->code ?? $player->age_category_badge }}
+                                </span>
+                                <span class="text-xs text-[#525252] font-mono">Rp {{ number_format($player->default_monthly_fee, 0, ',', '.') }} / bulan</span>
+                            </div>
+                            <div class="p-4 border-2 border-[#111111] space-y-1 {{ $arrearsCount > 0 ? 'bg-[#FEF2F2] border-[#DC2626]' : 'bg-[#F0FDF4] border-[#166534]' }}">
+                                <span class="text-[10px] uppercase font-mono font-bold {{ $arrearsCount > 0 ? 'text-[#991B1B]' : 'text-[#166534]' }} block">Status Tunggakan</span>
+                                @if($arrearsCount === 0)
+                                    <span class="text-lg font-mono font-bold text-[#166534] block">Lunas</span>
+                                    <span class="text-xs text-[#166534] font-mono">Tidak ada tunggakan iuran</span>
+                                @elseif($arrearsCount === 1)
+                                    <span class="text-lg font-mono font-bold text-[#B45309] block">1 Bulan</span>
+                                    <span class="text-xs text-[#B45309] font-mono">Kurang: Rp {{ number_format($totalArrears, 0, ',', '.') }}</span>
+                                @else
+                                    <span class="text-lg font-mono font-bold text-[#DC2626] block">{{ $arrearsCount }} Bulan</span>
+                                    <span class="text-xs text-[#DC2626] font-mono font-bold">Total: Rp {{ number_format($totalArrears, 0, ',', '.') }}</span>
+                                @endif
+                            </div>
+                            <div class="p-4 bg-[#F4F4F4] border-2 border-[#111111] space-y-1">
+                                <span class="text-[10px] uppercase font-mono font-bold text-[#525252] block">Total Iuran Terbayar</span>
+                                <span class="text-lg font-mono font-bold text-[#166534] block">
+                                    Rp {{ number_format($player->sppPayments->sum('jumlah'), 0, ',', '.') }}
+                                </span>
+                                <span class="text-xs text-[#525252] font-mono">{{ $player->sppPayments->count() }} kali transaksi tercatat</span>
+                            </div>
+                        </div>
+
+                        <!-- Alert Box if there are arrears -->
+                        @if($arrearsCount > 1)
+                            <div class="bg-[#FEF2F2] border-2 border-[#DC2626] border-l-[8px] border-l-[#DC2626] p-4 text-xs text-[#991B1B] space-y-1.5">
+                                <div class="flex items-center gap-2 font-bold font-mono text-sm text-[#991B1B]">
+                                    <i class="fa-solid fa-triangle-exclamation text-base" aria-hidden="true"></i>
+                                    <span>Pemberitahuan Tunggakan Iuran (Lebih dari 1 Bulan)</span>
+                                </div>
+                                <p class="leading-relaxed">
+                                    Siswa tercatat belum melunasi iuran SPP selama <strong>{{ $arrearsCount }} bulan</strong> dengan total kekurangan pembayaran sebesar <strong>Rp {{ number_format($totalArrears, 0, ',', '.') }}</strong>.
+                                    Bulan yang belum lunas:
+                                    <strong>{{ $unpaidPeriods->pluck('period_label')->join(', ') }}</strong>.
+                                </p>
+                                <p class="text-[11px] text-[#525252]">
+                                    Mohon kesediaan Bapak/Ibu wali murid untuk melakukan penyelesaian kewajiban SPP agar operasional pembinaan siswa dapat terus berjalan lancar.
+                                </p>
+                            </div>
+                        @elseif($arrearsCount === 1)
+                            @php $singleP = $unpaidPeriods->first(); @endphp
+                            <div class="bg-[#FFFBEB] border-2 border-[#F59E0B] border-l-[8px] border-l-[#F59E0B] p-4 text-xs text-[#92400E] space-y-1">
+                                <div class="flex items-center gap-2 font-bold font-mono text-xs text-[#92400E]">
+                                    <i class="fa-solid fa-circle-exclamation text-sm" aria-hidden="true"></i>
+                                    <span>Tagihan Iuran SPP Bulan Berjalan</span>
+                                </div>
+                                <p class="leading-relaxed">
+                                    Iuran SPP periode <strong>{{ $singleP->period_label }}</strong> belum terpenuhi.
+                                    @if($singleP->paid > 0)
+                                        Telah dibayar: <strong>Rp {{ number_format($singleP->paid, 0, ',', '.') }}</strong>, sisa kekurangan: <strong>Rp {{ number_format($singleP->shortage, 0, ',', '.') }}</strong>.
+                                    @else
+                                        Jumlah tagihan: <strong>Rp {{ number_format($singleP->shortage, 0, ',', '.') }}</strong>.
+                                    @endif
+                                </p>
+                            </div>
+                        @endif
+
+                        <!-- Recent Billing Periods Table -->
+                        @php $billingHistory = $player->getRecentSppBillingSummary(6); @endphp
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-[#111111] text-xs font-mono uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-days text-[#0000FF]" aria-hidden="true"></i>
+                                Rincian Status Tagihan &amp; Pembayaran Terkini
+                            </h4>
+
+                            @if($billingHistory->isNotEmpty())
+                                <div class="overflow-x-auto border-2 border-[#111111]">
+                                    <table class="w-full text-left border-collapse text-xs text-[#111111]">
+                                        <thead>
+                                            <tr class="bg-[#111111] text-white font-mono font-bold uppercase text-[11px]">
+                                                <th class="p-3">Periode</th>
+                                                <th class="p-3">Tarif SPP</th>
+                                                <th class="p-3">Total Terbayar</th>
+                                                <th class="p-3">Sisa / Status</th>
+                                                <th class="p-3">Rincian Pembayaran</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y-2 divide-[#111111] bg-white">
+                                            @foreach($billingHistory as $bItem)
+                                                <tr class="hover:bg-[#F4F4F4] transition-colors">
+                                                    <td class="p-3 font-mono font-bold">
+                                                        {{ $bItem->period_label }}
+                                                        @if($bItem->is_current_month)
+                                                            <span class="block text-[10px] text-[#0000FF] uppercase mt-0.5">Bulan Berjalan</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="p-3 font-mono">
+                                                        Rp {{ number_format($bItem->required, 0, ',', '.') }}
+                                                    </td>
+                                                    <td class="p-3 font-mono font-bold {{ $bItem->paid > 0 ? 'text-[#166534]' : 'text-[#525252]' }}">
+                                                        Rp {{ number_format($bItem->paid, 0, ',', '.') }}
+                                                    </td>
+                                                    <td class="p-3">
+                                                        @if($bItem->is_lunas)
+                                                            <span class="badge-success text-[11px] font-mono">
+                                                                <i class="fa-solid fa-check mr-1" aria-hidden="true"></i> Lunas
+                                                            </span>
+                                                        @elseif($bItem->paid > 0)
+                                                            <span class="badge-secondary text-[11px] font-mono inline-block">
+                                                                <i class="fa-solid fa-clock mr-1" aria-hidden="true"></i> Belum Lunas
+                                                            </span>
+                                                            <span class="block text-[10px] font-mono text-[#DC2626] font-bold mt-0.5">
+                                                                Kurang Rp {{ number_format($bItem->shortage, 0, ',', '.') }}
+                                                            </span>
+                                                        @else
+                                                            <span class="badge-danger text-[11px] font-mono">
+                                                                <i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i> Belum Bayar
+                                                            </span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="p-3 font-mono text-[11px] text-[#525252]">
+                                                        @if($bItem->payments->isNotEmpty())
+                                                            @foreach($bItem->payments as $pRow)
+                                                                <div class="py-0.5 border-b border-[#E5E5E5] last:border-b-0">
+                                                                    <span class="font-bold text-[#111111]">{{ $pRow->tanggal_bayar->format('d M Y') }}</span>:
+                                                                    <span class="text-[#166534] font-bold">{{ $pRow->formatted_jumlah }}</span>
+                                                                    <span class="uppercase text-[9px] px-1 bg-[#E5E5E5] text-[#111111] font-bold">{{ $pRow->metode }}</span>
+                                                                    @if($pRow->keterangan)
+                                                                        <span class="text-[10px] text-[#737373] block truncate max-w-[200px]" title="{{ $pRow->keterangan }}">({{ $pRow->keterangan }})</span>
+                                                                    @endif
+                                                                </div>
+                                                            @endforeach
+                                                        @else
+                                                            <span class="italic text-[#737373]">Belum ada transaksi</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <p class="text-xs text-[#525252] p-4 bg-[#F4F4F4] border-2 border-dashed border-[#111111] text-center">
+                                    Belum ada data periode iuran.
+                                </p>
+                            @endif
+                        </div>
+
+                        <!-- Payment Help & WhatsApp Confirmation Box -->
+                        <div class="bg-[#F4F4F4] border-2 border-[#111111] p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div class="space-y-1 text-xs">
+                                <span class="font-mono font-bold uppercase text-[11px] text-[#111111] flex items-center gap-1.5">
+                                    <i class="fa-solid fa-building-columns text-[#0000FF]" aria-hidden="true"></i> Rekening Pembayaran Resmi SSB
+                                </span>
+                                <p class="text-[#525252]">
+                                    Bank BCA: <strong class="text-[#111111] font-mono">123-456-7890</strong> a.n. <strong>SSB Mekar Jaya Subang</strong><br>
+                                    Atau pembayaran tunai di sekretariat Lapangan Veteran Dangdeur Subang saat jadwal latihan.
+                                </p>
+                            </div>
+
+                            @php
+                                $waMessage = "Halo Admin SSB Mekar Jaya Subang, saya orang tua dari {$player->full_name} (NIS: {$player->nis}). Ingin konfirmasi pembayaran / menanyakan status SPP siswa (" . ($arrearsCount > 0 ? "Tunggakan: {$arrearsCount} Bulan - Rp " . number_format($totalArrears, 0, ',', '.') : 'Status: Lunas') . ").";
+                                $waUrl = "https://wa.me/6285133463626?text=" . urlencode($waMessage);
+                            @endphp
+                            <a href="{{ $waUrl }}" target="_blank"
+                               class="min-h-[44px] px-4 py-2.5 bg-[#166534] hover:bg-[#14532D] text-white border-2 border-[#111111] text-xs font-mono font-bold inline-flex items-center gap-2 shrink-0 transition-colors">
+                                <i class="fa-brands fa-whatsapp text-sm" aria-hidden="true"></i>
+                                Konfirmasi / Tanya SPP via WA
+                            </a>
+                        </div>
                     </div>
 
                 </div>

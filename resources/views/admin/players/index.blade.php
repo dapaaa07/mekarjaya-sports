@@ -185,8 +185,29 @@
                                     @php
                                         $curPaid = $player->getTotalSppPaidForMonth();
                                         $curShortage = $player->getSppShortageForMonth();
+                                        $arrearsCount = $player->spp_arrears_count;
+                                        $totalArrears = $player->total_spp_arrears;
                                     @endphp
-                                    @if($player->hasPaidSppForMonth())
+                                    @if($arrearsCount > 1)
+                                        <div>
+                                            <span class="badge-danger text-xs font-mono inline-block bg-[#DC2626] text-white border border-[#111111]">
+                                                <i class="fa-solid fa-triangle-exclamation mr-1" aria-hidden="true"></i> Menunggak {{ $arrearsCount }} Bln
+                                            </span>
+                                            <span class="block text-[10px] font-mono text-[#B91C1C] font-bold mt-0.5">Total: Rp {{ number_format($totalArrears, 0, ',', '.') }}</span>
+                                        </div>
+                                        @if(Auth::user()?->isAdmin())
+                                            <a href="{{ route('admin.players.show', $player->id) }}#spp-section"
+                                               class="min-h-[40px] px-2.5 py-1 bg-[#FFFF00] hover:bg-[#E6E600] text-[#111111] border-2 border-[#111111] text-[11px] font-bold inline-flex items-center gap-1 transition-colors">
+                                                <i class="fa-solid fa-receipt text-[10px]" aria-hidden="true"></i> Lunasi SPP
+                                            </a>
+                                        @else
+                                            <a href="{{ route('admin.players.show', $player->id) }}#spp-section"
+                                               title="Lihat Riwayat SPP {{ $player->full_name }}"
+                                               class="min-h-[40px] px-2.5 py-1 bg-white hover:bg-[#FFFF00] text-[#111111] border border-[#111111] text-[11px] font-mono font-bold inline-flex items-center transition-colors">
+                                                Riwayat
+                                            </a>
+                                        @endif
+                                    @elseif($player->hasPaidSppForMonth())
                                         <span class="badge-success text-xs font-mono">
                                             <i class="fa-solid fa-check mr-1" aria-hidden="true"></i> Lunas
                                         </span>
