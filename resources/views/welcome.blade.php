@@ -52,8 +52,8 @@
 
                 <!-- Primary & Secondary CTAs -->
                 <div class="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-                    <a href="#roster" class="btn-primary text-sm">
-                        <i class="fa-solid fa-calendar-days text-xs" aria-hidden="true"></i> Cari Pemain Per Tahun Lahir
+                    <a href="{{ route('parent.portal') }}" class="btn-primary text-sm">
+                        <i class="fa-solid fa-id-card text-xs" aria-hidden="true"></i> Cek Data Siswa di Portal Ortu
                     </a>
                     <a href="#pendaftaran" class="btn-secondary text-sm">
                         Form Pendaftaran Siswa
@@ -124,224 +124,8 @@
 </section>
 
 
-<!-- SECTION 1: ROSTER PEMAIN PER TAHUN LAHIR -->
-<section id="roster" class="relative py-14 sm:py-16 lg:py-20 bg-[#FFFFFF] border-b-2 border-[#111111]">
-    <div class="max-w-[1280px] mx-auto px-4 sm:px-6">
 
-        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b-2 border-[#111111] pb-6 mb-8">
-            <div class="max-w-3xl">
-                <span class="text-xs font-mono font-bold text-[#0000FF] uppercase tracking-wider block">Direktori Anggota Resmi</span>
-                <h2 class="text-2xl sm:text-4xl font-bold text-[#111111] tracking-tight mt-1">
-                    Direktori & Data Siswa SSB Mekar Jaya
-                </h2>
-                <p class="text-[#525252] mt-2 text-sm sm:text-base max-w-[72ch] leading-relaxed">
-                    Informasi seluruh siswa aktif Akademi Sepak Bola Mekar Jaya Subang. Saring data berdasarkan nama, Nomor Induk Siswa (NIS), tahun kelahiran, atau Kelompok Umur (KU).
-                </p>
-            </div>
-
-            <div class="border-2 border-[#111111] bg-[#111111] text-white px-4 py-3 font-mono text-xs shrink-0 self-start lg:self-end">
-                <span class="text-[#D4D4D4] block text-[11px] uppercase">Menampilkan Data</span>
-                <span class="text-lg font-bold text-[#FFFF00]">{{ $players->total() }} Siswa Aktif</span>
-            </div>
-        </div>
-
-        <!-- Filter Controls Matrix -->
-        <div class="bg-[#FFFFFF] p-5 sm:p-6 mb-8 border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] space-y-5">
-            <form action="{{ route('home') }}#roster" method="GET" class="space-y-5">
-
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
-
-                    <!-- Search Input -->
-                    <div class="md:col-span-5">
-                        <label for="search" class="block text-xs font-bold text-[#111111] uppercase tracking-wider mb-1.5">Cari Nama / NIS Pemain</label>
-                        <input type="text" id="search" name="search" value="{{ request('search') }}"
-                               placeholder="Contoh: Fatih atau SSB-MJ-1701..."
-                               autocorrect="off" autocapitalize="off" spellcheck="false"
-                               class="ds-input">
-                    </div>
-
-                    <!-- Filter by Birth Year -->
-                    <div class="md:col-span-3">
-                        <label for="year" class="block text-xs font-bold text-[#111111] uppercase tracking-wider mb-1.5">Tahun Lahir</label>
-                        <select id="year" name="year" class="ds-input font-medium">
-                            <option value="">-- Semua Tahun Lahir --</option>
-                            @foreach($availableYears as $yr)
-                                <option value="{{ $yr }}" {{ request('year') == $yr ? 'selected' : '' }}>
-                                    Kelahiran {{ $yr }} (Usia {{ date('Y') - $yr }} th)
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Filter by Kelompok Umur -->
-                    <div class="md:col-span-3">
-                        <label for="ku" class="block text-xs font-bold text-[#111111] uppercase tracking-wider mb-1.5">Kelompok Umur (KU)</label>
-                        <select id="ku" name="ku" class="ds-input font-medium">
-                            <option value="">-- Semua KU --</option>
-                            @foreach($ageCategories as $cat)
-                                <option value="{{ $cat->code }}" {{ request('ku') == $cat->code ? 'selected' : '' }}>
-                                    {{ $cat->code }} ({{ $cat->min_birth_year }}-{{ $cat->max_birth_year }})
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="md:col-span-1">
-                        <button type="submit" aria-label="Terapkan filter roster" class="w-full min-h-[46px] btn-primary px-3 text-sm">
-                            <i class="fa-solid fa-filter" aria-hidden="true"></i>
-                            <span class="md:hidden">Saring</span>
-                        </button>
-                    </div>
-
-                </div>
-
-                <!-- Dual Quick Selector Rows: Tahun Lahir & KU Pills -->
-                <div class="pt-4 border-t-2 border-[#111111] space-y-3">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="text-xs font-mono font-bold text-[#525252] uppercase tracking-wider mr-1">Tahun Lahir:</span>
-                        <a href="{{ route('home') }}#roster"
-                           class="min-h-[44px] px-3.5 py-2 border-2 border-[#111111] font-mono text-xs font-bold inline-flex items-center transition-colors {{ !request('year') && !request('ku') ? 'bg-[#FF0000] text-[#000000]' : 'bg-white text-[#111111] hover:bg-[#FFFF00]' }}">
-                            Semua
-                        </a>
-                        @foreach($availableYears as $yr)
-                            <a href="{{ route('home', ['year' => $yr]) }}#roster"
-                               class="min-h-[44px] px-3.5 py-2 border-2 border-[#111111] font-mono text-xs font-bold inline-flex items-center transition-colors {{ request('year') == $yr ? 'bg-[#FF0000] text-[#000000]' : 'bg-white text-[#111111] hover:bg-[#FFFF00]' }}">
-                                {{ $yr }}
-                            </a>
-                        @endforeach
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="text-xs font-mono font-bold text-[#525252] uppercase tracking-wider mr-1">Kelompok Umur:</span>
-                        <a href="{{ route('home') }}#roster"
-                           class="min-h-[44px] px-3.5 py-2 border-2 border-[#111111] font-mono text-xs font-bold inline-flex items-center transition-colors {{ !request('ku') ? 'bg-[#0000FF] text-[#FFFFFF]' : 'bg-white text-[#111111] hover:bg-[#FFFF00]' }}">
-                            Semua KU
-                        </a>
-                        @foreach($ageCategories as $cat)
-                            <a href="{{ route('home', ['ku' => $cat->code]) }}#roster"
-                               class="min-h-[44px] px-3.5 py-2 border-2 border-[#111111] font-mono text-xs font-bold inline-flex items-center transition-colors {{ request('ku') == $cat->code ? 'bg-[#0000FF] text-[#FFFFFF]' : 'bg-white text-[#111111] hover:bg-[#FFFF00]' }}">
-                                {{ $cat->code }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-
-            </form>
-        </div>
-
-        <!-- Active Filter Indicator -->
-        @if(request('year') || request('ku') || request('search'))
-            <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#F4F4F4] border-2 border-[#111111] border-l-[6px] border-l-[#0000FF] p-4 text-xs sm:text-sm">
-                <div class="flex items-center gap-2 text-[#111111]">
-                    <i class="fa-solid fa-circle-info text-[#0000FF] text-base" aria-hidden="true"></i>
-                    <span>
-                        Filter aktif:
-                        @if(request('year')) <strong class="font-mono">Tahun {{ request('year') }}</strong> @endif
-                        @if(request('ku')) <strong class="font-mono">KU {{ request('ku') }}</strong> @endif
-                        @if(request('search')) <strong>"{{ request('search') }}"</strong> @endif
-                    </span>
-                </div>
-                <a href="{{ route('home') }}#roster" class="min-h-[44px] px-4 py-2 bg-white border-2 border-[#111111] hover:bg-[#FFFF00] font-bold text-[#111111] text-xs inline-flex items-center justify-center self-start sm:self-auto">
-                    Reset Filter
-                </a>
-            </div>
-        @endif
-
-        <!-- Player Card Grid -->
-        @if($players->count() > 0)
-            <div id="roster-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                @foreach($players as $player)
-                    <div class="bg-[#FFFFFF] border-2 border-[#111111] shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex flex-col justify-between group">
-
-                        <div>
-                            <!-- Header: NIS + Copy Button & Position -->
-                            <div class="bg-[#F4F4F4] px-4 py-2.5 border-b-2 border-[#111111] flex justify-between items-center gap-2 text-xs">
-                                <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="font-mono text-xs text-[#111111] font-bold truncate">{{ $player->nis }}</span>
-                                    <button type="button"
-                                            onclick="copyPlayerNis('{{ $player->nis }}', this)"
-                                            aria-label="Salin NIS {{ $player->nis }}"
-                                            title="Salin NIS {{ $player->nis }}"
-                                            class="px-2 py-2 min-w-[44px] min-h-[44px] border border-[#111111] bg-white hover:bg-[#FFFF00] text-[#111111] text-[10px] font-mono font-bold inline-flex items-center justify-center gap-1 cursor-pointer transition-colors shrink-0">
-                                        <i class="fa-regular fa-copy" aria-hidden="true"></i>
-                                        <span class="copy-label sr-only">Salin</span>
-                                    </button>
-                                </div>
-                                <span class="px-2 py-0.5 bg-[#0000FF] text-white border border-[#111111] font-mono font-bold text-[10px] uppercase shrink-0">
-                                    {{ $player->position }}
-                                </span>
-                            </div>
-
-                            <!-- Body Details -->
-                            <div class="p-5 space-y-4">
-                                <div class="flex items-center gap-3.5">
-                                    <div class="w-12 h-12 shrink-0 bg-[#111111] text-[#FFFF00] font-mono font-bold flex items-center justify-center text-lg border-2 border-[#111111]">
-                                        {{ strtoupper(substr($player->full_name, 0, 1)) }}
-                                    </div>
-                                    <div class="min-w-0">
-                                        <h3 class="font-bold text-[#111111] text-base leading-tight truncate" title="{{ $player->full_name }}">
-                                            {{ $player->full_name }}
-                                        </h3>
-                                        <p class="text-xs text-[#525252] mt-0.5">Panggilan: {{ $player->nickname ?? '-' }}</p>
-                                    </div>
-                                </div>
-
-                                <div class="bg-[#F4F4F4] p-3 border-2 border-[#111111] space-y-2 text-xs">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-[#525252]">Tahun Lahir:</span>
-                                        <span class="px-2 py-0.5 bg-[#FFFF00] text-[#111111] border border-[#111111] font-bold font-mono text-xs">
-                                            {{ $player->birth_year }}
-                                        </span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-[#525252]">Usia Sekarang:</span>
-                                        <span class="font-bold text-[#111111]">{{ $player->age }} Tahun</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-[#525252]">Kelompok Umur:</span>
-                                        <span class="font-bold font-mono text-[#0000FF]">{{ $player->age_category_badge }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card Footer: Joined Year + Direct Digital Card Shortcut -->
-                        <div class="px-4 py-2.5 bg-[#FFFFFF] border-t-2 border-[#111111] text-xs flex justify-between items-center gap-2">
-                            <span class="font-semibold text-[#166534] flex items-center gap-1">
-                                <i class="fa-solid fa-circle-check text-xs" aria-hidden="true"></i> Terdaftar {{ $player->joined_year }}
-                            </span>
-                            <a href="{{ route('parent.portal', ['nis' => $player->nis]) }}"
-                               class="min-h-[44px] px-3 py-2 inline-flex items-center gap-1 font-bold text-[#0000FF] border border-transparent hover:border-[#111111] hover:bg-[#FFFF00] hover:text-[#111111] transition-colors">
-                                <span>Kartu Digital</span>
-                                <i class="fa-solid fa-arrow-right text-[10px]" aria-hidden="true"></i>
-                            </a>
-                        </div>
-
-                    </div>
-                @endforeach
-            </div>
-
-            <!-- Pagination -->
-            <div class="mt-10">
-                {{ $players->links() }}
-            </div>
-        @else
-            <div class="bg-[#FFFFFF] p-10 text-center border-2 border-[#111111] max-w-2xl mx-auto">
-                <div class="w-12 h-12 mx-auto mb-4 bg-[#FFFF00] border-2 border-[#111111] flex items-center justify-center text-[#111111]">
-                    <i class="fa-solid fa-magnifying-glass text-lg" aria-hidden="true"></i>
-                </div>
-                <h3 class="font-bold text-[#111111] text-lg">Tidak Ada Data Pemain Ditemukan</h3>
-                <p class="text-[#525252] text-sm mt-2">Ubah kata kunci pencarian atau pilih tahun lahir yang lain.</p>
-                <a href="{{ route('home') }}#roster" class="mt-6 btn-primary text-xs">Reset Filter</a>
-            </div>
-        @endif
-
-    </div>
-</section>
-
-
-<!-- SECTION 2: PROGRAM KELOMPOK UMUR (Asymmetric Mondrian Span Grid) -->
+<!-- SECTION 1: PROGRAM KELOMPOK UMUR (Asymmetric Mondrian Span Grid) -->
 <section id="program" class="relative py-14 sm:py-16 lg:py-20 bg-[#FFFFFF] border-b-2 border-[#111111]">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-6">
 
@@ -983,40 +767,9 @@
 </section>
 
 
-<!-- LANDING PAGE UX SCRIPTS (Copy NIS, Auto-KU Calculator, Live KK Preview, Step Tracker, Submit State, FAQ) -->
+<!-- LANDING PAGE UX SCRIPTS (Auto-KU Calculator, Live KK Preview, Step Tracker, Submit State, FAQ) -->
 <script>
-    // 1. Copy Player NIS with accessible feedback
-    function copyPlayerNis(nis, buttonEl) {
-        const updateBtn = () => {
-            const icon = buttonEl.querySelector('i');
-            if (icon) icon.className = 'fa-solid fa-check text-[#166534]';
-            buttonEl.setAttribute('title', 'NIS Tersalin!');
-            buttonEl.classList.add('bg-[#DCFCE7]');
-            setTimeout(() => {
-                if (icon) icon.className = 'fa-regular fa-copy';
-                buttonEl.setAttribute('title', 'Salin NIS ' + nis);
-                buttonEl.classList.remove('bg-[#DCFCE7]');
-            }, 1500);
-        };
-
-        const fallbackCopy = () => {
-            const tmp = document.createElement('input');
-            tmp.value = nis;
-            document.body.appendChild(tmp);
-            tmp.select();
-            try { document.execCommand('copy'); } catch (err) {}
-            document.body.removeChild(tmp);
-            updateBtn();
-        };
-
-        if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(nis).then(updateBtn).catch(fallbackCopy);
-        } else {
-            fallbackCopy();
-        }
-    }
-
-    // 2. Auto-KU Calculator on Birth Date change
+    // 1. Auto-KU Calculator on Birth Date change
     (function() {
         const categories = @json($kuJson);
         const birthInput = document.getElementById('birth_date');

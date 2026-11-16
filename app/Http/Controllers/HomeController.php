@@ -18,40 +18,6 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        // Query player roster
-        $query = Player::where('status', 'aktif');
-
-        // Filter by Birth Year (Primary Pain Point Solution!)
-        if ($request->filled('year')) {
-            $query->where('birth_year', $request->year);
-        }
-
-        // Filter by Kelompok Umur Code (e.g. U-10, U-12, U-14, U-16, U-18)
-        if ($request->filled('ku')) {
-            $cat = AgeCategory::where('code', $request->ku)->first();
-            if ($cat) {
-                $query->whereBetween('birth_year', [$cat->min_birth_year, $cat->max_birth_year]);
-            }
-        }
-
-        // Search by Name or NIS
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('full_name', 'like', "%{$search}%")
-                  ->orWhere('nis', 'like', "%{$search}%")
-                  ->orWhere('nickname', 'like', "%{$search}%");
-            });
-        }
-
-        $players = $query->orderBy('birth_year', 'desc')->orderBy('full_name', 'asc')->paginate(12)->withQueryString();
-
-        // Get list of unique birth years in database for dropdown
-        $availableYears = Player::select('birth_year')
-            ->distinct()
-            ->orderBy('birth_year', 'desc')
-            ->pluck('birth_year');
-
         $ageCategories = AgeCategory::all();
         $coaches = Coach::all();
         $miniSoccerRates = MiniSoccerRate::all();
@@ -67,8 +33,6 @@ class HomeController extends Controller
         $yearsCovered = Player::distinct('birth_year')->count('birth_year');
 
         return view('welcome', compact(
-            'players',
-            'availableYears',
             'ageCategories',
             'coaches',
             'miniSoccerRates',

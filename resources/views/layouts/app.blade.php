@@ -54,18 +54,16 @@
                 </a>
 
                 <!-- Desktop Navigation Links -->
-                <nav aria-label="Navigasi Utama" id="desktop-navbar" class="hidden lg:flex items-center gap-6 text-sm font-medium text-[#111111]">
+                <nav aria-label="Navigasi Utama" id="desktop-navbar" class="hidden lg:flex items-center gap-5 xl:gap-6 text-sm font-medium text-[#111111]">
                     <a href="{{ route('home') }}" data-nav="beranda" class="nav-link py-2 px-1 border-b-2 transition-colors {{ request()->routeIs('home') ? 'border-[#FF0000] font-bold text-[#111111]' : 'border-transparent font-medium text-[#111111] hover:border-[#111111]' }}">Beranda</a>
-                    <a href="{{ route('home') }}#roster" data-nav="roster" class="nav-link py-2 px-1 border-b-2 border-transparent font-medium text-[#111111] hover:border-[#0000FF] transition-colors flex items-center gap-1.5">
-                        <i class="fa-solid fa-calendar-days text-xs text-[#0000FF]" aria-hidden="true"></i> Roster Per Tahun
-                    </a>
-                    <a href="{{ route('parent.portal') }}" data-nav="portal" class="nav-link py-2 px-1 border-b-2 {{ request()->routeIs('parent.portal') ? 'border-[#0000FF] font-bold text-[#0000FF]' : 'border-transparent font-medium text-[#111111] hover:border-[#0000FF]' }} transition-colors flex items-center gap-1.5">
-                        <i class="fa-solid fa-id-card text-xs text-[#0000FF]" aria-hidden="true"></i> Portal Orang Tua
-                    </a>
                     <a href="{{ route('home') }}#program" data-nav="program" class="nav-link py-2 px-1 border-b-2 border-transparent font-medium text-[#111111] hover:border-[#111111] transition-colors">Program KU</a>
                     <a href="{{ route('home') }}#mini-soccer" data-nav="mini-soccer" class="nav-link py-2 px-1 border-b-2 border-transparent font-medium text-[#111111] hover:border-[#111111] transition-colors">Mini Soccer</a>
                     <a href="{{ route('home') }}#pelatih" data-nav="pelatih" class="nav-link py-2 px-1 border-b-2 border-transparent font-medium text-[#111111] hover:border-[#111111] transition-colors">Tim Pelatih</a>
                     <a href="{{ route('home') }}#faq" data-nav="faq" class="nav-link py-2 px-1 border-b-2 border-transparent font-medium text-[#111111] hover:border-[#111111] transition-colors">FAQ</a>
+                    <a href="{{ route('parent.portal') }}" data-nav="portal" class="nav-link min-h-[40px] px-3.5 py-1.5 border-2 {{ request()->routeIs('parent.portal') ? 'bg-[#0000FF] text-white border-[#111111] font-bold shadow-[2px_2px_0px_#111111]' : 'border-[#111111] bg-[#F4F4F4] text-[#111111] hover:bg-[#FFFF00] font-bold shadow-[2px_2px_0px_#111111]' }} transition-all inline-flex items-center gap-2 text-xs uppercase tracking-wider">
+                        <i class="fa-solid fa-id-card text-xs {{ request()->routeIs('parent.portal') ? 'text-[#FFFF00]' : 'text-[#0000FF]' }}" aria-hidden="true"></i>
+                        <span>Portal Orang Tua</span>
+                    </a>
                 </nav>
 
                 <!-- Action CTA & Mobile Toggle -->
@@ -86,13 +84,14 @@
         <!-- Mobile Drawer Menu -->
         <nav id="mobile-menu" aria-label="Menu Mobile" class="hidden lg:hidden border-t-2 border-[#111111] bg-white px-4 pt-3 pb-6 space-y-2">
             <a href="{{ route('home') }}" data-nav="beranda" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 {{ request()->routeIs('home') ? 'border-2 border-[#111111] bg-[#111111] text-[#FFFF00] font-bold' : 'border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium' }} text-sm transition-colors">Beranda</a>
-            <a href="{{ route('home') }}#roster" data-nav="roster" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">Roster Pemain Per Tahun</a>
-            <a href="{{ route('parent.portal') }}" data-nav="portal" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 {{ request()->routeIs('parent.portal') ? 'border-2 border-[#111111] bg-[#0000FF] text-white font-bold' : 'border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium' }} text-sm transition-colors">Portal Orang Tua & Rapor</a>
             <a href="{{ route('home') }}#program" data-nav="program" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">Program Kelompok Umur</a>
             <a href="{{ route('home') }}#mini-soccer" data-nav="mini-soccer" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">Tarif Mini Soccer</a>
             <a href="{{ route('home') }}#pelatih" data-nav="pelatih" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">Tim Pelatih</a>
             <a href="{{ route('home') }}#pendaftaran" data-nav="pendaftaran" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">Pendaftaran Online</a>
             <a href="{{ route('home') }}#faq" data-nav="faq" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors">FAQ (Tanya Jawab)</a>
+            <a href="{{ route('parent.portal') }}" data-nav="portal" class="mobile-nav-link flex items-center min-h-[44px] px-3 py-2 {{ request()->routeIs('parent.portal') ? 'border-2 border-[#111111] bg-[#0000FF] text-white font-bold' : 'border-2 border-[#111111] bg-[#F4F4F4] hover:bg-[#FFFF00] text-[#111111] font-bold' }} text-sm transition-colors">
+                <i class="fa-solid fa-id-card text-xs mr-2 {{ request()->routeIs('parent.portal') ? 'text-[#FFFF00]' : 'text-[#0000FF]' }}" aria-hidden="true"></i> Portal Orang Tua & Rapor
+            </a>
             <div class="pt-2">
                 <a href="{{ route('home') }}#pendaftaran" class="w-full btn-primary text-sm">
                     Daftar Siswa Baru
@@ -152,7 +151,6 @@
                     <h4 class="text-white font-bold text-xs font-mono uppercase tracking-wider mb-4 border-l-4 border-[#FF0000] pl-2.5">Navigasi Halaman</h4>
                     <ul class="space-y-0.5 text-sm text-[#D4D4D4]">
                         <li><a href="{{ route('home') }}" class="inline-flex items-center min-h-[44px] hover:text-[#FFFF00] transition-colors">Beranda</a></li>
-                        <li><a href="{{ route('home') }}#roster" class="inline-flex items-center min-h-[44px] hover:text-[#FFFF00] transition-colors">Roster Siswa Per Tahun</a></li>
                         <li><a href="{{ route('parent.portal') }}" class="inline-flex items-center min-h-[44px] hover:text-[#FFFF00] transition-colors">Portal Orang Tua & Rapor</a></li>
                         <li><a href="{{ route('home') }}#program" class="inline-flex items-center min-h-[44px] hover:text-[#FFFF00] transition-colors">Program Kelompok Umur</a></li>
                         <li><a href="{{ route('home') }}#pelatih" class="inline-flex items-center min-h-[44px] hover:text-[#FFFF00] transition-colors">Profil Tim Pelatih</a></li>
@@ -250,33 +248,45 @@
             function setActiveNav(activeId) {
                 document.querySelectorAll('#desktop-navbar [data-nav]').forEach(link => {
                     const navId = link.getAttribute('data-nav');
-                    if (navId === activeId) {
-                        link.classList.remove('border-transparent', 'font-medium');
-                        if (navId === 'portal') {
-                            link.classList.add('border-[#0000FF]', 'font-bold', 'text-[#0000FF]');
+                    if (navId === 'portal') {
+                        if (activeId === 'portal') {
+                            link.className = 'nav-link min-h-[40px] px-3.5 py-1.5 border-2 bg-[#0000FF] text-white border-[#111111] font-bold shadow-[2px_2px_0px_#111111] transition-all inline-flex items-center gap-2 text-xs uppercase tracking-wider';
+                            link.setAttribute('aria-current', 'page');
                         } else {
-                            link.classList.add('border-[#FF0000]', 'font-bold');
+                            link.className = 'nav-link min-h-[40px] px-3.5 py-1.5 border-2 border-[#111111] bg-[#F4F4F4] text-[#111111] hover:bg-[#FFFF00] font-bold shadow-[2px_2px_0px_#111111] transition-all inline-flex items-center gap-2 text-xs uppercase tracking-wider';
+                            link.removeAttribute('aria-current');
                         }
-                        link.setAttribute('aria-current', 'page');
                     } else {
-                        link.classList.remove('border-[#FF0000]', 'border-[#0000FF]', 'font-bold', 'text-[#0000FF]');
-                        link.classList.add('border-transparent', 'font-medium');
-                        link.removeAttribute('aria-current');
+                        if (navId === activeId) {
+                            link.classList.remove('border-transparent', 'font-medium');
+                            link.classList.add('border-[#FF0000]', 'font-bold');
+                            link.setAttribute('aria-current', 'page');
+                        } else {
+                            link.classList.remove('border-[#FF0000]', 'font-bold');
+                            link.classList.add('border-transparent', 'font-medium');
+                            link.removeAttribute('aria-current');
+                        }
                     }
                 });
 
                 document.querySelectorAll('#mobile-menu [data-nav]').forEach(link => {
                     const navId = link.getAttribute('data-nav');
-                    if (navId === activeId) {
-                        if (navId === 'portal') {
+                    if (navId === 'portal') {
+                        if (activeId === 'portal') {
                             link.className = 'mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border-2 border-[#111111] bg-[#0000FF] text-white font-bold text-sm transition-colors';
+                            link.setAttribute('aria-current', 'page');
                         } else {
-                            link.className = 'mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border-2 border-[#111111] bg-[#111111] text-[#FFFF00] font-bold text-sm transition-colors';
+                            link.className = 'mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border-2 border-[#111111] bg-[#F4F4F4] hover:bg-[#FFFF00] text-[#111111] font-bold text-sm transition-colors';
+                            link.removeAttribute('aria-current');
                         }
-                        link.setAttribute('aria-current', 'page');
                     } else {
-                        link.className = 'mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors';
-                        link.removeAttribute('aria-current');
+                        if (navId === activeId) {
+                            link.className = 'mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border-2 border-[#111111] bg-[#111111] text-[#FFFF00] font-bold text-sm transition-colors';
+                            link.setAttribute('aria-current', 'page');
+                        } else {
+                            link.className = 'mobile-nav-link flex items-center min-h-[44px] px-3 py-2 border border-[#111111] bg-white hover:bg-[#F4F4F4] text-[#111111] font-medium text-sm transition-colors';
+                            link.removeAttribute('aria-current');
+                        }
                     }
                 });
             }
@@ -302,7 +312,7 @@
                 });
             });
 
-            const sectionIds = ['beranda', 'roster', 'program', 'mini-soccer', 'pelatih', 'pendaftaran', 'faq'];
+            const sectionIds = ['beranda', 'program', 'mini-soccer', 'pelatih', 'pendaftaran', 'faq'];
             const trackedSections = sectionIds
                 .map(id => ({ id, el: document.getElementById(id) }))
                 .filter(item => item.el !== null);
