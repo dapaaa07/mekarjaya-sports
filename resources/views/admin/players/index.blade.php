@@ -182,7 +182,11 @@
                             <!-- SPP Status (Derived from Current Month SppPayment Ledger) -->
                             <td class="p-4">
                                 <div class="flex flex-wrap items-center gap-2">
-                                    @if($player->current_spp_status == 'Lunas')
+                                    @php
+                                        $curPaid = $player->getTotalSppPaidForMonth();
+                                        $curShortage = $player->getSppShortageForMonth();
+                                    @endphp
+                                    @if($player->hasPaidSppForMonth())
                                         <span class="badge-success text-xs font-mono">
                                             <i class="fa-solid fa-check mr-1" aria-hidden="true"></i> Lunas
                                         </span>
@@ -191,6 +195,25 @@
                                            class="min-h-[40px] px-2.5 py-1 bg-white hover:bg-[#FFFF00] text-[#111111] border border-[#111111] text-[11px] font-mono font-bold inline-flex items-center transition-colors">
                                             Riwayat
                                         </a>
+                                    @elseif($curPaid > 0)
+                                        <div>
+                                            <span class="badge-secondary text-xs font-mono inline-block">
+                                                <i class="fa-solid fa-clock mr-1" aria-hidden="true"></i> Belum Lunas
+                                            </span>
+                                            <span class="block text-[10px] font-mono text-[#B91C1C] font-bold mt-0.5">Kurang Rp {{ number_format($curShortage, 0, ',', '.') }}</span>
+                                        </div>
+                                        @if(Auth::user()?->isAdmin())
+                                            <a href="{{ route('admin.players.show', $player->id) }}#spp-section"
+                                               class="min-h-[40px] px-2.5 py-1 bg-[#FFFF00] hover:bg-[#E6E600] text-[#111111] border-2 border-[#111111] text-[11px] font-bold inline-flex items-center gap-1 transition-colors">
+                                                <i class="fa-solid fa-receipt text-[10px]" aria-hidden="true"></i> Lunasi SPP
+                                            </a>
+                                        @else
+                                            <a href="{{ route('admin.players.show', $player->id) }}#spp-section"
+                                               title="Lihat Riwayat SPP {{ $player->full_name }}"
+                                               class="min-h-[40px] px-2.5 py-1 bg-white hover:bg-[#FFFF00] text-[#111111] border border-[#111111] text-[11px] font-mono font-bold inline-flex items-center transition-colors">
+                                                Riwayat
+                                            </a>
+                                        @endif
                                     @else
                                         <span class="badge-danger text-xs font-mono">
                                             <i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i> Belum Bayar

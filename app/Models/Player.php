@@ -188,13 +188,41 @@ class Player extends Model
             ->orderBy('id', 'desc');
     }
 
-    public function getDefaultMonthlyFeeAttribute(): int
+    public function getAgeCategoryAttribute(): ?AgeCategory
     {
-        $category = AgeCategory::where('min_birth_year', '<=', $this->birth_year)
+        return AgeCategory::where('min_birth_year', '<=', $this->birth_year)
             ->where('max_birth_year', '>=', $this->birth_year)
             ->first();
+    }
 
-        return $category ? (int) $category->monthly_fee : 150000;
+    public function getDefaultMonthlyFeeAttribute(): int
+    {
+        return $this->age_category ? (int) $this->age_category->monthly_fee : 150000;
+    }
+
+    public function getTotalSppPaidForMonth(?int $month = null, ?int $year = null): int
+    {
+        $month = $month ?? (int) now()->month;
+        $year = $year ?? (int) now()->year;
+
+        if ($this->relationLoaded('sppPayments')) {
+            return (int) $this->sppPayments
+                ->filter(fn (SppPayment $payment) => (int) $payment->periode_bulan === $month && (int) $payment->periode_tahun === $year)
+                ->sum('jumlah');
+        }
+
+        return (int) $this->sppPayments()
+            ->where('periode_bulan', $month)
+            ->where('periode_tahun', $year)
+            ->sum('jumlah');
+    }
+
+    public function getSppShortageForMonth(?int $month = null, ?int $year = null): int
+    {
+        $required = $this->default_monthly_fee;
+        $paid = $this->getTotalSppPaidForMonth($month, $year);
+
+        return max(0, $required - $paid);
     }
 
     public function hasPaidSppForMonth(?int $month = null, ?int $year = null): bool
@@ -202,16 +230,7 @@ class Player extends Model
         $month = $month ?? (int) now()->month;
         $year = $year ?? (int) now()->year;
 
-        if ($this->relationLoaded('sppPayments')) {
-            return $this->sppPayments->contains(
-                fn (SppPayment $payment) => (int) $payment->periode_bulan === $month && (int) $payment->periode_tahun === $year
-            );
-        }
-
-        return $this->sppPayments()
-            ->where('periode_bulan', $month)
-            ->where('periode_tahun', $year)
-            ->exists();
+        return $this->getTotalSppPaidForMonth($month, $year) >= $this->default_monthly_fee;
     }
 
     public function getCurrentSppStatusAttribute(): string
@@ -221,6 +240,7 @@ class Player extends Model
 
     public function syncCurrentSppStatus(): void
     {
+        $this->unsetRelation('sppPayments');
         $computed = $this->hasPaidSppForMonth() ? 'Lunas' : 'Belum Bayar';
         if ($this->spp_status !== $computed) {
             $this->update(['spp_status' => $computed]);

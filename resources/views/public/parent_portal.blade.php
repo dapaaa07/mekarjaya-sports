@@ -151,8 +151,15 @@
                                         </div>
                                         <div class="border-t border-[#333333] pt-3 pl-1">
                                             <span class="text-[#D4D4D4] block text-[11px] font-mono uppercase mb-1">Status SPP Bulan Ini</span>
-                                            @if($player->current_spp_status == 'Lunas')
+                                            @php
+                                                $curPaid = $player->getTotalSppPaidForMonth();
+                                                $curShortage = $player->getSppShortageForMonth();
+                                            @endphp
+                                            @if($player->hasPaidSppForMonth())
                                                 <span class="badge-success text-xs"><i class="fa-solid fa-check mr-1" aria-hidden="true"></i> Lunas</span>
+                                            @elseif($curPaid > 0)
+                                                <span class="badge-secondary text-xs"><i class="fa-solid fa-clock mr-1" aria-hidden="true"></i> Belum Lunas</span>
+                                                <span class="block text-[10px] font-mono text-[#FCA5A5] mt-0.5">Kurang Rp {{ number_format($curShortage, 0, ',', '.') }}</span>
                                             @else
                                                 <span class="badge-danger text-xs"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i> Belum Bayar</span>
                                             @endif

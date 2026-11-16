@@ -37,16 +37,25 @@ class PlayerController extends Controller
 
         // Filter by Current-Month SPP Payment History Status
         if ($request->filled('spp_status')) {
+            $sppSubquery = "(
+                SELECT COALESCE(SUM(spp_payments.jumlah), 0)
+                FROM spp_payments
+                WHERE spp_payments.player_id = players.id
+                  AND spp_payments.periode_bulan = {$currentMonth}
+                  AND spp_payments.periode_tahun = {$currentYear}
+            )";
+            $feeSubquery = "COALESCE((
+                SELECT monthly_fee
+                FROM age_categories
+                WHERE players.birth_year >= age_categories.min_birth_year
+                  AND players.birth_year <= age_categories.max_birth_year
+                LIMIT 1
+            ), 150000)";
+
             if ($request->spp_status === 'Lunas') {
-                $query->whereHas('sppPayments', function ($q) use ($currentMonth, $currentYear) {
-                    $q->where('periode_bulan', $currentMonth)
-                      ->where('periode_tahun', $currentYear);
-                });
+                $query->whereRaw("{$sppSubquery} >= {$feeSubquery}");
             } elseif ($request->spp_status === 'Belum Bayar') {
-                $query->whereDoesntHave('sppPayments', function ($q) use ($currentMonth, $currentYear) {
-                    $q->where('periode_bulan', $currentMonth)
-                      ->where('periode_tahun', $currentYear);
-                });
+                $query->whereRaw("{$sppSubquery} < {$feeSubquery}");
             }
         }
 
@@ -267,22 +276,22 @@ class PlayerController extends Controller
             'metode.in' => 'Metode pembayaran harus Tunai atau Transfer.',
         ]);
 
-        $exists = SppPayment::where('player_id', $player->id)
-            ->where('periode_bulan', $validated['periode_bulan'])
-            ->where('periode_tahun', $validated['periode_tahun'])
-            ->exists();
+        $month = (int) $validated['periode_bulan'];
+        $year = (int) $validated['periode_tahun'];
+        $currentPaid = $player->getTotalSppPaidForMonth($month, $year);
+        $requiredFee = $player->default_monthly_fee;
 
-        if ($exists) {
-            $monthName = SppPayment::MONTHS_ID[(int) $validated['periode_bulan']] ?? $validated['periode_bulan'];
+        if ($currentPaid >= $requiredFee) {
+            $monthName = SppPayment::MONTHS_ID[$month] ?? $month;
             return back()->withInput()->withErrors([
-                'periode_bulan' => "Pembayaran SPP untuk periode {$monthName} {$validated['periode_tahun']} sudah tercatat.",
+                'periode_bulan' => "Pembayaran SPP untuk periode {$monthName} {$year} sudah lunas (Total terbayar: Rp " . number_format($currentPaid, 0, ',', '.') . " dari kewajiban Rp " . number_format($requiredFee, 0, ',', '.') . ").",
             ]);
         }
 
         $payment = SppPayment::create([
             'player_id' => $player->id,
-            'periode_bulan' => $validated['periode_bulan'],
-            'periode_tahun' => $validated['periode_tahun'],
+            'periode_bulan' => $month,
+            'periode_tahun' => $year,
             'jumlah' => $validated['jumlah'],
             'tanggal_bayar' => $validated['tanggal_bayar'],
             'metode' => $validated['metode'],
@@ -291,8 +300,18 @@ class PlayerController extends Controller
 
         $player->syncCurrentSppStatus();
 
+        $newTotalPaid = $currentPaid + (int) $validated['jumlah'];
+        $monthName = SppPayment::MONTHS_ID[$month] ?? $month;
+
+        if ($newTotalPaid >= $requiredFee) {
+            $msg = "Pembayaran SPP {$player->full_name} periode {$monthName} {$year} ({$payment->formatted_jumlah}) berhasil dicatat. Status periode ini: LUNAS (Total terbayar Rp " . number_format($newTotalPaid, 0, ',', '.') . " dari kewajiban Rp " . number_format($requiredFee, 0, ',', '.') . ").";
+        } else {
+            $shortage = $requiredFee - $newTotalPaid;
+            $msg = "Pembayaran SPP {$player->full_name} periode {$monthName} {$year} ({$payment->formatted_jumlah}) berhasil dicatat. Status periode ini: BELUM LUNAS (Total terbayar Rp " . number_format($newTotalPaid, 0, ',', '.') . " dari kewajiban Rp " . number_format($requiredFee, 0, ',', '.') . " - Masih kurang Rp " . number_format($shortage, 0, ',', '.') . ").";
+        }
+
         return redirect()->to(route('admin.players.show', $player->id) . '#spp-section')
-            ->with('success', "Pembayaran SPP {$player->full_name} periode {$payment->period_label} ({$payment->formatted_jumlah}) berhasil dicatat.");
+            ->with('success', $msg);
     }
 
     public function destroySppPayment(Player $player, SppPayment $sppPayment)

@@ -300,17 +300,26 @@
         @if(Auth::user()?->isAdmin())
         <!-- Left Form: Record SPP Payment (5 Cols) -->
         <div class="lg:col-span-5 no-print editorial-card p-6 border-t-[6px] border-t-[#FF0000] space-y-5">
+            @php
+                $curPaid = $player->getTotalSppPaidForMonth();
+                $curShortage = $player->getSppShortageForMonth();
+            @endphp
             <div class="flex items-start justify-between gap-3 border-b-2 border-[#111111] pb-3.5">
                 <div>
                     <h3 class="font-bold text-[#111111] text-base flex items-center gap-2">
                         <i class="fa-solid fa-receipt text-[#CC0000]" aria-hidden="true"></i> Catat Pembayaran SPP
                     </h3>
                     <p class="text-xs text-[#525252] mt-0.5">
-                        Tarif standar kelompok umur: <strong class="font-mono text-[#111111]">Rp {{ number_format($player->default_monthly_fee, 0, ',', '.') }}</strong>/bulan
+                        Tarif standar kelompok umur {{ $player->age_category?->code ?? $player->age_category_badge }}: <strong class="font-mono text-[#111111]">Rp {{ number_format($player->default_monthly_fee, 0, ',', '.') }}</strong>/bulan
                     </p>
                 </div>
-                @if($player->current_spp_status == 'Lunas')
+                @if($player->hasPaidSppForMonth())
                     <span class="badge-success font-mono shrink-0">Lunas</span>
+                @elseif($curPaid > 0)
+                    <div class="text-right shrink-0">
+                        <span class="badge-secondary font-mono text-[11px] block">Belum Lunas</span>
+                        <span class="text-[10px] font-mono text-[#B91C1C] font-bold block mt-0.5">Kurang Rp {{ number_format($curShortage, 0, ',', '.') }}</span>
+                    </div>
                 @else
                     <span class="badge-danger font-mono shrink-0">Belum Bayar</span>
                 @endif
@@ -342,8 +351,13 @@
                     <div>
                         <label for="jumlah" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Nominal (Rp) *</label>
                         <input type="number" id="jumlah" name="jumlah" min="1000" step="1000" required
-                               value="{{ old('jumlah', $player->default_monthly_fee) }}"
+                               value="{{ old('jumlah', $curShortage > 0 ? $curShortage : $player->default_monthly_fee) }}"
                                class="ds-input text-sm font-mono font-bold">
+                        @if($curPaid > 0 && $curShortage > 0)
+                            <p class="text-[11px] font-mono text-[#525252] mt-1">
+                                Terbayar bulan ini: <strong class="text-[#14532D]">Rp {{ number_format($curPaid, 0, ',', '.') }}</strong> | Sisa: <strong class="text-[#B91C1C]">Rp {{ number_format($curShortage, 0, ',', '.') }}</strong>
+                            </p>
+                        @endif
                     </div>
                     <div>
                         <label for="tanggal_bayar" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Tanggal Bayar *</label>
@@ -365,7 +379,7 @@
                     <label for="keterangan" class="block font-bold text-[#111111] uppercase tracking-wider text-xs mb-1.5">Keterangan (Opsional)</label>
                     <input type="text" id="keterangan" name="keterangan" maxlength="255"
                            value="{{ old('keterangan') }}"
-                           placeholder="Contoh: Diterima via transfer a.n. Orang Tua"
+                           placeholder="Contoh: Diterima via transfer a.n. Orang Tua (Cicilan 1 / Pelunasan)"
                            class="ds-input text-sm">
                 </div>
 
@@ -407,12 +421,23 @@
                         </thead>
                         <tbody class="divide-y-2 divide-[#111111] bg-white">
                             @foreach($sppPayments as $payment)
+                                @php
+                                    $periodTotal = $sppPayments->where('periode_bulan', $payment->periode_bulan)->where('periode_tahun', $payment->periode_tahun)->sum('jumlah');
+                                    $isPeriodLunas = $periodTotal >= $player->default_monthly_fee;
+                                @endphp
                                 <tr class="hover:bg-[#F4F4F4] transition-colors">
                                     <td class="p-3.5 font-bold font-mono">
                                         {{ $payment->period_label }}
-                                        @if($payment->periode_bulan === (int) now()->month && $payment->periode_tahun === (int) now()->year)
-                                            <span class="block text-[10px] text-[#14532D] uppercase mt-0.5">Bulan Berjalan</span>
-                                        @endif
+                                        <div class="mt-1 flex flex-wrap items-center gap-1">
+                                            @if($isPeriodLunas)
+                                                <span class="inline-block px-1.5 py-0.5 text-[10px] bg-[#DCFCE7] text-[#166534] border border-[#166534] font-bold uppercase">Lunas</span>
+                                            @else
+                                                <span class="inline-block px-1.5 py-0.5 text-[10px] bg-[#FEF3C7] text-[#92400E] border border-[#92400E] font-bold uppercase">Belum Lunas (-Rp {{ number_format($player->default_monthly_fee - $periodTotal, 0, ',', '.') }})</span>
+                                            @endif
+                                            @if($payment->periode_bulan === (int) now()->month && $payment->periode_tahun === (int) now()->year)
+                                                <span class="inline-block px-1.5 py-0.5 text-[10px] bg-[#111111] text-[#FFFF00] font-mono font-bold uppercase">Bulan Berjalan</span>
+                                            @endif
+                                        </div>
                                     </td>
                                     <td class="p-3.5 font-mono text-[#525252]">
                                         {{ $payment->tanggal_bayar->format('d M Y') }}

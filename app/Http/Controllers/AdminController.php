@@ -57,17 +57,26 @@ class AdminController extends Controller
         // SPP Summary (berbasis riwayat pembayaran bulan & tahun berjalan)
         $currentMonth = (int) now()->month;
         $currentYear = (int) now()->year;
+        $sppSubquery = "(
+            SELECT COALESCE(SUM(spp_payments.jumlah), 0)
+            FROM spp_payments
+            WHERE spp_payments.player_id = players.id
+              AND spp_payments.periode_bulan = {$currentMonth}
+              AND spp_payments.periode_tahun = {$currentYear}
+        )";
+        $feeSubquery = "COALESCE((
+            SELECT monthly_fee
+            FROM age_categories
+            WHERE players.birth_year >= age_categories.min_birth_year
+              AND players.birth_year <= age_categories.max_birth_year
+            LIMIT 1
+        ), 150000)";
+
         $sppLunas = Player::where('status', 'aktif')
-            ->whereHas('sppPayments', function ($q) use ($currentMonth, $currentYear) {
-                $q->where('periode_bulan', $currentMonth)
-                  ->where('periode_tahun', $currentYear);
-            })
+            ->whereRaw("{$sppSubquery} >= {$feeSubquery}")
             ->count();
         $sppMenunggak = Player::where('status', 'aktif')
-            ->whereDoesntHave('sppPayments', function ($q) use ($currentMonth, $currentYear) {
-                $q->where('periode_bulan', $currentMonth)
-                  ->where('periode_tahun', $currentYear);
-            })
+            ->whereRaw("{$sppSubquery} < {$feeSubquery}")
             ->count();
 
         // Distribution by Birth Year (Core Pain Point Visualizer!)
